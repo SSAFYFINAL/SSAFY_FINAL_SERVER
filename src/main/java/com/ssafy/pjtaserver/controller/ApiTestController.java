@@ -9,6 +9,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,6 +25,7 @@ import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 public class ApiTestController {
 
     private final AuthenticationManager authenticationManager;
@@ -31,6 +33,8 @@ public class ApiTestController {
 
     @GetMapping("/api/public/test")
     public ResponseEntity<ApiResponse> test1() {
+        log.info("------------------------------api test------------------------------");
+        log.info("들어왔니");
         return ApiResponse.of(ApiResponseCode.USER_CREATED);
     }
 
