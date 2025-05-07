@@ -1,0 +1,43 @@
+spring:
+  profiles:
+    active: local
+  application:
+    name: PJT-A-Server
+
+  # mysql db 설정
+  datasource:
+    url: jdbc:mysql://localhost:3306/PJT_A_Server
+    username: ssafy
+    password: 'ssafy1234'
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  # jpa 설정
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategySnakeCaseImpl
+#        show_sql: true
+        format_sql: true
+        default_batch_fetch_size: 100
+    open-in-view: false
+
+
+  # 페이징 처리 page 0부터 시작
+  data:
+    web:
+      pageable:
+        default-page-size: 10
+        max-page-size: 2000
+
+server:
+  port: 8081
+
+# 실제로 나오는 로그
+logging:
+  level:
+    org.hibernate.SQL: debug
+    org.springframework.security.web : trace
+#    org.hibernate.type : trace
+
