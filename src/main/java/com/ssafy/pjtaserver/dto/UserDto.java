@@ -7,12 +7,18 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
 import java.util.*;
-import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.*;
 
 // 시큐리티에서 제공해주는 User를 상속받아 dto정의
 public class UserDto extends User {
 
-    private String userLoginId, userPwd, username, nickName, userEmail, userPhone;
+    private final String userLoginId;
+    private String userPwd;
+    private String username;
+    private String nickName;
+    private String userEmail;
+    private String userPhone;
 
     private boolean social;
 
@@ -23,14 +29,8 @@ public class UserDto extends User {
         this.userLoginId = userLoginId;
     }
 
-
     public UserDto(String userLoginId, String userPwd, String username, String nickName, String userEmail, String userPhone, boolean social, List<String> roleNames) {
-        super(
-                userLoginId,
-                userPwd,
-                roleNames.stream()
-                        .map(str -> new SimpleGrantedAuthority("ROLE_" + str))
-                        .collect(Collectors.toList()));
+        super(userLoginId, userPwd, getCollect(roleNames));
 
         this.userLoginId = userLoginId;
         this.userPwd = userPwd;
@@ -42,22 +42,25 @@ public class UserDto extends User {
         this.roleNames = roleNames;
     }
 
-    // 로그인 요청시 넘어오는 파라미터 매핑해주는 생성자
-    @JsonCreator // Jackson이 이 생성자를 사용하도록 지시
-    public UserDto(@JsonProperty("username") String username, @JsonProperty("password") String password) {
-        super(username, password, new ArrayList<>());
-        this.username = username; // 필드에 매핑
-        this.userPwd = password;
+    private static List<SimpleGrantedAuthority> getCollect(List<String> roleNames) {
+        return roleNames.stream()
+                .map(str -> new SimpleGrantedAuthority("ROLE_" + str))
+                .collect(toList());
     }
 
+    @JsonCreator
+    public UserDto(@JsonProperty("userLoginId") String userLoginId, @JsonProperty("password") String password) {
+        super(userLoginId, password, new ArrayList<>());
+        this.userLoginId = userLoginId;
+        this.userPwd = password;
+    }
 
     // JWT
     public Map<String, Object> getClaims() {
         HashMap<String, Object> dataMap = new HashMap<>();
-
         dataMap.put("email", userEmail);
-        dataMap.put("userPwd", userPwd);
         dataMap.put("userLoginId", userLoginId);
+        dataMap.put("userPwd", userPwd);
         dataMap.put("username", username);
         dataMap.put("nickName", nickName);
         dataMap.put("userPhone", userPhone);

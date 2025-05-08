@@ -28,7 +28,7 @@ public class ApiLoginSuccessHandler implements AuthenticationSuccessHandler {
         // 유저의 정보를 담고있다.
         Map<String, Object> claims = userDto.getClaims();
 
-        String accessToken = JWTUtil.generateToken(claims, 3);
+        String accessToken = JWTUtil.generateToken(claims, 30);
         String refreshToken = JWTUtil.generateToken(claims, 60 * 24);
 
         // 엑세스 토큰

@@ -34,7 +34,6 @@ public class JWTUtil {
                 .setExpiration(Date.from(ZonedDateTime.now().plusMinutes(min).toInstant()))
                 .signWith(key)
                 .compact();
-
     }
 
     public static Map<String, Object> validateToken(String token) {

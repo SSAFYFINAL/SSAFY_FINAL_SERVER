@@ -12,7 +12,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -23,20 +22,14 @@ import java.util.Map;
 @Slf4j
 public class JWTCheckFilter extends OncePerRequestFilter {
 
-    // 필터링 제외
+    // 필터링
     // false : 체크한다 / true : 체크 안한다
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-        // Preflight요청은 체크하지 않음
-        if(request.getMethod().equals("OPTIONS")){
-            return true;
-        }
         String path = request.getRequestURI();
-        log.info("check uri..............{}", path);
 
-        //api/public/ 경로의 호출은 체크하지 않음
-        if (path.startsWith("/api/public/")) {
-            log.info("Path {} is excluded from JWT filter.", path);
+        if (request.getMethod().equals("OPTIONS") || path.startsWith("/api/public/")) {
+            log.info("Path {} 제외됨 JWT filter.", path);
             return true; // 필터 제외
         }
         return false;
@@ -45,7 +38,6 @@ public class JWTCheckFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
-        log.info("---------------------------");
         log.info("---------------------------");
         log.info("---------------------------");
 
@@ -66,7 +58,6 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             String username = (String) claims.get("username");
             String userPhone = (String) claims.get("userPhone");
 
-            // 추후 pwd는 뺄예정
             UserDto userDto = new UserDto(userLoginId, userPwd, username, nickname, email, userPhone, social, roleNames);
 
             log.info("----------------------------------- ");

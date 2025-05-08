@@ -1,13 +1,11 @@
 package com.ssafy.pjtaserver.config;
 
 import com.ssafy.pjtaserver.security.filter.JWTCheckFilter;
-import com.ssafy.pjtaserver.security.handler.ApiLoginFailHandler;
-import com.ssafy.pjtaserver.security.handler.ApiLoginSuccessHandler;
-import com.ssafy.pjtaserver.security.handler.CustomAccessDeniedHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -33,31 +31,21 @@ public class CustomSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         log.info("------------------------------security config------------------------------");
-
-//        http
-//                .csrf(AbstractHttpConfigurer::disable)
-//                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-//                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.NEVER))
-//                .exceptionHandling(exceptions -> exceptions.accessDeniedHandler(new CustomAccessDeniedHandler()))
-//                .formLogin(login -> login
-//                        .loginPage("/api/member/login")
-//                        .successHandler(new ApiLoginSuccessHandler())
-//                        .failureHandler(new ApiLoginFailHandler())
-//                );
-//
-//        // JWTCheckFilter 추가
-//        http.addFilterBefore(new JWTCheckFilter(), UsernamePasswordAuthenticationFilter.class);
         http
-                .csrf(AbstractHttpConfigurer::disable) // CSRF 비활성화 (REST API 특성상 필요하지 않음)
-                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // CORS 설정 필요시 추가
+                .csrf(AbstractHttpConfigurer::disable)
+                // CORS 설정 필요시 추가
+
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("**").permitAll() // 로그인/회원가입 등 공개 API 허용
-                        .anyRequest().authenticated() // 그 외 요청은 인증 필요
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // OPTIONS 메서드 허용
+                        .requestMatchers("/api/public/**").permitAll()
+                        .anyRequest().authenticated()
                 )
                 .sessionManagement(sessionManagement -> sessionManagement
                         .sessionCreationPolicy(SessionCreationPolicy.NEVER)
                 )
                 // JWT 필터 추가 (UsernamePasswordAuthenticationFilter 이전에 동작)
+                // jwt 필터에서 토큰이 존재하는지 여부 확인
                 .addFilterBefore(new JWTCheckFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

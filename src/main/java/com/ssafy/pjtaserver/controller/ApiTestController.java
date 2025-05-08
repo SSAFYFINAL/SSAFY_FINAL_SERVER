@@ -28,9 +28,6 @@ import java.io.IOException;
 @Slf4j
 public class ApiTestController {
 
-    private final AuthenticationManager authenticationManager;
-
-
     @GetMapping("/api/public/test")
     public ResponseEntity<ApiResponse> test1() {
         log.info("------------------------------api test------------------------------");
@@ -54,31 +51,5 @@ public class ApiTestController {
     public ResponseEntity<ApiResponse> test4() {
         return ApiResponse.of(ApiResponseCode.USER_CREATED);
     }
-
-    @PostMapping("/api/public/login")
-    public ResponseEntity<?> login(
-            @RequestBody UserDto userDto,
-            HttpServletRequest request,
-            HttpServletResponse response) throws IOException, ServletException {
-        try {
-            // 사용자 인증 진행
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(userDto.getUsername(), userDto.getPassword())
-            );
-
-            // 인증 성공 시 AuthenticationSuccessHandler 호출
-            ApiLoginSuccessHandler successHandler = new ApiLoginSuccessHandler();
-            successHandler.onAuthenticationSuccess(request, response, authentication); // 강제 호출
-
-            return ResponseEntity.ok().build(); // SuccessHandler에서 이미 응답을 처리하므로 빈 응답 반환
-        } catch (AuthenticationException e) {
-            // 인증 실패 시 AuthenticationFailureHandler 호출
-            ApiLoginFailHandler failureHandler = new ApiLoginFailHandler();
-            failureHandler.onAuthenticationFailure(request, response, e); // 강제 호출
-
-            return ResponseEntity.ok().build(); // FailureHandler에서 응답 처리하므로 빈 응답 반환
-        }
-    }
-
 
 }
