@@ -45,10 +45,11 @@ public class MailServiceImpl implements MailService {
             Context context = new Context();
             context.setVariable("subject", mailDto.getSubject());
             context.setVariable("message", mailDto.getContent());
-            context.setVariable("certifyCode", 1111111111);
+            context.setVariable("certifyCode", mailDto.getCertifyCode());
             switch (mailDto.getRequestType()) {
                 case "join" -> context.setVariable("requestType", "회원가입");
                 case "findPwd" -> context.setVariable("requestType", "비밀번호 찾기");
+                case "tempPwd" -> context.setVariable("requestType", "임시 비밀번호");
                 default -> context.setVariable("userType", "알 수 없음");
             }
 

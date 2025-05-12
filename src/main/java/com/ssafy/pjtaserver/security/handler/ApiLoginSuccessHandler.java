@@ -49,6 +49,5 @@ public class ApiLoginSuccessHandler implements AuthenticationSuccessHandler {
         PrintWriter printWriter = response.getWriter();
         printWriter.println(jsonStr);
         printWriter.close();
-
     }
 }

@@ -22,7 +22,7 @@ public interface UserService {
         return new UserDto(
                 user.getUserLoginId(),
                 user.getUserPwd(),
-                user.getUsername(),
+                user.getUsernameMain(),
                 user.getNickName(),
                 user.getUserEmail(),
                 user.getUserPhone(),

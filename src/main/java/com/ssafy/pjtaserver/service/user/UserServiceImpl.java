@@ -1,12 +1,14 @@
 package com.ssafy.pjtaserver.service.user;
 
 import com.ssafy.pjtaserver.domain.user.User;
+import com.ssafy.pjtaserver.dto.MailDto;
 import com.ssafy.pjtaserver.enums.UserRole;
 import com.ssafy.pjtaserver.dto.UserDto;
 import com.ssafy.pjtaserver.repository.user.UserRepository;
 import com.ssafy.pjtaserver.security.handler.ApiLoginFailHandler;
 import com.ssafy.pjtaserver.security.handler.ApiLoginSuccessHandler;
 import com.ssafy.pjtaserver.enums.SocialLogin;
+import com.ssafy.pjtaserver.service.mail.MailService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -39,6 +41,7 @@ public class UserServiceImpl implements UserService {
     private static final String DEFAULT_SOCIAL_NICKNAME = "소셜회원"; // 소셜 로그인 사용자를 위한 기본 닉네임
     private static final int PASSWORD_LENGTH = 10; // 임의 비밀번호 길이
 
+    private final MailService mailService;
     private final UserRepository userRepository;
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
@@ -58,7 +61,7 @@ public class UserServiceImpl implements UserService {
         try {
             // 사용자 인증 시도
             Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(userDto.getUsername(), userDto.getPassword())
+                    new UsernamePasswordAuthenticationToken(userDto.getUserLoginId(), userDto.getPassword())
             );
             // 인증 성공 시 성공 핸들러 처리
             getSuccessHandler().onAuthenticationSuccess(request, response, authentication);
@@ -88,10 +91,19 @@ public class UserServiceImpl implements UserService {
             // 기존 사용자 DTO 반환
             return entityToDto(user.get());
         }
+        String rawPassword = makePassword();
 
         // 사용자 정보가 없으면 새 사용자 생성 및 저장
-        User socialUser = makeSocialUser(socialUserInfo, socialLogin.getName());
+        User socialUser = makeSocialUser(socialUserInfo, socialLogin.getName(), rawPassword);
         userRepository.save(socialUser);
+
+        mailService.sendEmail(new MailDto(
+                email,
+                "임시 비밀번호",
+                "임시 비밀번호를 확인하고 추후에 수정 해주세요.",
+                rawPassword,
+                "tempPwd"
+        ));
 
         return entityToDto(socialUser);
     }
@@ -137,16 +149,13 @@ public class UserServiceImpl implements UserService {
      * @param socialType 소셜 로그인 플랫폼 타입 (KAKAO, GOOGLE)
      * @return 새로 생성된 사용자 엔티티
      */
-    private User makeSocialUser(Map<String, String> userInfo, String socialType) {
-        // 임의 비밀번호 생성
-        String password = makePassword();
-
+    private User makeSocialUser(Map<String, String> userInfo, String socialType, String rawPassword) {
         // 사용자 엔티티 생성
         User user = User.builder()
                 .userLoginId(userInfo.get("email"))
                 .userEmail(userInfo.get("email"))
-                .userPwd(passwordEncoder.encode(password))
-                .username(userInfo.get("username"))
+                .userPwd(passwordEncoder.encode(rawPassword))
+                .usernameMain(userInfo.get("username"))
                 .nickName(socialType + DEFAULT_SOCIAL_NICKNAME)
                 .userPhone(DEFAULT_PHONE_NUMBER)
                 .social(true)

@@ -33,7 +33,7 @@ class UserTest {
         System.out.println("normalUser = " + normalUser);
         System.out.println("adminUser = " + adminUser);
 
-        assertThat(normalUser.getUsername()).isEqualTo(adminUser.getUsername());
+        assertThat(normalUser.getUsernameMain()).isEqualTo(adminUser.getUsernameMain());
 
     }
 
@@ -47,7 +47,7 @@ class UserTest {
                 .selectFrom(user)
                 .where(user.username.eq("dojin"))
                 .fetchOne();
-        assertThat(findUser.getUsername()).isEqualTo("dojin");
+        assertThat(findUser.getUsernameMain()).isEqualTo("dojin");
     }
 
 }

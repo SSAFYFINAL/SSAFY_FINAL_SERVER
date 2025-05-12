@@ -35,7 +35,7 @@ public class User {
     private List<UserRole> userRoleList = new ArrayList<>();
 
     @Column(name = "user_name", nullable = false)
-    private String username;
+    private String usernameMain;
 
     @Column(name = "user_nick_name", nullable = false)
     private String nickName;
@@ -67,7 +67,7 @@ public class User {
         User user = new User();
         user.userLoginId = userLoginId;
         user.userPwd = userPwd;
-        user.username = username;
+        user.usernameMain = username;
         user.nickName = nickName;
         user.userEmail = userEmail;
         user.userPhone = userPhone;
@@ -90,7 +90,7 @@ public class User {
         User admin = new User();
         admin.userLoginId = userLoginId;
         admin.userPwd = userPwd;
-        admin.username = username;
+        admin.usernameMain = username;
         admin.nickName = nickName;
         admin.userEmail = userEmail;
         admin.userPhone = userPhone;
@@ -99,10 +99,10 @@ public class User {
     }
 
     @Builder
-    public User(String userLoginId, String userPwd, String username, String nickName, String userEmail, String userPhone, boolean social) {
+    public User(String userLoginId, String userPwd, String usernameMain, String nickName, String userEmail, String userPhone, boolean social) {
         this.userLoginId = userLoginId;
         this.userPwd = userPwd;
-        this.username = username;
+        this.usernameMain = usernameMain;
         this.nickName = nickName;
         this.userEmail = userEmail;
         this.userPhone = userPhone;

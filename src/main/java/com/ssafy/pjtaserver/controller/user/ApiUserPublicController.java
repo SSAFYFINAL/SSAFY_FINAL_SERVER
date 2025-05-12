@@ -29,6 +29,8 @@ public class ApiUserPublicController {
     public void login(@RequestBody UserDto userDto,
                                     HttpServletRequest request,
                                     HttpServletResponse response) throws IOException, ServletException {
+        log.info("------------------------------api login------------------------------");
+        log.info("login : {}", userDto);
         userService.authenticateAndRespond(userDto, request, response);
     }
 
@@ -72,8 +74,6 @@ public class ApiUserPublicController {
         String jetRefreshToken = JWTUtil.generateToken(claims, 60 * 24);
         claims.put("accessToken", jwtAccessToken);
         claims.put("refreshToken", jetRefreshToken);
-
-        return ApiResponse.of(ApiResponseCode.USER_CREATED, claims);    }
-
-
+        return ApiResponse.of(ApiResponseCode.USER_CREATED, claims);
+    }
 }

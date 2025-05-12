@@ -51,12 +51,13 @@ public class UserDto extends User {
     }
 
     @JsonCreator
-    public UserDto(@JsonProperty("userLoginId") String userLoginId, @JsonProperty("password") String password) {
-        super(userLoginId, password, new ArrayList<>());
+    public UserDto(
+            @JsonProperty(value = "userLoginId", required = true) String userLoginId,
+            @JsonProperty(value = "password", required = true) String password) {
+        super(userLoginId, password, List.of());
         this.userLoginId = userLoginId;
         this.userPwd = password;
     }
-
     // JWT
     public Map<String, Object> getClaims() {
         HashMap<String, Object> dataMap = new HashMap<>();

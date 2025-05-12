@@ -45,7 +45,7 @@ public class CustomUserDetailService implements UserDetailsService {
         UserDto userDto = new UserDto(
                 user.getUserLoginId(),
                 user.getUserPwd(),
-                user.getUsername(),
+                user.getUsernameMain(),
                 user.getNickName(),
                 user.getUserPhone(),
                 user.getProfileImgPath(),
