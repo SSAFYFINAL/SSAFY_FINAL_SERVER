@@ -47,8 +47,8 @@ public class CustomUserDetailService implements UserDetailsService {
                 user.getUserPwd(),
                 user.getUsernameMain(),
                 user.getNickName(),
+                user.getUserEmail(),
                 user.getUserPhone(),
-                user.getProfileImgPath(),
                 user.isSocial(),
                 user.getUserRoleList()
                         .stream()
