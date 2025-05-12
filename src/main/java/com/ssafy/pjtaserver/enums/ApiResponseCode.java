@@ -1,4 +1,4 @@
-package com.ssafy.pjtaserver.util.apiResponseUtil;
+package com.ssafy.pjtaserver.enums;
 
 import lombok.Getter;
 import org.springframework.http.HttpStatus;

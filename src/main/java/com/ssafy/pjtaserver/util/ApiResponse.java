@@ -1,6 +1,7 @@
 
-package com.ssafy.pjtaserver.util.apiResponseUtil;
+package com.ssafy.pjtaserver.util;
 
+import com.ssafy.pjtaserver.enums.ApiResponseCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
