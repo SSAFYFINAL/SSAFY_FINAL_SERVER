@@ -42,7 +42,7 @@ public class CustomSecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sessionManagement -> sessionManagement
-                        .sessionCreationPolicy(SessionCreationPolicy.NEVER)
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 // JWT 필터 추가 (UsernamePasswordAuthenticationFilter 이전에 동작)
                 // jwt 필터에서 토큰이 존재하는지 여부 확인
@@ -78,7 +78,4 @@ public class CustomSecurityConfig {
         return http.getSharedObject(AuthenticationManagerBuilder.class)
                 .build();
     }
-
-
-
 }

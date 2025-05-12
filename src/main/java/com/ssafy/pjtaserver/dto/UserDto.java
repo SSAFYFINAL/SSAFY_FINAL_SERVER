@@ -2,6 +2,7 @@ package com.ssafy.pjtaserver.dto;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -11,6 +12,7 @@ import java.util.*;
 import static java.util.stream.Collectors.*;
 
 // 시큐리티에서 제공해주는 User를 상속받아 dto정의
+@Getter
 public class UserDto extends User {
 
     private final String userLoginId;

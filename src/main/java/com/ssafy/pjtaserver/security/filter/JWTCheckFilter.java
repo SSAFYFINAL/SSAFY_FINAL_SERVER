@@ -3,13 +3,14 @@ package com.ssafy.pjtaserver.security.filter;
 import com.google.gson.Gson;
 import com.ssafy.pjtaserver.dto.UserDto;
 import com.ssafy.pjtaserver.util.JWTUtil;
-import com.ssafy.pjtaserver.util.apiResponseUtil.ApiResponse;
-import com.ssafy.pjtaserver.util.apiResponseUtil.ApiResponseCode;
+import com.ssafy.pjtaserver.util.ApiResponse;
+import com.ssafy.pjtaserver.enums.ApiResponseCode;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -27,11 +28,15 @@ public class JWTCheckFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         String path = request.getRequestURI();
+        String method = request.getMethod();
 
-        if (request.getMethod().equals("OPTIONS") || path.startsWith("/api/public/")) {
+        if (HttpMethod.OPTIONS.matches(method) || path.startsWith("/api/public/")) {
+            log.info("-----------------------------------제외 프리패스-----------------------------------");
             log.info("Path {} 제외됨 JWT filter.", path);
-            return true; // 필터 제외
+            log.info("-----------------------------------제외 프리패스-----------------------------------");
+            return true; // 필터링 제외
         }
+
         return false;
     }
 
@@ -42,6 +47,11 @@ public class JWTCheckFilter extends OncePerRequestFilter {
         log.info("---------------------------");
 
         String authHeaderStr = request.getHeader("Authorization");
+        if (authHeaderStr == null || !authHeaderStr.startsWith("Bearer ")) {
+            log.warn("Authorization 헤더가 없거나 형식이 올바르지 않음. 경로: {}", request.getRequestURI());
+            filterChain.doFilter(request, response); // 필터 체인을 계속 진행
+            return;
+        }
 
         try {
             String accessToken = authHeaderStr.substring(7);

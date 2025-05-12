@@ -1,10 +1,8 @@
 package com.ssafy.pjtaserver.domain.user;
 
+import com.ssafy.pjtaserver.enums.UserRole;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -98,6 +96,17 @@ public class User {
         admin.userPhone = userPhone;
         admin.userRoleList.add(UserRole.ADMIN);
         return admin;
+    }
+
+    @Builder
+    public User(String userLoginId, String userPwd, String username, String nickName, String userEmail, String userPhone, boolean social) {
+        this.userLoginId = userLoginId;
+        this.userPwd = userPwd;
+        this.username = username;
+        this.nickName = nickName;
+        this.userEmail = userEmail;
+        this.userPhone = userPhone;
+        this.social = social;
     }
 
     public void addRole(UserRole role) {
