@@ -1,6 +1,6 @@
 package com.ssafy.pjtaserver.controller.user;
 
-import com.ssafy.pjtaserver.dto.UserDto;
+import com.ssafy.pjtaserver.dto.UserLoginDto;
 import com.ssafy.pjtaserver.service.user.UserService;
 import com.ssafy.pjtaserver.util.JWTUtil;
 import com.ssafy.pjtaserver.enums.SocialLogin;
@@ -26,12 +26,12 @@ public class ApiUserPublicController {
     private final UserService userService;
 
     @PostMapping("/login")
-    public void login(@RequestBody UserDto userDto,
+    public void login(@RequestBody UserLoginDto userLoginDto,
                                     HttpServletRequest request,
                                     HttpServletResponse response) throws IOException, ServletException {
         log.info("------------------------------api login------------------------------");
-        log.info("login : {}", userDto);
-        userService.authenticateAndRespond(userDto, request, response);
+        log.info("login : {}", userLoginDto);
+        userService.authenticateAndRespond(userLoginDto, request, response);
     }
 
     /**
@@ -47,7 +47,7 @@ public class ApiUserPublicController {
         log.info("------------------------------api kakao data------------------------------");
 
         // 서비스에서 받은 유저의 정보를 담아준다.
-        UserDto kakaoUser = userService.getSocialUser(accessToken, SocialLogin.KAKAO);
+        UserLoginDto kakaoUser = userService.getSocialUser(accessToken, SocialLogin.KAKAO);
 
         // 토큰의 payload 에 정보를 담는다.
         Map<String, Object> claims = kakaoUser.getClaims();
@@ -66,7 +66,7 @@ public class ApiUserPublicController {
         log.info("------------------------------api google data------------------------------");
         log.info("getMemberFromGoogle : {}", accessToken);
         log.info("------------------------------api google data------------------------------");
-        UserDto googleUser = userService.getSocialUser(accessToken, SocialLogin.GOOGLE);
+        UserLoginDto googleUser = userService.getSocialUser(accessToken, SocialLogin.GOOGLE);
 
         Map<String, Object> claims = googleUser.getClaims();
         // 토근 생성

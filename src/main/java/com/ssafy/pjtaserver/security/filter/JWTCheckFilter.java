@@ -1,7 +1,7 @@
 package com.ssafy.pjtaserver.security.filter;
 
 import com.google.gson.Gson;
-import com.ssafy.pjtaserver.dto.UserDto;
+import com.ssafy.pjtaserver.dto.UserLoginDto;
 import com.ssafy.pjtaserver.util.JWTUtil;
 import com.ssafy.pjtaserver.util.ApiResponse;
 import com.ssafy.pjtaserver.enums.ApiResponseCode;
@@ -68,14 +68,14 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             String username = (String) claims.get("username");
             String userPhone = (String) claims.get("userPhone");
 
-            UserDto userDto = new UserDto(userLoginId, userPwd, username, nickname, email, userPhone, social, roleNames);
+            UserLoginDto userLoginDto = new UserLoginDto(userLoginId, userPwd, username, nickname, email, userPhone, social, roleNames);
 
             log.info("----------------------------------- ");
-            log.info(String.valueOf(userDto));
-            log.info(userDto.getAuthorities().toString());
+            log.info(String.valueOf(userLoginDto));
+            log.info(userLoginDto.getAuthorities().toString());
 
             UsernamePasswordAuthenticationToken authenticationToken
-                    = new UsernamePasswordAuthenticationToken(userDto,userPwd,userDto.getAuthorities());
+                    = new UsernamePasswordAuthenticationToken(userLoginDto,userPwd, userLoginDto.getAuthorities());
 
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 

@@ -3,7 +3,7 @@ package com.ssafy.pjtaserver.service.user;
 import com.ssafy.pjtaserver.domain.user.User;
 import com.ssafy.pjtaserver.dto.MailDto;
 import com.ssafy.pjtaserver.enums.UserRole;
-import com.ssafy.pjtaserver.dto.UserDto;
+import com.ssafy.pjtaserver.dto.UserLoginDto;
 import com.ssafy.pjtaserver.repository.user.UserRepository;
 import com.ssafy.pjtaserver.security.handler.ApiLoginFailHandler;
 import com.ssafy.pjtaserver.security.handler.ApiLoginSuccessHandler;
@@ -50,18 +50,18 @@ public class UserServiceImpl implements UserService {
     /**
      * 로그인 성공/실패 핸들러를 통해 결과를 응답
      *
-     * @param userDto 유저 인증 정보 (username, password)
+     * @param userLoginDto 유저 인증 정보 (username, password)
      * @param request HTTP 요청 객체
      * @param response HTTP 응답 객체
      * @throws IOException  핸들러 처리 중 발생 가능한 예외
      * @throws ServletException 핸들러 처리 중 발생 가능한 예외
      */
     @Override
-    public void authenticateAndRespond(UserDto userDto, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    public void authenticateAndRespond(UserLoginDto userLoginDto, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         try {
             // 사용자 인증 시도
             Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(userDto.getUserLoginId(), userDto.getPassword())
+                    new UsernamePasswordAuthenticationToken(userLoginDto.getUserLoginId(), userLoginDto.getPassword())
             );
             // 인증 성공 시 성공 핸들러 처리
             getSuccessHandler().onAuthenticationSuccess(request, response, authentication);
@@ -80,7 +80,7 @@ public class UserServiceImpl implements UserService {
      * @return UserDto 사용자 정보 DTO
      */
     @Override
-    public UserDto getSocialUser(String accessToken, SocialLogin socialLogin) {
+    public UserLoginDto getSocialUser(String accessToken, SocialLogin socialLogin) {
         // 소셜 플랫폼에서 사용자 정보 가져오기
         Map<String, String> socialUserInfo = getUserInfoFromSocial(accessToken, socialLogin);
         String email = socialUserInfo.get("email");

@@ -13,7 +13,7 @@ import static java.util.stream.Collectors.*;
 
 // 시큐리티에서 제공해주는 User를 상속받아 dto정의
 @Getter
-public class UserDto extends User {
+public class UserLoginDto extends User {
 
     private final String userLoginId;
     private String userPwd;
@@ -26,12 +26,12 @@ public class UserDto extends User {
 
     private List<String> roleNames = new ArrayList<>();
 
-    public UserDto(String username, String password, Collection<? extends GrantedAuthority> authorities, String userLoginId) {
+    public UserLoginDto(String username, String password, Collection<? extends GrantedAuthority> authorities, String userLoginId) {
         super(username, password, authorities);
         this.userLoginId = userLoginId;
     }
 
-    public UserDto(String userLoginId, String userPwd, String username, String nickName, String userEmail, String userPhone, boolean social, List<String> roleNames) {
+    public UserLoginDto(String userLoginId, String userPwd, String username, String nickName, String userEmail, String userPhone, boolean social, List<String> roleNames) {
         super(userLoginId, userPwd, getCollect(roleNames));
 
         this.userLoginId = userLoginId;
@@ -51,7 +51,7 @@ public class UserDto extends User {
     }
 
     @JsonCreator
-    public UserDto(
+    public UserLoginDto(
             @JsonProperty(value = "userLoginId", required = true) String userLoginId,
             @JsonProperty(value = "password", required = true) String password) {
         super(userLoginId, password, List.of());
