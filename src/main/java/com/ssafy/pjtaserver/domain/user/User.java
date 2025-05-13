@@ -1,10 +1,8 @@
 package com.ssafy.pjtaserver.domain.user;
 
+import com.ssafy.pjtaserver.enums.UserRole;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +35,7 @@ public class User {
     private List<UserRole> userRoleList = new ArrayList<>();
 
     @Column(name = "user_name", nullable = false)
-    private String username;
+    private String usernameMain;
 
     @Column(name = "user_nick_name", nullable = false)
     private String nickName;
@@ -69,7 +67,7 @@ public class User {
         User user = new User();
         user.userLoginId = userLoginId;
         user.userPwd = userPwd;
-        user.username = username;
+        user.usernameMain = username;
         user.nickName = nickName;
         user.userEmail = userEmail;
         user.userPhone = userPhone;
@@ -92,12 +90,23 @@ public class User {
         User admin = new User();
         admin.userLoginId = userLoginId;
         admin.userPwd = userPwd;
-        admin.username = username;
+        admin.usernameMain = username;
         admin.nickName = nickName;
         admin.userEmail = userEmail;
         admin.userPhone = userPhone;
         admin.userRoleList.add(UserRole.ADMIN);
         return admin;
+    }
+
+    @Builder
+    public User(String userLoginId, String userPwd, String usernameMain, String nickName, String userEmail, String userPhone, boolean social) {
+        this.userLoginId = userLoginId;
+        this.userPwd = userPwd;
+        this.usernameMain = usernameMain;
+        this.nickName = nickName;
+        this.userEmail = userEmail;
+        this.userPhone = userPhone;
+        this.social = social;
     }
 
     public void addRole(UserRole role) {

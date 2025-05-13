@@ -1,27 +1,13 @@
 package com.ssafy.pjtaserver.controller;
 
-import com.ssafy.pjtaserver.dto.UserDto;
-import com.ssafy.pjtaserver.security.handler.ApiLoginFailHandler;
-import com.ssafy.pjtaserver.security.handler.ApiLoginSuccessHandler;
-import com.ssafy.pjtaserver.util.apiResponseUtil.ApiResponse;
-import com.ssafy.pjtaserver.util.apiResponseUtil.ApiResponseCode;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import com.ssafy.pjtaserver.util.ApiResponse;
+import com.ssafy.pjtaserver.enums.ApiResponseCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor

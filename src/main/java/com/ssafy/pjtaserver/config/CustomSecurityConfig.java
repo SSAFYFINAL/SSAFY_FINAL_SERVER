@@ -32,20 +32,23 @@ public class CustomSecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         log.info("------------------------------security config------------------------------");
         http
-                .csrf(AbstractHttpConfigurer::disable)
-                // CORS 설정 필요시 추가
-
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .csrf(AbstractHttpConfigurer::disable) // CSRF 보호 비활성화
+                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // CORS 설정 추가
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // OPTIONS 메서드 허용
-                        .requestMatchers("/api/public/**").permitAll()
-                        .anyRequest().authenticated()
+                        .requestMatchers("/api/public/**").permitAll() // /api/public/** 경로는 인증 불필요
+                        .anyRequest().authenticated() // 나머지는 인증 필요
                 )
                 .sessionManagement(sessionManagement -> sessionManagement
-                        .sessionCreationPolicy(SessionCreationPolicy.NEVER)
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 상태 비저장 방식 사용
                 )
+
+                // 기본 필터 제거
+                .securityContext(AbstractHttpConfigurer::disable) // SecurityContextHolderFilter 제거
+                .requestCache(AbstractHttpConfigurer::disable) // RequestCacheAwareFilter 제거
+                .logout(AbstractHttpConfigurer::disable) // LogoutFilter 제거 로그아웃은 따로 정의해서 진행할꺼기 때문에 필요없음
+
                 // JWT 필터 추가 (UsernamePasswordAuthenticationFilter 이전에 동작)
-                // jwt 필터에서 토큰이 존재하는지 여부 확인
                 .addFilterBefore(new JWTCheckFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
@@ -73,12 +76,11 @@ public class CustomSecurityConfig {
         return source;
     }
 
+    // 시큐리티 에서 제공하는 인증로직이 아닌 내가 직접 커스텀한 인증로직을 사용하겠다 선언
+    // 직접 AuthenticationManager 를 컨트롤러 또는 서비스에서 사용할 수 있도록 하기 위한 설정
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
         return http.getSharedObject(AuthenticationManagerBuilder.class)
                 .build();
     }
-
-
-
 }

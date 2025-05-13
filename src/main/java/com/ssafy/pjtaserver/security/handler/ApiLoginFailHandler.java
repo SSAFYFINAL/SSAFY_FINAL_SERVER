@@ -1,8 +1,8 @@
 package com.ssafy.pjtaserver.security.handler;
 
 import com.google.gson.Gson;
-import com.ssafy.pjtaserver.util.apiResponseUtil.ApiResponse;
-import com.ssafy.pjtaserver.util.apiResponseUtil.ApiResponseCode;
+import com.ssafy.pjtaserver.util.ApiResponse;
+import com.ssafy.pjtaserver.enums.ApiResponseCode;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

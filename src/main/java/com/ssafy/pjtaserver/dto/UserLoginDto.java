@@ -2,6 +2,7 @@ package com.ssafy.pjtaserver.dto;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -11,7 +12,8 @@ import java.util.*;
 import static java.util.stream.Collectors.*;
 
 // 시큐리티에서 제공해주는 User를 상속받아 dto정의
-public class UserDto extends User {
+@Getter
+public class UserLoginDto extends User {
 
     private final String userLoginId;
     private String userPwd;
@@ -24,12 +26,12 @@ public class UserDto extends User {
 
     private List<String> roleNames = new ArrayList<>();
 
-    public UserDto(String username, String password, Collection<? extends GrantedAuthority> authorities, String userLoginId) {
+    public UserLoginDto(String username, String password, Collection<? extends GrantedAuthority> authorities, String userLoginId) {
         super(username, password, authorities);
         this.userLoginId = userLoginId;
     }
 
-    public UserDto(String userLoginId, String userPwd, String username, String nickName, String userEmail, String userPhone, boolean social, List<String> roleNames) {
+    public UserLoginDto(String userLoginId, String userPwd, String username, String nickName, String userEmail, String userPhone, boolean social, List<String> roleNames) {
         super(userLoginId, userPwd, getCollect(roleNames));
 
         this.userLoginId = userLoginId;
@@ -49,12 +51,13 @@ public class UserDto extends User {
     }
 
     @JsonCreator
-    public UserDto(@JsonProperty("userLoginId") String userLoginId, @JsonProperty("password") String password) {
-        super(userLoginId, password, new ArrayList<>());
+    public UserLoginDto(
+            @JsonProperty(value = "userLoginId", required = true) String userLoginId,
+            @JsonProperty(value = "password", required = true) String password) {
+        super(userLoginId, password, List.of());
         this.userLoginId = userLoginId;
         this.userPwd = password;
     }
-
     // JWT
     public Map<String, Object> getClaims() {
         HashMap<String, Object> dataMap = new HashMap<>();

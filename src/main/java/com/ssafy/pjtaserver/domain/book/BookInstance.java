@@ -1,5 +1,6 @@
 package com.ssafy.pjtaserver.domain.book;
 
+import com.ssafy.pjtaserver.enums.BookCheckoutStatus;
 import com.ssafy.pjtaserver.domain.user.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
