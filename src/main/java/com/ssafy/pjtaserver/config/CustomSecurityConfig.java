@@ -76,6 +76,8 @@ public class CustomSecurityConfig {
         return source;
     }
 
+    // 시큐리티 에서 제공하는 인증로직이 아닌 내가 직접 커스텀한 인증로직을 사용하겠다 선언
+    // 직접 AuthenticationManager 를 컨트롤러 또는 서비스에서 사용할 수 있도록 하기 위한 설정
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
         return http.getSharedObject(AuthenticationManagerBuilder.class)

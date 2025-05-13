@@ -45,7 +45,7 @@ class UserTest {
 
         User findUser = jpaQueryFactory
                 .selectFrom(user)
-                .where(user.username.eq("dojin"))
+                .where(user.usernameMain.eq("dojin"))
                 .fetchOne();
         assertThat(findUser.getUsernameMain()).isEqualTo("dojin");
     }
