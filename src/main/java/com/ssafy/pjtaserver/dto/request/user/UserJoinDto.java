@@ -1,4 +1,4 @@
-package com.ssafy.pjtaserver.dto.request;
+package com.ssafy.pjtaserver.dto.request.user;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

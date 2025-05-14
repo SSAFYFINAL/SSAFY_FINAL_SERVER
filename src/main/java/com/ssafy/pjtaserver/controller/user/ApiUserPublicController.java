@@ -1,27 +1,25 @@
 package com.ssafy.pjtaserver.controller.user;
 
 import com.ssafy.pjtaserver.dto.UserLoginDto;
-import com.ssafy.pjtaserver.dto.request.UserCheckedIdDto;
-import com.ssafy.pjtaserver.dto.request.UserJoinDto;
+import com.ssafy.pjtaserver.dto.request.user.UserCheckedIdDto;
+import com.ssafy.pjtaserver.dto.request.user.UserJoinDto;
 import com.ssafy.pjtaserver.service.user.UserService;
 import com.ssafy.pjtaserver.util.JWTUtil;
 import com.ssafy.pjtaserver.enums.SocialLogin;
 import com.ssafy.pjtaserver.util.ApiResponse;
 import com.ssafy.pjtaserver.enums.ApiResponseCode;
+import jakarta.mail.MessagingException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -47,7 +45,7 @@ public class ApiUserPublicController {
      */
     // 카카오 소셔
     @GetMapping("/login/kakao")
-    public ResponseEntity<ApiResponse> getMemberFromKakao(String accessToken) {
+    public ResponseEntity<ApiResponse> getMemberFromKakao(String accessToken) throws MessagingException {
         log.info("------------------------------api kakao data------------------------------");
         log.info("getMemberFromKakao : {}", accessToken);
         log.info("------------------------------api kakao data------------------------------");
@@ -68,7 +66,7 @@ public class ApiUserPublicController {
     }
 
     @GetMapping("/login/google")
-    public ResponseEntity<ApiResponse> getMemberFromGoogle(String accessToken) {
+    public ResponseEntity<ApiResponse> getMemberFromGoogle(String accessToken) throws MessagingException {
         log.info("------------------------------api google data------------------------------");
         log.info("getMemberFromGoogle : {}", accessToken);
         log.info("------------------------------api google data------------------------------");
