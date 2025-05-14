@@ -1,7 +1,7 @@
 package com.ssafy.pjtaserver.exception;
 
-import com.ssafy.pjtaserver.util.ApiResponse;
 import com.ssafy.pjtaserver.enums.ApiResponseCode;
+import com.ssafy.pjtaserver.util.ApiResponse;
 import jakarta.mail.MessagingException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -10,9 +10,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @ControllerAdvice
 @Slf4j

@@ -74,4 +74,7 @@ public class UserLoginDto extends User {
         return dataMap;
     }
 
+    public String getUsername() {
+        return userLoginId;
+    }
 }
