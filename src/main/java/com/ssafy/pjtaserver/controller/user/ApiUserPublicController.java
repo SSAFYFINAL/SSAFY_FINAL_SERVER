@@ -1,17 +1,21 @@
 package com.ssafy.pjtaserver.controller.user;
 
 import com.ssafy.pjtaserver.dto.UserLoginDto;
+import com.ssafy.pjtaserver.dto.request.user.UserCheckedIdDto;
+import com.ssafy.pjtaserver.dto.request.user.UserJoinDto;
 import com.ssafy.pjtaserver.service.user.UserService;
 import com.ssafy.pjtaserver.util.JWTUtil;
 import com.ssafy.pjtaserver.enums.SocialLogin;
 import com.ssafy.pjtaserver.util.ApiResponse;
 import com.ssafy.pjtaserver.enums.ApiResponseCode;
+import jakarta.mail.MessagingException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -41,7 +45,7 @@ public class ApiUserPublicController {
      */
     // 카카오 소셔
     @GetMapping("/login/kakao")
-    public ResponseEntity<ApiResponse> getMemberFromKakao(String accessToken) {
+    public ResponseEntity<ApiResponse> getMemberFromKakao(String accessToken) throws MessagingException {
         log.info("------------------------------api kakao data------------------------------");
         log.info("getMemberFromKakao : {}", accessToken);
         log.info("------------------------------api kakao data------------------------------");
@@ -62,7 +66,7 @@ public class ApiUserPublicController {
     }
 
     @GetMapping("/login/google")
-    public ResponseEntity<ApiResponse> getMemberFromGoogle(String accessToken) {
+    public ResponseEntity<ApiResponse> getMemberFromGoogle(String accessToken) throws MessagingException {
         log.info("------------------------------api google data------------------------------");
         log.info("getMemberFromGoogle : {}", accessToken);
         log.info("------------------------------api google data------------------------------");
@@ -75,5 +79,25 @@ public class ApiUserPublicController {
         claims.put("accessToken", jwtAccessToken);
         claims.put("refreshToken", jetRefreshToken);
         return ApiResponse.of(ApiResponseCode.USER_CREATED, claims);
+    }
+
+    @PostMapping("/user/join")
+    public ResponseEntity<ApiResponse> joinUser(@Validated @RequestBody UserJoinDto userJoinDto) {
+        log.info("------------------------------api user join------------------------------");
+        log.info("joinUser : {}", userJoinDto);
+
+        if(!userService.joinUser(userJoinDto)) {
+            return ApiResponse.of(ApiResponseCode.USER_CREATED_ERROR);
+        }
+
+        return ApiResponse.of(ApiResponseCode.USER_CREATED, userJoinDto.getUserLoginId());
+    }
+
+    @GetMapping("/user/check-id")
+    public ResponseEntity<ApiResponse> checkId(@Validated @RequestBody UserCheckedIdDto userCheckedIdDto) {
+        if(userService.findByUserId(userCheckedIdDto.getUserLoginId())){
+            return ApiResponse.of(ApiResponseCode.VALIDATION_ERROR);
+        }
+        return ApiResponse.of(ApiResponseCode.SUCCESS);
     }
 }

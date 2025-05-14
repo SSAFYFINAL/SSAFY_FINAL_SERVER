@@ -1,14 +1,18 @@
 package com.ssafy.pjtaserver.service.user;
 
 import com.ssafy.pjtaserver.domain.user.User;
-import com.ssafy.pjtaserver.dto.MailDto;
+import com.ssafy.pjtaserver.dto.request.mail.MailSendDto;
+import com.ssafy.pjtaserver.dto.request.user.UserJoinDto;
+import com.ssafy.pjtaserver.enums.EmailType;
 import com.ssafy.pjtaserver.enums.UserRole;
 import com.ssafy.pjtaserver.dto.UserLoginDto;
+import com.ssafy.pjtaserver.exception.JoinValidationException;
 import com.ssafy.pjtaserver.repository.user.UserRepository;
 import com.ssafy.pjtaserver.security.handler.ApiLoginFailHandler;
 import com.ssafy.pjtaserver.security.handler.ApiLoginSuccessHandler;
 import com.ssafy.pjtaserver.enums.SocialLogin;
 import com.ssafy.pjtaserver.service.mail.MailService;
+import jakarta.mail.MessagingException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -80,7 +84,7 @@ public class UserServiceImpl implements UserService {
      * @return UserDto 사용자 정보 DTO
      */
     @Override
-    public UserLoginDto getSocialUser(String accessToken, SocialLogin socialLogin) {
+    public UserLoginDto getSocialUser(String accessToken, SocialLogin socialLogin) throws MessagingException {
         // 소셜 플랫폼에서 사용자 정보 가져오기
         Map<String, String> socialUserInfo = getUserInfoFromSocial(accessToken, socialLogin);
         String email = socialUserInfo.get("email");
@@ -97,15 +101,45 @@ public class UserServiceImpl implements UserService {
         User socialUser = makeSocialUser(socialUserInfo, socialLogin.getName(), rawPassword);
         userRepository.save(socialUser);
 
-        mailService.sendEmail(new MailDto(
+        mailService.sendEmail(new MailSendDto(
                 email,
-                "임시 비밀번호",
-                "임시 비밀번호를 확인하고 추후에 수정 해주세요.",
                 rawPassword,
-                "tempPwd"
+                EmailType.TEMP_PASSWORD
         ));
 
         return entityToDto(socialUser);
+    }
+
+    @Override
+    public boolean joinUser(UserJoinDto userJoinDto) {
+        if(!userJoinDto.getIsEmailChecked()) {
+            throw new JoinValidationException("이메일 인증 누락");
+        }
+        if(!userJoinDto.getIsCheckedPw()) {
+            throw new JoinValidationException("비밀번호, 비밀번호 확인 불일치");
+        }
+        if(!userJoinDto.getIsDuplicatedUserLoginId()) {
+            throw new JoinValidationException("아이디 중복 확인 실패, 누락");
+        }
+
+        User joinUser = User.createNormalUser(
+                userJoinDto.getUserLoginId(),
+                userJoinDto.getUserPwd(),
+                userJoinDto.getUsernameMain(),
+                userJoinDto.getUserNickName(),
+                userJoinDto.getUserEmail(),
+                userJoinDto.getUserPhone()
+        );
+
+        userRepository.save(joinUser);
+
+        return true;
+    }
+
+    @Override
+    public boolean findByUserId(String userLoginId) {
+        Optional<User> user = userRepository.findByUserLoginId(userLoginId);
+        return user.isPresent();
     }
 
     /**
