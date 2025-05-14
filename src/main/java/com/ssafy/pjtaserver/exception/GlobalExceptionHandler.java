@@ -3,6 +3,7 @@ package com.ssafy.pjtaserver.exception;
 import com.ssafy.pjtaserver.util.ApiResponse;
 import com.ssafy.pjtaserver.enums.ApiResponseCode;
 import jakarta.mail.MessagingException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -14,7 +15,14 @@ import java.util.List;
 import java.util.Optional;
 
 @ControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(CustomEmailException.class)
+    protected ResponseEntity<ApiResponse> handleCustomEmailException(CustomEmailException e) {
+        log.warn("이메일 발송이 제한됨: {}", e.getMessage());
+        return ApiResponse.of(ApiResponseCode.EMAIL_SEND_ERROR, e.getMessage());
+    }
 
     /**
      * 
@@ -51,8 +59,10 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(MessagingException.class)
     protected ResponseEntity<ApiResponse> handleMessagingException(MessagingException e) {
+        log.error("MessagingException 발생: {}", e.getMessage(), e);
         return ApiResponse.of(ApiResponseCode.SERVER_ERROR, e.getMessage());
     }
+
 
     /**
      * 잘못된 입력 처리 (예: IllegalArgumentException 등)
@@ -78,6 +88,8 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(RuntimeException.class)
     protected ResponseEntity<ApiResponse> handleRuntimeException(RuntimeException e) {
-        return ApiResponse.of(ApiResponseCode.SERVER_ERROR, "예상하지 못한 에러가 발생했습니다.");
+        log.error("예상치 못한 에러 발생: {}", e.getMessage(), e);
+        return ApiResponse.of(ApiResponseCode.SERVER_ERROR, "예상하지 못한 오류가 발생했습니다.");
     }
+
 }
