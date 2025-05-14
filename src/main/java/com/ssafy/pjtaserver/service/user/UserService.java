@@ -2,6 +2,7 @@ package com.ssafy.pjtaserver.service.user;
 
 import com.ssafy.pjtaserver.domain.user.User;
 import com.ssafy.pjtaserver.dto.UserLoginDto;
+import com.ssafy.pjtaserver.dto.request.UserJoinDto;
 import com.ssafy.pjtaserver.enums.SocialLogin;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,6 +17,11 @@ public interface UserService {
 
     // accessToken 을 전달받아 유저의 dto을 반환
     UserLoginDto getSocialUser(String accessToken, SocialLogin socialLogin);
+
+    // 유저 회원가입
+    boolean joinUser(UserJoinDto userJoinDto);
+
+    boolean findByUserId(String userLoginId);
 
     // user 엔티티를 userDto로 변환시켜주는 로직
     default UserLoginDto entityToDto(User user) {

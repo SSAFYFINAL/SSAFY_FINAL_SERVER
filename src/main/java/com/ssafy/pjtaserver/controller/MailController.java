@@ -13,13 +13,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-/**
- * Please explain the class!!
- *
- * @author : jonghoon
- * @fileName : MailSendController
- * @since : 11/11/24
- */
 @Controller
 @RequestMapping("/api/public")
 @RequiredArgsConstructor
@@ -30,7 +23,6 @@ public class MailController {
 
     /**
      * HTML 구성 기반 이메일을 전송합니다.
-     *
      * @param mailDto
      * @return
      */

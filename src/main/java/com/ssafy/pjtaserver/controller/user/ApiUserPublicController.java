@@ -1,6 +1,8 @@
 package com.ssafy.pjtaserver.controller.user;
 
 import com.ssafy.pjtaserver.dto.UserLoginDto;
+import com.ssafy.pjtaserver.dto.request.UserCheckedIdDto;
+import com.ssafy.pjtaserver.dto.request.UserJoinDto;
 import com.ssafy.pjtaserver.service.user.UserService;
 import com.ssafy.pjtaserver.util.JWTUtil;
 import com.ssafy.pjtaserver.enums.SocialLogin;
@@ -9,13 +11,17 @@ import com.ssafy.pjtaserver.enums.ApiResponseCode;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -75,5 +81,25 @@ public class ApiUserPublicController {
         claims.put("accessToken", jwtAccessToken);
         claims.put("refreshToken", jetRefreshToken);
         return ApiResponse.of(ApiResponseCode.USER_CREATED, claims);
+    }
+
+    @PostMapping("/user/join")
+    public ResponseEntity<ApiResponse> joinUser(@Validated @RequestBody UserJoinDto userJoinDto) {
+        log.info("------------------------------api user join------------------------------");
+        log.info("joinUser : {}", userJoinDto);
+
+        if(!userService.joinUser(userJoinDto)) {
+            return ApiResponse.of(ApiResponseCode.USER_CREATED_ERROR);
+        }
+
+        return ApiResponse.of(ApiResponseCode.USER_CREATED, userJoinDto.getUserLoginId());
+    }
+
+    @GetMapping("/user/check-id")
+    public ResponseEntity<ApiResponse> checkId(@Validated @RequestBody UserCheckedIdDto userCheckedIdDto) {
+        if(userService.findByUserId(userCheckedIdDto.getUserLoginId())){
+            return ApiResponse.of(ApiResponseCode.VALIDATION_ERROR);
+        }
+        return ApiResponse.of(ApiResponseCode.SUCCESS);
     }
 }

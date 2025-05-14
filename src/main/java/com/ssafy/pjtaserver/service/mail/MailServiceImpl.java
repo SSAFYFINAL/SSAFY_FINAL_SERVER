@@ -1,6 +1,7 @@
 package com.ssafy.pjtaserver.service.mail;
 
 import com.ssafy.pjtaserver.dto.MailDto;
+import com.ssafy.pjtaserver.enums.EmailType;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
@@ -42,16 +43,19 @@ public class MailServiceImpl implements MailService {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
+            String certifyCode;
+
             Context context = new Context();
             context.setVariable("subject", mailDto.getSubject());
             context.setVariable("message", mailDto.getContent());
-            context.setVariable("certifyCode", mailDto.getCertifyCode());
-            switch (mailDto.getRequestType()) {
-                case "join" -> context.setVariable("requestType", "회원가입");
-                case "findPwd" -> context.setVariable("requestType", "비밀번호 찾기");
-                case "tempPwd" -> context.setVariable("requestType", "임시 비밀번호");
-                default -> context.setVariable("userType", "알 수 없음");
+
+            if (mailDto.getRequestType() == EmailType.REGISTER ||
+                    mailDto.getRequestType() == EmailType.RESET_PASSWORD) {
+                certifyCode = String.valueOf(getCertifyCode());
+            } else {
+                certifyCode = mailDto.getCertifyCode();
             }
+            context.setVariable("certifyCode", certifyCode);
 
             String htmlContent = templateEngine.process("email-template", context);
             helper.setTo(mailDto.getEmailAddr());
@@ -69,6 +73,9 @@ public class MailServiceImpl implements MailService {
         }
     }
 
+    private int getCertifyCode() {
+        return (int) ((Math.random() * 7 + 1) * 100000);
+    }
 
     // 추후 이미지도 메일에 포함될경우 사용
     private String getBase64EncodedImage(String imagePath) throws IOException {

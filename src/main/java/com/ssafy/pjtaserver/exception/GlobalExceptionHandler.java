@@ -4,11 +4,33 @@ import com.ssafy.pjtaserver.util.ApiResponse;
 import com.ssafy.pjtaserver.enums.ApiResponseCode;
 import jakarta.mail.MessagingException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 @ControllerAdvice
 public class GlobalExceptionHandler {
+
+    /**
+     * 
+     * @param e MethodArgumentNotValidException
+     * @return 400 , 필수값 응답 반환
+     */
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    protected  ResponseEntity<ApiResponse> handleValidationException(MethodArgumentNotValidException e) {
+        List<String> errMsg = e.getBindingResult()
+                .getFieldErrors()
+                .stream()
+                .map(FieldError::getDefaultMessage)
+                .toList();
+
+        return ApiResponse.of(ApiResponseCode.INVALID_REQUEST, errMsg);
+    }
 
     /**
      * JWT 관련 커스텀 예외 처리
@@ -40,6 +62,11 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(IllegalArgumentException.class)
     protected ResponseEntity<ApiResponse> handleIllegalArgumentException(IllegalArgumentException e) {
+        return ApiResponse.of(ApiResponseCode.INVALID_REQUEST, e.getMessage());
+    }
+
+    @ExceptionHandler(JoinValidationException.class)
+    protected ResponseEntity<ApiResponse> handleJoinValidationException(JoinValidationException e) {
         return ApiResponse.of(ApiResponseCode.INVALID_REQUEST, e.getMessage());
     }
 
