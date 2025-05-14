@@ -1,22 +1,18 @@
-package com.ssafy.pjtaserver.dto;
+package com.ssafy.pjtaserver.dto.request.mail;
 
 import com.ssafy.pjtaserver.enums.EmailType;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class MailDto {
+public class MailSendDto {
 
     @NotBlank(message = "emailAddr는 필수값 입니다.")
+    @Email
     private String emailAddr;                   // 수신자 이메일
-
-    @NotBlank(message = "subject는 필수값 입니다.")
-    private String subject;                     // 이메일 제목
-
-    @NotBlank(message = "content는 필수값 입니다.")
-    private String content;                     // 이메일 내용
 
     private String certifyCode;                 // 인증 코드
 

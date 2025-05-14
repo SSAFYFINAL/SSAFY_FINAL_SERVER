@@ -40,9 +40,78 @@ public class Email {
     @Column(name = "attempt_count", nullable = false)
     private Integer attemptCount;
 
+    @Column(name = "locked", nullable = false)
+    private boolean locked;
+
+    @Column(name = "locked_until")
+    private LocalDateTime lockedUntil;
+
     @PrePersist
     public void prePersist() {
         this.expiresAt = LocalDateTime.now().plusMinutes(5);
         this.verified = false;
+        this.locked = false;
+        this.attemptCount = 0;
     }
+
+    public static Email createEmailHistory(String email, String verificationCode, EmailType emailType) {
+        Email emailInfo = new Email();
+        emailInfo.email = email;
+        emailInfo.verificationCode = verificationCode;
+        emailInfo.emailType = emailType;
+        return emailInfo;
+    }
+
+    public static Email updateEmailHistory(String email, String verificationCode, EmailType emailType) {
+        Email emailInfo = new Email();
+        emailInfo.email = email;
+        emailInfo.verificationCode = verificationCode;
+        emailInfo.emailType = emailType;
+        return emailInfo;
+    }
+
+    // 시도 휫수 5회이상이면 이메일 제한걸어준다.
+    public void addAttemptCount() {
+        this.attemptCount++;
+
+        if (this.attemptCount >= 5) {
+            lockAccount();
+        }
+    }
+
+    public boolean isLocked() {
+        // 현재 시간이 잠금 만료 시간을 지나지 않았으면 잠겨 있음
+        if (this.locked && this.lockedUntil != null) {
+            if (LocalDateTime.now().isBefore(this.lockedUntil)) {
+                return true;
+            }
+            // 만료 시간이 지나면 잠금을 해제
+            this.unlockAccount();
+        }
+        return false;
+    }
+
+    // 해당 이메일을 통한 인증 잠금처리 해준다 5분
+    public void lockAccount() {
+        this.locked = true;
+        this.lockedUntil = LocalDateTime.now().plusMinutes(5);
+    }
+
+    public void unlockAccount() {
+        this.locked = false;
+        this.lockedUntil = null;
+        this.attemptCount = 0;
+    }
+
+    public void settingVerified() {
+        this.verified = true;                    // 인증 완료 상태 업데이트
+        this.verifiedAt = LocalDateTime.now();   // 인증 완료 시간 저장
+    }
+
+    public void settingVerificationCode(String verificationCode) {
+        this.verificationCode = verificationCode;
+    }
+
+
+
 }
