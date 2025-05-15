@@ -1,6 +1,7 @@
 package com.ssafy.pjtaserver.controller.user;
 
-import com.ssafy.pjtaserver.dto.request.user.UserUpdateDto;
+import com.ssafy.pjtaserver.dto.request.user.UserResetPwDto;
+import com.ssafy.pjtaserver.enums.ApiResponseCode;
 import com.ssafy.pjtaserver.service.user.UserService;
 import com.ssafy.pjtaserver.util.ApiResponse;
 import lombok.RequiredArgsConstructor;
@@ -8,10 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,12 +20,19 @@ public class ApiUserAuthController {
 
     private final UserService userService;
 
-    @PutMapping("/user/update/user-info")
-    public ResponseEntity<ApiResponse> updateUserInfo   (@RequestBody UserUpdateDto userUpdateDto, @AuthenticationPrincipal UserDetails userDetails) {
-        log.info("------------------------------api update user info------------------------------");
-        log.info("updateUserInfo : {}", userUpdateDto);
-        log.info("Username in userDetails: {}", userDetails.getUsername());
-        return null;
+    @PutMapping("/user/password-reset")
+    public ResponseEntity<ApiResponse> updatePassword(@AuthenticationPrincipal UserDetails userDetails, @Validated @RequestBody UserResetPwDto userResetPwDto) {
+        log.info("------------------------------api user password reset------------------------------");
+        log.info("userResetPwDto : {}", userResetPwDto);
+        log.info("userDetails : {}", userDetails.getUsername());
+        String userLoginId = userDetails.getUsername();
+
+        boolean isReset = userService.resetUserPwd(userLoginId, userResetPwDto);
+
+        if(!isReset) {
+            return ApiResponse.of(ApiResponseCode.INVALID_REQUEST);
+        }
+        return ApiResponse.of(ApiResponseCode.SUCCESS);
     }
 
 }
