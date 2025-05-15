@@ -2,15 +2,16 @@ package com.ssafy.pjtaserver.security.filter;
 
 import com.google.gson.Gson;
 import com.ssafy.pjtaserver.dto.UserLoginDto;
-import com.ssafy.pjtaserver.util.JWTUtil;
-import com.ssafy.pjtaserver.util.ApiResponse;
 import com.ssafy.pjtaserver.enums.ApiResponseCode;
+import com.ssafy.pjtaserver.util.ApiResponse;
+import com.ssafy.pjtaserver.util.JWTUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -19,6 +20,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 import java.util.Map;
+
+import static com.ssafy.pjtaserver.enums.ApiResponseCode.*;
 
 @Slf4j
 public class JWTCheckFilter extends OncePerRequestFilter {
@@ -45,21 +48,29 @@ public class JWTCheckFilter extends OncePerRequestFilter {
 
         log.info("---------------------------");
         log.info("---------------------------");
-
         String authHeaderStr = request.getHeader("Authorization");
-        if (authHeaderStr == null || !authHeaderStr.startsWith("Bearer ")) {
-            log.warn("Authorization 헤더가 없거나 형식이 올바르지 않음. 경로: {}", request.getRequestURI());
-            filterChain.doFilter(request, response); // 필터 체인을 계속 진행
+
+        if(authHeaderStr == null) {
+            sendErrorResponse(response,ERROR_ACCESS_TOKEN);
+            return;
+        }
+
+        if(!authHeaderStr.startsWith("Bearer ")) {
+            sendErrorResponse(response, ERROR_TOKEN_FIELD);
+            return;
+        }
+
+        String accessToken = authHeaderStr.substring(7);
+        if(accessToken.isBlank()) {
+            sendErrorResponse(response,ERROR_TOKEN_ISEMPTY);
             return;
         }
 
         try {
-            String accessToken = authHeaderStr.substring(7);
-
             Map<String, Object> claims = JWTUtil.validateToken(accessToken);
 
             log.info("JWT claims: " + claims);
-            String userLoginId = (String)claims.get("userLoginId");
+            String userLoginId = (String) claims.get("userLoginId");
             Boolean social = (Boolean) claims.get("social");
             String nickname = (String) claims.get("nickName");
             List<String> roleNames = (List<String>) claims.get("roleNames");
@@ -75,7 +86,7 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             log.info(userLoginDto.getAuthorities().toString());
 
             UsernamePasswordAuthenticationToken authenticationToken
-                    = new UsernamePasswordAuthenticationToken(userLoginDto,userPwd, userLoginDto.getAuthorities());
+                    = new UsernamePasswordAuthenticationToken(userLoginDto, userPwd, userLoginDto.getAuthorities());
 
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
@@ -85,14 +96,20 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             log.error("JWT Check Error ---------------");
             log.error(e.getMessage());
 
-            Gson gson = new Gson();
-            String msg = gson.toJson(ApiResponse.of(ApiResponseCode.ERROR_ACCESS_TOKEN));
-
-            response.setContentType("application/json; charset=UTF-8");
-            PrintWriter printWriter = response.getWriter();
-            printWriter.println(msg);
-            printWriter.close();
-
+            sendErrorResponse(response, ERROR_ACCESS_TOKEN);
         }
+    }
+
+    // 응답반환용 메서드
+    private void sendErrorResponse(HttpServletResponse response, ApiResponseCode apiResponseCode) throws IOException {
+        response.setStatus(HttpStatus.OK.value());
+        response.setContentType("application/json; charset=UTF-8");
+
+        ApiResponse apiResponse = ApiResponse.of(apiResponseCode,apiResponseCode.getMessage()).getBody();
+        String json = new Gson().toJson(apiResponse);
+
+        PrintWriter out = response.getWriter();
+        out.println(json);
+        out.close();
     }
 }
