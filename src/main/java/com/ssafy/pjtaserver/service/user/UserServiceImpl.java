@@ -3,6 +3,7 @@ package com.ssafy.pjtaserver.service.user;
 import com.ssafy.pjtaserver.domain.user.User;
 import com.ssafy.pjtaserver.dto.request.mail.MailSendDto;
 import com.ssafy.pjtaserver.dto.request.user.UserJoinDto;
+import com.ssafy.pjtaserver.dto.request.user.UserResetPwDto;
 import com.ssafy.pjtaserver.enums.EmailType;
 import com.ssafy.pjtaserver.enums.UserRole;
 import com.ssafy.pjtaserver.dto.UserLoginDto;
@@ -38,7 +39,7 @@ import java.util.Optional;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 public class UserServiceImpl implements UserService {
 
     private static final String DEFAULT_PHONE_NUMBER = "010-xxxx-xxxx"; // 소셜 로그인 사용자를 위한 기본 휴대폰 번호
@@ -83,6 +84,7 @@ public class UserServiceImpl implements UserService {
      * @param socialLogin 소셜 로그인 플랫폼 정보 (KAKAO, GOOGLE)
      * @return UserDto 사용자 정보 DTO
      */
+    @Transactional
     @Override
     public UserLoginDto getSocialUser(String accessToken, SocialLogin socialLogin) throws MessagingException {
         // 소셜 플랫폼에서 사용자 정보 가져오기
@@ -110,6 +112,7 @@ public class UserServiceImpl implements UserService {
         return entityToDto(socialUser);
     }
 
+    @Transactional
     @Override
     public boolean joinUser(UserJoinDto userJoinDto) {
         if(!userJoinDto.getIsEmailChecked()) {
@@ -124,7 +127,7 @@ public class UserServiceImpl implements UserService {
 
         User joinUser = User.createNormalUser(
                 userJoinDto.getUserLoginId(),
-                userJoinDto.getUserPwd(),
+                passwordEncoder.encode(userJoinDto.getUserPwd()),
                 userJoinDto.getUsernameMain(),
                 userJoinDto.getUserNickName(),
                 userJoinDto.getUserEmail(),
@@ -140,6 +143,35 @@ public class UserServiceImpl implements UserService {
     public boolean findByUserId(String userLoginId) {
         Optional<User> user = userRepository.findByUserLoginId(userLoginId);
         return user.isPresent();
+    }
+
+    @Transactional
+    @Override
+    public boolean resetUserPwd(String userLoginId, UserResetPwDto userResetPwDto) {
+        return userRepository.findByUserLoginId(userLoginId)
+                .map(user -> {
+                    String encodedPwd = passwordEncoder.encode(userResetPwDto.getResetPwd());
+                    user.changePwd(encodedPwd);
+                    userRepository.save(user);
+                    log.info("------------------------성공----------------------");
+                    return true; // 성공
+                })
+                .orElse(false);
+    }
+
+    /**
+     * 비밀번호 유효성 검사
+     */
+    private void validatePassword(String password) {
+        if (password.length() < 8) {
+            throw new IllegalArgumentException("비밀번호는 최소 8자 이상이어야 합니다.");
+        }
+        if (!password.matches(".*[0-9].*")) {
+            throw new IllegalArgumentException("비밀번호는 숫자를 포함해야 합니다.");
+        }
+        if (!password.matches(".*[!@#$%^&*()].*")) {
+            throw new IllegalArgumentException("비밀번호는 특수 문자를 포함해야 합니다.");
+        }
     }
 
     /**

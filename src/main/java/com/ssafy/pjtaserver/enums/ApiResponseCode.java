@@ -20,12 +20,15 @@ public enum ApiResponseCode {
     NOT_FOUND(HttpStatus.NOT_FOUND, 404, "요청한 리소스를 찾을 수 없습니다."),
     USER_CREATED_ERROR(HttpStatus.BAD_REQUEST,401,"회원가입 실패"),
 
+
     EMAIL_SEND_ERROR(HttpStatus.FORBIDDEN,403,"이메일 인증 휫수 초과."),
     EMAIL_VERIFY_ERROR(HttpStatus.FORBIDDEN, 403, "이메일 인증에 실패하였습니다."),
 
     // 토큰 에러
-    ERROR_ACCESS_TOKEN(HttpStatus.UNAUTHORIZED, 401, "ERROR_ACCESS_TOKEN"),
-    DENIED_ACCESS_TOKEN(HttpStatus.UNAUTHORIZED, 401, "DENIED_ACCESS_TOKEN"),
+    ERROR_ACCESS_TOKEN(HttpStatus.UNAUTHORIZED, 401, "만료되거나 잘못된 토큰입니다."),
+    DENIED_ACCESS_TOKEN(HttpStatus.UNAUTHORIZED, 401, "권한이 미달되는 토큰입니다."),
+    ERROR_TOKEN_ISEMPTY(HttpStatus.UNAUTHORIZED, 401, "토큰의 값이 비어있습니다."),
+    ERROR_TOKEN_FIELD(HttpStatus.UNAUTHORIZED, 401, "토큰의 형식이 올바르지 않습니다."),
 
     //서버에러
     SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, 500, "서버 내부 오류입니다.");
