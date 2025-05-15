@@ -1,7 +1,7 @@
 package com.ssafy.pjtaserver.security.handler;
 
 import com.google.gson.Gson;
-import com.ssafy.pjtaserver.dto.UserLoginDto;
+import com.ssafy.pjtaserver.dto.request.user.UserLoginDto;
 import com.ssafy.pjtaserver.util.JWTUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
