@@ -1,7 +1,7 @@
 package com.ssafy.pjtaserver.enums;
 
-import com.ssafy.pjtaserver.dto.GoogleResponseDto;
-import com.ssafy.pjtaserver.dto.KakaoResponseDto;
+import com.ssafy.pjtaserver.dto.response.user.GoogleResponseDto;
+import com.ssafy.pjtaserver.dto.response.user.KakaoResponseDto;
 import lombok.Getter;
 
 import java.util.HashMap;

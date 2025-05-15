@@ -1,4 +1,4 @@
-package com.ssafy.pjtaserver.dto;
+package com.ssafy.pjtaserver.dto.response.user;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
