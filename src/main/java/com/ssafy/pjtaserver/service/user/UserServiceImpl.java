@@ -38,7 +38,7 @@ import java.util.Optional;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 public class UserServiceImpl implements UserService {
 
     private static final String DEFAULT_PHONE_NUMBER = "010-xxxx-xxxx"; // 소셜 로그인 사용자를 위한 기본 휴대폰 번호
@@ -83,6 +83,7 @@ public class UserServiceImpl implements UserService {
      * @param socialLogin 소셜 로그인 플랫폼 정보 (KAKAO, GOOGLE)
      * @return UserDto 사용자 정보 DTO
      */
+    @Transactional
     @Override
     public UserLoginDto getSocialUser(String accessToken, SocialLogin socialLogin) throws MessagingException {
         // 소셜 플랫폼에서 사용자 정보 가져오기
@@ -110,6 +111,7 @@ public class UserServiceImpl implements UserService {
         return entityToDto(socialUser);
     }
 
+    @Transactional
     @Override
     public boolean joinUser(UserJoinDto userJoinDto) {
         if(!userJoinDto.getIsEmailChecked()) {
@@ -124,7 +126,7 @@ public class UserServiceImpl implements UserService {
 
         User joinUser = User.createNormalUser(
                 userJoinDto.getUserLoginId(),
-                userJoinDto.getUserPwd(),
+                passwordEncoder.encode(userJoinDto.getUserPwd()),
                 userJoinDto.getUsernameMain(),
                 userJoinDto.getUserNickName(),
                 userJoinDto.getUserEmail(),

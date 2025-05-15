@@ -17,6 +17,7 @@ import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StreamUtils;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
@@ -29,6 +30,7 @@ import java.util.Optional;
 @Service
 @Slf4j
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class MailServiceImpl implements MailService {
 
     private final JavaMailSender mailSender;
@@ -42,6 +44,7 @@ public class MailServiceImpl implements MailService {
      * html 기반 메일 전송
      * @param mailSendDto
      */
+    @Transactional
     @Override
     public boolean sendEmail(MailSendDto mailSendDto) throws MessagingException {
         try {
@@ -100,6 +103,7 @@ public class MailServiceImpl implements MailService {
         }
     }
 
+    @Transactional
     @Override
     public boolean verifyEmail(MailVerifyDto mailVerifyDto) {
         return mailRepository.findByEmail(mailVerifyDto.getEmail())
