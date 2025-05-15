@@ -1,7 +1,7 @@
 package com.ssafy.pjtaserver.security.filter;
 
 import com.google.gson.Gson;
-import com.ssafy.pjtaserver.dto.UserLoginDto;
+import com.ssafy.pjtaserver.dto.request.user.UserLoginDto;
 import com.ssafy.pjtaserver.enums.ApiResponseCode;
 import com.ssafy.pjtaserver.util.ApiResponse;
 import com.ssafy.pjtaserver.util.JWTUtil;

@@ -52,4 +52,27 @@ public class BookInfo {
     public void prePersist() {
         registryDate = LocalDateTime.now();
     }
+
+    public static BookInfo createDummyBook(
+            String isbn,
+            String title,
+            String description,
+            String authorName,
+            String publisherName,
+            String classificationName,
+            Category categoryId,
+            String bookImgPath
+    ) {
+        BookInfo bookInfo = new BookInfo();
+        bookInfo.isbn = isbn;
+        bookInfo.title = title;
+        bookInfo.description = description;
+        bookInfo.authorName = authorName;
+        bookInfo.publisherName = publisherName;
+        bookInfo.seriesName = classificationName;
+        bookInfo.categoryId = categoryId;
+        bookInfo.bookImgPath = bookImgPath;
+        return bookInfo;
+    }
+
 }

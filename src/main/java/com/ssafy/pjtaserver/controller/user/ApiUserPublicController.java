@@ -1,6 +1,6 @@
 package com.ssafy.pjtaserver.controller.user;
 
-import com.ssafy.pjtaserver.dto.UserLoginDto;
+import com.ssafy.pjtaserver.dto.request.user.UserLoginDto;
 import com.ssafy.pjtaserver.dto.request.user.UserCheckedIdDto;
 import com.ssafy.pjtaserver.dto.request.user.UserJoinDto;
 import com.ssafy.pjtaserver.service.user.UserService;

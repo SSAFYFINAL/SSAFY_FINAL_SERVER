@@ -1,7 +1,7 @@
 package com.ssafy.pjtaserver.service.user;
 
 import com.ssafy.pjtaserver.domain.user.User;
-import com.ssafy.pjtaserver.dto.UserLoginDto;
+import com.ssafy.pjtaserver.dto.request.user.UserLoginDto;
 import com.ssafy.pjtaserver.dto.request.user.UserJoinDto;
 import com.ssafy.pjtaserver.dto.request.user.UserResetPwDto;
 import com.ssafy.pjtaserver.enums.SocialLogin;
