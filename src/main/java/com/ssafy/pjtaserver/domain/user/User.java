@@ -52,6 +52,9 @@ public class User {
     @Column(name = "profile_img_path")
     private String profileImgPath;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<FavoriteBookList> favoriteBookList = new ArrayList<>();
+
     /**
      * 일반 유저 권한의 새로운 User 인스턴스를 생성합니다.
      *
@@ -129,4 +132,11 @@ public class User {
         this.social = social;
     }
 
+    public void addFavoriteBook(FavoriteBookList favoriteBookList) {
+        this.favoriteBookList.add(favoriteBookList);
+
+        if (favoriteBookList.getUser() != this) {
+            favoriteBookList.setUser(this);
+        }
+    }
 }

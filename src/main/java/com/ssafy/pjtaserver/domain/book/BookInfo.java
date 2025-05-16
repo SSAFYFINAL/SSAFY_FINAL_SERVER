@@ -1,11 +1,14 @@
 package com.ssafy.pjtaserver.domain.book;
 
+import com.ssafy.pjtaserver.domain.user.FavoriteBookList;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -48,12 +51,15 @@ public class BookInfo {
     @Column(name = "book_img_path")
     private String bookImgPath;
 
+    @OneToMany(mappedBy = "bookInfo", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<FavoriteBookList> favoriteBookList = new ArrayList<>();
+
     @PrePersist
     public void prePersist() {
         registryDate = LocalDateTime.now();
     }
 
-    public static BookInfo createDummyBook(
+    public static BookInfo createBook(
             String isbn,
             String title,
             String description,
@@ -75,4 +81,11 @@ public class BookInfo {
         return bookInfo;
     }
 
+    public void addFavoriteBook(FavoriteBookList favoriteBookList) {
+        this.favoriteBookList.add(favoriteBookList);
+
+        if (favoriteBookList.getBookInfo() != this) {
+            favoriteBookList.setBookInfo(this);
+        }
+    }
 }
