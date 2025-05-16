@@ -1,4 +1,4 @@
-package com.ssafy.pjtaserver.repository.book;
+package com.ssafy.pjtaserver.repository.book.info;
 
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -21,7 +21,7 @@ import static org.springframework.util.StringUtils.hasText;
 
 @RequiredArgsConstructor
 @Slf4j
-public class BookRepositoryImpl implements BookQueryRepository {
+public class BookInfoRepositoryImpl implements BookInfoQueryRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
 

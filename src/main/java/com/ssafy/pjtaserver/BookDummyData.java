@@ -1,11 +1,14 @@
 package com.ssafy.pjtaserver;
 
 import com.ssafy.pjtaserver.domain.book.BookInfo;
-import com.ssafy.pjtaserver.repository.book.BookRepository;
+import com.ssafy.pjtaserver.domain.book.BookInstance;
+import com.ssafy.pjtaserver.repository.book.info.BookInfoRepository;
+import com.ssafy.pjtaserver.repository.book.instance.BookInstanceRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -13,52 +16,46 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class BookDummyData {
 
-    private final BookRepository bookRepository;
+    private final BookInfoRepository bookInfoRepository;
+    private final BookInstanceRepository bookInstanceRepository;
+
+    private static final String[] AUTHOR_FIRST_NAMES = {"Alice", "Bob", "Cathy", "David", "Eva", "Frank", "Grace", "Henry", "Ivy", "Jack"};
+    private static final String[] AUTHOR_LAST_NAMES = {"Anderson", "Brown", "Clark", "Davis", "Evans", "Foster", "Green", "Hill", "Irving", "Johnson"};
+    private static final String[] PUBLISHERS = {"AlphaBooks", "BetaPress", "CodeHouse", "DevPublishers", "EngineInk"};
 
     @PostConstruct
     public void init() {
-        List<String> titles = List.of(
-                "1984", "To Kill a Mockingbird", "The Great Gatsby", "The Catcher in the Rye",
-                "Pride and Prejudice", "Brave New World", "The Hobbit", "Fahrenheit 451",
-                "Jane Eyre", "Animal Farm", "The Lord of the Rings", "Harry Potter and the Sorcerer's Stone",
-                "The Chronicles of Narnia", "The Book Thief", "Wuthering Heights", "The Giver",
-                "The Alchemist", "The Little Prince", "Crime and Punishment", "War and Peace"
-        );
+        List<BookInfo> allBookInfos = new ArrayList<>();
 
-        List<String> authors = List.of(
-                "George Orwell", "Harper Lee", "F. Scott Fitzgerald", "J.D. Salinger",
-                "Jane Austen", "Aldous Huxley", "J.R.R. Tolkien", "Ray Bradbury",
-                "Charlotte Brontë", "Markus Zusak", "Fyodor Dostoevsky", "Leo Tolstoy",
-                "Paulo Coelho", "Antoine de Saint-Exupéry", "C.S. Lewis", "Lois Lowry"
-        );
+        for (int i = 1; i <= 50; i++) {
+            String isbn = String.format("%013d", i);
+            String title = "Book Title " + (char)('A' + (i % 26)) + i;
+            String description = "Description for " + title;
+            String authorName = AUTHOR_FIRST_NAMES[i % AUTHOR_FIRST_NAMES.length] + " " +
+                    AUTHOR_LAST_NAMES[i % AUTHOR_LAST_NAMES.length];
+            String publisherName = PUBLISHERS[i % PUBLISHERS.length];
+            String classificationName = String.format("00%d.%d", (i % 10), i % 5);
+            String imgPath = "/images/book_" + i + ".jpg";
 
-        List<String> publishers = List.of(
-                "Penguin", "HarperCollins", "Random House", "Simon & Schuster", "Bloomsbury"
-        );
-
-        List<String> classifications = List.of(
-                "Fiction", "Classic", "Sci-Fi", "Fantasy", "Literature", "Philosophy"
-        );
-
-        for (int i = 1; i <= 100; i++) {
-            String title = titles.get(i % titles.size());
-            String author = authors.get(i % authors.size());
-            String publisher = publishers.get(i % publishers.size());
-            String classification = classifications.get(i % classifications.size());
-            String isbn = "978-" + UUID.randomUUID().toString().substring(0, 10);
-
-            BookInfo book = BookInfo.createDummyBook(
-                    isbn,
-                    title,
-                    title + " is a fascinating book by " + author + ".",
-                    author,
-                    publisher,
-                    classification,
-                    null, // 카테고리 더미 넣을 거면 여기 넣기
-                    "https://placehold.co/300x400?text=" + title.replace(" ", "+")
+            BookInfo bookInfo = BookInfo.createBook(
+                    isbn, title, description, authorName, publisherName, classificationName,
+                    null, imgPath
             );
 
-            bookRepository.save(book);
+            allBookInfos.add(bookInfo);
         }
+
+        bookInfoRepository.saveAll(allBookInfos);
+
+        List<BookInstance> allInstances = new ArrayList<>();
+        for (BookInfo info : allBookInfos) {
+            for (int j = 0; j < 3; j++) {
+                String callNumber = "CALL-" + UUID.randomUUID().toString().substring(0, 8);
+                BookInstance instance = BookInstance.create(info, callNumber);
+                allInstances.add(instance);
+            }
+        }
+
+        bookInstanceRepository.saveAll(allInstances);
     }
 }

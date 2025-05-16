@@ -3,6 +3,7 @@ package com.ssafy.pjtaserver.exception;
 import com.ssafy.pjtaserver.enums.ApiResponseCode;
 import com.ssafy.pjtaserver.util.ApiResponse;
 import jakarta.mail.MessagingException;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -15,6 +16,12 @@ import java.util.List;
 @ControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    protected ResponseEntity<ApiResponse> handleEntityNotFoundException(EntityNotFoundException e) {
+        log.warn("해당 책을 찾을 수 없습니다: {}", e.getMessage());
+        return ApiResponse.of(ApiResponseCode.INVALID_REQUEST, e.getMessage());
+    }
 
     @ExceptionHandler(CustomEmailException.class)
     protected ResponseEntity<ApiResponse> handleCustomEmailException(CustomEmailException e) {

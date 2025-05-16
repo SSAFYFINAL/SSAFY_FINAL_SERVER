@@ -30,9 +30,6 @@ public class BookReservation {
     @Column(name = "reservation_date", nullable = false)
     private LocalDateTime reservationDate;
 
-    @Column(name = "expiration_date")
-    private LocalDateTime expirationDate;
-
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private ReservationStatus status;
@@ -40,7 +37,6 @@ public class BookReservation {
     @PrePersist
     public void prePersist() {
         reservationDate = LocalDateTime.now();
-        expirationDate = LocalDateTime.now().plusDays(7);
         status = ReservationStatus.ACTIVE;
     }
 }
