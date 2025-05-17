@@ -14,4 +14,5 @@ public interface BookService {
     BookDetailDto getDetail(Long bookInfoId, Optional<String> userLoginId);
     BookResponseType favoriteBookManager(String userLoginId, Long bookInfoId);
     BookResponseType checkoutAndReservationManager(String userLoginId, Long bookInfoId);
+    PageResponseDto<BookInfoSearchDto> searchFavoritePageComplex(BookInfoSearchCondition condition, Pageable updatedPageable, String userLoginId);
 }

@@ -167,6 +167,24 @@ public class BookServiceImpl implements BookService {
         }
     }
 
+    @Override
+    public PageResponseDto<BookInfoSearchDto> searchFavoritePageComplex(BookInfoSearchCondition condition, Pageable pageable, String userLoginId) {
+
+        Sort sort = Sort.by(Sort.Direction.fromString(condition.getOrderDirection()), condition.getOrderBy());
+        Pageable updatedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
+
+        // page 객체를 pageResponseDto 로 변환해서 반환해준다 안그러면 warn 로그 찍힘
+        Page<BookInfoSearchDto> bookInfoSearchDto = favoriteRepository.searchFavoriteBook(condition, updatedPageable, userLoginId);
+
+        return new PageResponseDto<>(
+                bookInfoSearchDto.getContent(),
+                bookInfoSearchDto.getTotalElements(),
+                bookInfoSearchDto.getTotalPages(),
+                bookInfoSearchDto.getNumber(),
+                bookInfoSearchDto.getSize()
+        );
+    }
+
     // 책의 대출여부를 확인해주는 메서드
     private boolean isBookAvailableForCheckout(Long bookInfoId) {
         return bookInstanceRepository.isBookAvailableForCheckout(bookInfoId);

@@ -1,6 +1,9 @@
 package com.ssafy.pjtaserver.controller.book;
 
 import com.ssafy.pjtaserver.dto.response.book.BookDetailDto;
+import com.ssafy.pjtaserver.dto.response.book.BookInfoSearchCondition;
+import com.ssafy.pjtaserver.dto.response.book.BookInfoSearchDto;
+import com.ssafy.pjtaserver.dto.response.book.PageResponseDto;
 import com.ssafy.pjtaserver.enums.ApiResponseCode;
 import com.ssafy.pjtaserver.enums.BookResponseType;
 import com.ssafy.pjtaserver.service.book.BookService;
@@ -62,9 +65,13 @@ public class ApiBookAuthController {
     }
 
     @GetMapping("/favorites")
-    public ResponseEntity<ApiResponse> getFavorites(@AuthenticationPrincipal UserDetails userDetails, Pageable pageable) {
+    public ResponseEntity<ApiResponse> getFavoriteList(@AuthenticationPrincipal UserDetails userDetails, @RequestBody BookInfoSearchCondition condition, Pageable pageable) {
+        PageResponseDto<BookInfoSearchDto> results = bookService.searchFavoritePageComplex(condition, pageable, userDetails.getUsername());
 
-        return null;
+        log.info("------------------------------api get favorite list------------------------------");
+        log.info("results : {}", results);
+
+        return ApiResponse.of(ApiResponseCode.SUCCESS,results);
     }
 
 
