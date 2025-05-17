@@ -11,4 +11,5 @@ import java.util.Optional;
 @Repository
 public interface FavoriteRepository extends JpaRepository<FavoriteBookList, Long>, FavoriteQueryRepository {
     Optional<FavoriteBookList> findFavoriteBookListByUserAndBookInfo(User user, BookInfo bookInfo);
+    boolean existsFavoriteBookListByUserAndBookInfo(User user, BookInfo bookInfo);
 }

@@ -1,5 +1,6 @@
 package com.ssafy.pjtaserver.controller.book;
 
+import com.ssafy.pjtaserver.dto.response.book.BookDetailDto;
 import com.ssafy.pjtaserver.enums.ApiResponseCode;
 import com.ssafy.pjtaserver.enums.BookResponseType;
 import com.ssafy.pjtaserver.service.book.BookService;
@@ -11,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+
+import static java.util.Optional.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -48,10 +51,22 @@ public class ApiBookAuthController {
         return ApiResponse.of(ApiResponseCode.FAVORITE_CALCLE);
     }
 
+    @GetMapping("/details/{bookInfoId}")
+    public ResponseEntity<ApiResponse> getBookInfoDetails(@AuthenticationPrincipal UserDetails userDetails,@PathVariable("bookInfoId") Long bookInfoId) {
+        BookDetailDto results = bookService.getDetail(bookInfoId, userDetails.getUsername() == null ? empty() : of(userDetails.getUsername()));
+
+        log.info("------------------------------api is book available for checkout------------------------------");
+        log.info("results : {}", results);
+
+        return ApiResponse.of(ApiResponseCode.SUCCESS, results);
+    }
+
     @GetMapping("/favorites")
     public ResponseEntity<ApiResponse> getFavorites(@AuthenticationPrincipal UserDetails userDetails, Pageable pageable) {
 
         return null;
     }
+
+
 
 }

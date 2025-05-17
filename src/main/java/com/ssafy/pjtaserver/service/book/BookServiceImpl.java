@@ -60,22 +60,31 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public BookDetailDto getDetail(Long bookInfoId) {
+    public BookDetailDto getDetail(Long bookInfoId, Optional<String> userLoginId) {
+        BookInfo bookInfo = getBookInfo(bookInfoId);
+
+        boolean isFavorite = userLoginId
+                .map(this::getUser)
+                .map(user -> isBookFavorite(bookInfo, user))
+                .orElse(false);
+
         boolean isAvailableForCheckout = isBookAvailableForCheckout(bookInfoId);
 
+
         return bookInfoRepository.findBookInfoById(bookInfoId)
-                .map(bookInfo -> BookDetailDto.builder()
-                        .bookInfoId(bookInfo.getId())
-                        .title(bookInfo.getTitle())
-                        .authorName(bookInfo.getAuthorName())
-                        .isbn(bookInfo.getIsbn())
-                        .registryDate(bookInfo.getRegistryDate())
-                        .publisherName(bookInfo.getPublisherName())
+                .map(info -> BookDetailDto.builder()
+                        .bookInfoId(info.getId())
+                        .title(info.getTitle())
+                        .authorName(info.getAuthorName())
+                        .isbn(info.getIsbn())
+                        .registryDate(info.getRegistryDate())
+                        .publisherName(info.getPublisherName())
                         .isAvailableCheckedOut(isAvailableForCheckout)
-                        .bookImgPath(bookInfo.getBookImgPath())
-                        .seriesName(bookInfo.getSeriesName())
-                        .description(bookInfo.getDescription())
-                        .categoryName(bookInfo.getCategoryId())
+                        .isBookFavorite(isFavorite)
+                        .bookImgPath(info.getBookImgPath())
+                        .seriesName(info.getSeriesName())
+                        .description(info.getDescription())
+                        .categoryName(info.getCategoryId())
                         .build()
                 )
                 .orElseThrow(() -> new EntityNotFoundException("해당 책이 존재하지 않습니다.: " + bookInfoId));
@@ -161,6 +170,10 @@ public class BookServiceImpl implements BookService {
     // 책의 대출여부를 확인해주는 메서드
     private boolean isBookAvailableForCheckout(Long bookInfoId) {
         return bookInstanceRepository.isBookAvailableForCheckout(bookInfoId);
+    }
+
+    private boolean isBookFavorite(BookInfo bookInfo, User user) {
+        return favoriteRepository.existsFavoriteBookListByUserAndBookInfo(user, bookInfo);
     }
 
     // bookInfoId 와 대출상태를 이용해 해당 InfoId를 가진 인스턴스들중 대출 가능한 책이 있다면 그책중 가장 빠른 bookInfoId를 가져온다.

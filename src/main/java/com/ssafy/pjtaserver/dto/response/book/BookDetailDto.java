@@ -16,6 +16,7 @@ public class BookDetailDto {
     private LocalDateTime registryDate;
     private String publisherName;
     private boolean isAvailableCheckedOut;
+    private boolean isBookFavorite;
     private String bookImgPath;
     private String seriesName;
     private String description;

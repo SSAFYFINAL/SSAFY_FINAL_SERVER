@@ -30,9 +30,9 @@ public class ApiPublicBookController {
         return ApiResponse.of(ApiResponseCode.SUCCESS, results);
     }
 
-    @GetMapping("/is-checkout/{bookInfoId}")
+    @GetMapping("/details/{bookInfoId}")
     public ResponseEntity<ApiResponse> getBookInfoDetails(@PathVariable("bookInfoId") Long bookInfoId) {
-        BookDetailDto results = bookService.getDetail(bookInfoId);
+        BookDetailDto results = bookService.getDetail(bookInfoId, java.util.Optional.empty());
 
         log.info("------------------------------api is book available for checkout------------------------------");
         log.info("results : {}", results);
