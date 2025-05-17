@@ -5,7 +5,6 @@ import com.ssafy.pjtaserver.dto.response.book.BookInfoSearchCondition;
 import com.ssafy.pjtaserver.dto.response.book.BookInfoSearchDto;
 import com.ssafy.pjtaserver.dto.response.book.PageResponseDto;
 import com.ssafy.pjtaserver.enums.ApiResponseCode;
-import com.ssafy.pjtaserver.repository.book.instance.BookInstanceRepository;
 import com.ssafy.pjtaserver.service.book.BookService;
 import com.ssafy.pjtaserver.util.ApiResponse;
 import lombok.RequiredArgsConstructor;
@@ -33,9 +32,8 @@ public class ApiPublicBookController {
         return ApiResponse.of(ApiResponseCode.SUCCESS, results);
     }
 
-    // 대출 가능 여부 판단. 테스트 용
     @GetMapping("/is-checkout/{bookInfoId}")
-    public ResponseEntity<ApiResponse> isBookAvailableForCheckout(@PathVariable("bookInfoId") Long bookInfoId) {
+    public ResponseEntity<ApiResponse> getBookInfoDetails(@PathVariable("bookInfoId") Long bookInfoId) {
         BookDetailDto results = bookService.getDetail(bookInfoId);
 
         log.info("------------------------------api is book available for checkout------------------------------");

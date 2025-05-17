@@ -17,6 +17,12 @@ import java.util.List;
 @Slf4j
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(DuplicateFavoriteBookException.class)
+    protected ResponseEntity<ApiResponse> handleDuplicateFavoriteBookException(DuplicateFavoriteBookException e) {
+        log.warn("이미 해당 유저의 찜 목록에 추가된 책입니다.: {}", e.getMessage());
+        return ApiResponse.of(ApiResponseCode.INVALID_REQUEST, e.getMessage());
+    }
+
     @ExceptionHandler(EntityNotFoundException.class)
     protected ResponseEntity<ApiResponse> handleEntityNotFoundException(EntityNotFoundException e) {
         log.warn("해당 책을 찾을 수 없습니다: {}", e.getMessage());
