@@ -1,6 +1,7 @@
 package com.ssafy.pjtaserver.service.user;
 
 import com.ssafy.pjtaserver.domain.user.User;
+import com.ssafy.pjtaserver.dto.request.user.UserFindIdDto;
 import com.ssafy.pjtaserver.dto.request.user.UserLoginDto;
 import com.ssafy.pjtaserver.dto.request.user.UserJoinDto;
 import com.ssafy.pjtaserver.dto.request.user.UserResetPwDto;
@@ -26,6 +27,8 @@ public interface UserService {
     boolean findByUserId(String userLoginId);
 
     boolean resetUserPwd(String userLoginId, UserResetPwDto userResetPwDto);
+
+    String findUserIdByUserEmailAndName(UserFindIdDto userFindIdDto);
 
     // user 엔티티를 userDto로 변환시켜주는 로직
     default UserLoginDto entityToDto(User user) {
