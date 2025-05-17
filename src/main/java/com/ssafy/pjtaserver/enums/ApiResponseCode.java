@@ -11,18 +11,22 @@ public enum ApiResponseCode {
     LOGIN_SUCCESS(HttpStatus.OK, 102, "로그인에 성공했습니다."),
     EMAIL_SEND_SUCCESS(HttpStatus.OK, 103, "이메일이 정상적으로 발송되었습니다."),
     EMAIL_VERIFY_SUCCESS(HttpStatus.OK, 100, "이메일 인증이 정상적으로 처리되었습니다."),
+    CHECKOUT_SUCCESS(HttpStatus.OK, 100, "대출이 완료되었습니다."),
+    RESERVATION_SUCCESS(HttpStatus.OK, 100, "예약이 완료되었습니다."),
+    FAVORITE_CALCLE(HttpStatus.OK, 100, "즐겨찾기 취소 완료되었습니다."),
+    FAVORITE_ADD(HttpStatus.OK, 100, "즐겨찾기 추가 완료되었습니다."),
 
     // 실패
-    INVALID_REQUEST(HttpStatus.BAD_REQUEST, 400, "잘못된 요청입니다."),
-    VALIDATION_ERROR(HttpStatus.BAD_REQUEST, 401, "요청값 검증 실패"),
-    AUTHENTICATION_FAILED(HttpStatus.UNAUTHORIZED, 402, "인증 실패"),
-    FORBIDDEN(HttpStatus.FORBIDDEN, 403, "권한이 없습니다."),
-    NOT_FOUND(HttpStatus.NOT_FOUND, 404, "요청한 리소스를 찾을 수 없습니다."),
-    USER_CREATED_ERROR(HttpStatus.BAD_REQUEST,401,"회원가입 실패"),
+    INVALID_REQUEST(HttpStatus.OK, 400, "잘못된 요청입니다."),
+    VALIDATION_ERROR(HttpStatus.OK, 401, "요청값 검증 실패"),
+    AUTHENTICATION_FAILED(HttpStatus.OK, 402, "인증 실패"),
+    FORBIDDEN(HttpStatus.OK, 403, "권한이 없습니다."),
+    NOT_FOUND(HttpStatus.OK, 404, "요청한 리소스를 찾을 수 없습니다."),
+    USER_CREATED_ERROR(HttpStatus.OK,401,"회원가입 실패"),
 
 
-    EMAIL_SEND_ERROR(HttpStatus.FORBIDDEN,403,"이메일 인증 휫수 초과."),
-    EMAIL_VERIFY_ERROR(HttpStatus.FORBIDDEN, 403, "이메일 인증에 실패하였습니다."),
+    EMAIL_SEND_ERROR(HttpStatus.OK,403,"이메일 인증 휫수 초과."),
+    EMAIL_VERIFY_ERROR(HttpStatus.OK, 403, "이메일 인증에 실패하였습니다."),
 
     // 토큰 에러
     ERROR_ACCESS_TOKEN(HttpStatus.UNAUTHORIZED, 401, "만료되거나 잘못된 토큰입니다."),
