@@ -2,7 +2,7 @@ package com.ssafy.pjtaserver.security;
 
 import com.ssafy.pjtaserver.domain.user.User;
 import com.ssafy.pjtaserver.dto.request.user.UserLoginDto;
-import com.ssafy.pjtaserver.repository.user.UserRepository;
+import com.ssafy.pjtaserver.repository.user.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;

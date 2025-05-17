@@ -15,8 +15,8 @@ import com.ssafy.pjtaserver.enums.ReservationStatus;
 import com.ssafy.pjtaserver.repository.book.info.BookInfoRepository;
 import com.ssafy.pjtaserver.repository.book.instance.BookInstanceRepository;
 import com.ssafy.pjtaserver.repository.book.reservation.BookReservationRepository;
-import com.ssafy.pjtaserver.repository.user.FavoriteBookListRepository;
-import com.ssafy.pjtaserver.repository.user.UserRepository;
+import com.ssafy.pjtaserver.repository.user.favorite.FavoriteRepository;
+import com.ssafy.pjtaserver.repository.user.user.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,7 +40,7 @@ public class BookServiceImpl implements BookService {
     private final BookInfoRepository bookInfoRepository;
     private final BookInstanceRepository bookInstanceRepository;
     private final UserRepository userRepository;
-    private final FavoriteBookListRepository favoriteBookListRepository;
+    private final FavoriteRepository favoriteRepository;
     private final BookReservationRepository bookReservationRepository;
 
     @Override
@@ -60,22 +60,31 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public BookDetailDto getDetail(Long bookInfoId) {
+    public BookDetailDto getDetail(Long bookInfoId, Optional<String> userLoginId) {
+        BookInfo bookInfo = getBookInfo(bookInfoId);
+
+        boolean isFavorite = userLoginId
+                .map(this::getUser)
+                .map(user -> isBookFavorite(bookInfo, user))
+                .orElse(false);
+
         boolean isAvailableForCheckout = isBookAvailableForCheckout(bookInfoId);
 
+
         return bookInfoRepository.findBookInfoById(bookInfoId)
-                .map(bookInfo -> BookDetailDto.builder()
-                        .bookInfoId(bookInfo.getId())
-                        .title(bookInfo.getTitle())
-                        .authorName(bookInfo.getAuthorName())
-                        .isbn(bookInfo.getIsbn())
-                        .registryDate(bookInfo.getRegistryDate())
-                        .publisherName(bookInfo.getPublisherName())
+                .map(info -> BookDetailDto.builder()
+                        .bookInfoId(info.getId())
+                        .title(info.getTitle())
+                        .authorName(info.getAuthorName())
+                        .isbn(info.getIsbn())
+                        .registryDate(info.getRegistryDate())
+                        .publisherName(info.getPublisherName())
                         .isAvailableCheckedOut(isAvailableForCheckout)
-                        .bookImgPath(bookInfo.getBookImgPath())
-                        .seriesName(bookInfo.getSeriesName())
-                        .description(bookInfo.getDescription())
-                        .categoryName(bookInfo.getCategoryId())
+                        .isBookFavorite(isFavorite)
+                        .bookImgPath(info.getBookImgPath())
+                        .seriesName(info.getSeriesName())
+                        .description(info.getDescription())
+                        .categoryName(info.getCategoryId())
                         .build()
                 )
                 .orElseThrow(() -> new EntityNotFoundException("해당 책이 존재하지 않습니다.: " + bookInfoId));
@@ -96,12 +105,12 @@ public class BookServiceImpl implements BookService {
 
         // 즐겨찾기 존재 확인
         Optional<FavoriteBookList> favoriteBookHistory =
-                favoriteBookListRepository.findFavoriteBookListByUserAndBookInfo(user, bookInfo);
+                favoriteRepository.findFavoriteBookListByUserAndBookInfo(user, bookInfo);
 
         // 만약 이미 즐겨찾기에 해당 책이 존재한다면 취소처리
         if (favoriteBookHistory.isPresent()) {
             favoriteBookHistory.get().delete();
-            favoriteBookListRepository.delete(favoriteBookHistory.get());
+            favoriteRepository.delete(favoriteBookHistory.get());
 
             log.info("favorite book list removed for user: {}, book: {}", user.getId(), bookInfo.getId());
             return BookResponseType.FAVORITE_CALCLE;
@@ -109,7 +118,7 @@ public class BookServiceImpl implements BookService {
 
         // 즐겨찾기 추가
         FavoriteBookList favoriteBookList = FavoriteBookList.createFavoriteBookList(user, bookInfo);
-        favoriteBookListRepository.save(favoriteBookList);
+        favoriteRepository.save(favoriteBookList);
 
         log.info("favorite book list created: {}", favoriteBookList);
         return BookResponseType.FAVORITE_ADD;
@@ -158,9 +167,31 @@ public class BookServiceImpl implements BookService {
         }
     }
 
+    @Override
+    public PageResponseDto<BookInfoSearchDto> searchFavoritePageComplex(BookInfoSearchCondition condition, Pageable pageable, String userLoginId) {
+
+        Sort sort = Sort.by(Sort.Direction.fromString(condition.getOrderDirection()), condition.getOrderBy());
+        Pageable updatedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
+
+        // page 객체를 pageResponseDto 로 변환해서 반환해준다 안그러면 warn 로그 찍힘
+        Page<BookInfoSearchDto> bookInfoSearchDto = favoriteRepository.searchFavoriteBook(condition, updatedPageable, userLoginId);
+
+        return new PageResponseDto<>(
+                bookInfoSearchDto.getContent(),
+                bookInfoSearchDto.getTotalElements(),
+                bookInfoSearchDto.getTotalPages(),
+                bookInfoSearchDto.getNumber(),
+                bookInfoSearchDto.getSize()
+        );
+    }
+
     // 책의 대출여부를 확인해주는 메서드
     private boolean isBookAvailableForCheckout(Long bookInfoId) {
         return bookInstanceRepository.isBookAvailableForCheckout(bookInfoId);
+    }
+
+    private boolean isBookFavorite(BookInfo bookInfo, User user) {
+        return favoriteRepository.existsFavoriteBookListByUserAndBookInfo(user, bookInfo);
     }
 
     // bookInfoId 와 대출상태를 이용해 해당 InfoId를 가진 인스턴스들중 대출 가능한 책이 있다면 그책중 가장 빠른 bookInfoId를 가져온다.

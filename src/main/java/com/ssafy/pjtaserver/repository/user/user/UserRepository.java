@@ -1,4 +1,4 @@
-package com.ssafy.pjtaserver.repository.user;
+package com.ssafy.pjtaserver.repository.user.user;
 
 import com.ssafy.pjtaserver.domain.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;

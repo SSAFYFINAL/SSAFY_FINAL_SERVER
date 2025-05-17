@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -23,8 +22,7 @@ public class ApiPublicBookController {
     private final BookService bookService;
 
     @GetMapping("/search/list")
-    public ResponseEntity<ApiResponse> searchBookList(
-            @Validated @RequestBody BookInfoSearchCondition condition,
+    public ResponseEntity<ApiResponse> searchBookList(@RequestBody BookInfoSearchCondition condition,
             Pageable pageable) {
 
         log.info("------------------------------api search book list------------------------------");
@@ -32,9 +30,9 @@ public class ApiPublicBookController {
         return ApiResponse.of(ApiResponseCode.SUCCESS, results);
     }
 
-    @GetMapping("/is-checkout/{bookInfoId}")
+    @GetMapping("/details/{bookInfoId}")
     public ResponseEntity<ApiResponse> getBookInfoDetails(@PathVariable("bookInfoId") Long bookInfoId) {
-        BookDetailDto results = bookService.getDetail(bookInfoId);
+        BookDetailDto results = bookService.getDetail(bookInfoId, java.util.Optional.empty());
 
         log.info("------------------------------api is book available for checkout------------------------------");
         log.info("results : {}", results);

@@ -2,8 +2,8 @@ package com.ssafy.pjtaserver.domain.user;
 
 import com.ssafy.pjtaserver.domain.book.BookInfo;
 import com.ssafy.pjtaserver.repository.book.info.BookInfoRepository;
-import com.ssafy.pjtaserver.repository.user.FavoriteBookListRepository;
-import com.ssafy.pjtaserver.repository.user.UserRepository;
+import com.ssafy.pjtaserver.repository.user.favorite.FavoriteRepository;
+import com.ssafy.pjtaserver.repository.user.user.UserRepository;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ class FavoriteBookListTest {
     private BookInfoRepository bookInfoRepository;
 
     @Autowired
-    private FavoriteBookListRepository favoriteBookListRepository;
+    private FavoriteRepository favoriteRepository;
 
     @Autowired
     private UserRepository userRepository;
@@ -50,13 +50,13 @@ class FavoriteBookListTest {
             System.out.println("[Book 저장 완료]: " + book);
 
             FavoriteBookList favoriteBookList = FavoriteBookList.createFavoriteBookList(user, book);
-            favoriteBookListRepository.save(favoriteBookList);
+            favoriteRepository.save(favoriteBookList);
             System.out.println("[FavoriteBookList 저장 완료]: " + favoriteBookList);
         }
 
         // 3. 저장된 FavoriteBookList 출력
         System.out.println("\n[저장된 FavoriteBookList 찾기]");
-        favoriteBookListRepository.findAll().forEach(System.out::println);
+        favoriteRepository.findAll().forEach(System.out::println);
 
         // 4. User와 연결된 FavoriteBookList 출력
         System.out.println("\n[User와 연관된 FavoriteBookList]");
@@ -64,6 +64,6 @@ class FavoriteBookListTest {
 
         userRepository.delete(user);
         assertThat(userRepository.findById(user.getId())).isEmpty();
-        assertThat(favoriteBookListRepository.count()).isEqualTo(0);
+        assertThat(favoriteRepository.count()).isEqualTo(0);
     }
 }

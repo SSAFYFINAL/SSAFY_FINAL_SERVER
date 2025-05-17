@@ -1,4 +1,4 @@
-package com.ssafy.pjtaserver.repository.book.info;
+package com.ssafy.pjtaserver.repository.user.favorite;
 
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -17,16 +17,18 @@ import org.springframework.data.support.PageableExecutionUtils;
 import java.util.List;
 
 import static com.ssafy.pjtaserver.domain.book.QBookInfo.bookInfo;
+import static com.ssafy.pjtaserver.domain.user.QFavoriteBookList.favoriteBookList;
 import static org.springframework.util.StringUtils.hasText;
 
-@RequiredArgsConstructor
 @Slf4j
-public class BookInfoRepositoryImpl implements BookInfoQueryRepository {
+@RequiredArgsConstructor
+public class FavoriteRepositoryImpl implements FavoriteQueryRepository{
 
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public Page<BookInfoSearchDto> searchPageComplex(BookInfoSearchCondition condition, Pageable pageable) {
+    public Page<BookInfoSearchDto> searchFavoriteBook(BookInfoSearchCondition condition, Pageable pageable, String userLoginId) {
+
         List<BookInfoSearchDto> results = jpaQueryFactory
                 .select(new QBookInfoSearchDto(
                         bookInfo.id.as("bookInfoId"),
@@ -37,10 +39,13 @@ public class BookInfoRepositoryImpl implements BookInfoQueryRepository {
                         bookInfo.seriesName.as("seriesName"),
                         bookInfo.title))
                 .from(bookInfo)
+                .join(bookInfo.favoriteBookList, favoriteBookList)
+                .on(favoriteBookList.user.userLoginId.eq(userLoginId)) // 조인 조건
                 .where(
                         titleEq(condition.getTitle()),
                         authorNameEq(condition.getAuthorName()),
-                        publisherNameEq(condition.getPublisherName())
+                        publisherNameEq(condition.getPublisherName()),
+                        favoriteBookList.user.userLoginId.eq(userLoginId)
                 )
                 .orderBy(getOrderSpecifiers(pageable))
                 .offset(pageable.getOffset())
@@ -50,11 +55,14 @@ public class BookInfoRepositoryImpl implements BookInfoQueryRepository {
         JPAQuery<Long> countQuery = jpaQueryFactory
                 .select(bookInfo.id.count())
                 .from(bookInfo)
+                .join(bookInfo.favoriteBookList, favoriteBookList)
+                .on(favoriteBookList.user.userLoginId.eq(userLoginId))
                 .where(
                         titleEq(condition.getTitle()),
                         authorNameEq(condition.getAuthorName()),
                         publisherNameEq(condition.getPublisherName())
                 );
+
         return PageableExecutionUtils.getPage(results, pageable, countQuery::fetchOne);
     }
 
@@ -84,5 +92,6 @@ public class BookInfoRepositoryImpl implements BookInfoQueryRepository {
             default -> null;
         };
     }
+
 
 }

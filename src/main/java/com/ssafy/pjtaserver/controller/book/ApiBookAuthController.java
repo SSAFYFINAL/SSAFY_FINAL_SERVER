@@ -1,18 +1,22 @@
 package com.ssafy.pjtaserver.controller.book;
 
+import com.ssafy.pjtaserver.dto.response.book.BookDetailDto;
+import com.ssafy.pjtaserver.dto.response.book.BookInfoSearchCondition;
+import com.ssafy.pjtaserver.dto.response.book.BookInfoSearchDto;
+import com.ssafy.pjtaserver.dto.response.book.PageResponseDto;
 import com.ssafy.pjtaserver.enums.ApiResponseCode;
 import com.ssafy.pjtaserver.enums.BookResponseType;
 import com.ssafy.pjtaserver.service.book.BookService;
 import com.ssafy.pjtaserver.util.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import static java.util.Optional.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -36,7 +40,7 @@ public class ApiBookAuthController {
     }
 
     // 찜하기 로직 db 수정 필요해보인다.
-    @PostMapping("/like/{bookInfoId}")
+    @PostMapping("/favorites/{bookInfoId}")
     public ResponseEntity<ApiResponse> likeBook(@AuthenticationPrincipal UserDetails userDetails, @PathVariable("bookInfoId") Long bookInfoId) {
         String userLoginId = userDetails.getUsername();
         log.info("------------------------------api like book------------------------------");
@@ -49,4 +53,27 @@ public class ApiBookAuthController {
 
         return ApiResponse.of(ApiResponseCode.FAVORITE_CALCLE);
     }
+
+    @GetMapping("/details/{bookInfoId}")
+    public ResponseEntity<ApiResponse> getBookInfoDetails(@AuthenticationPrincipal UserDetails userDetails,@PathVariable("bookInfoId") Long bookInfoId) {
+        BookDetailDto results = bookService.getDetail(bookInfoId, userDetails.getUsername() == null ? empty() : of(userDetails.getUsername()));
+
+        log.info("------------------------------api is book available for checkout------------------------------");
+        log.info("results : {}", results);
+
+        return ApiResponse.of(ApiResponseCode.SUCCESS, results);
+    }
+
+    @GetMapping("/favorites")
+    public ResponseEntity<ApiResponse> getFavoriteList(@AuthenticationPrincipal UserDetails userDetails, @RequestBody BookInfoSearchCondition condition, Pageable pageable) {
+        PageResponseDto<BookInfoSearchDto> results = bookService.searchFavoritePageComplex(condition, pageable, userDetails.getUsername());
+
+        log.info("------------------------------api get favorite list------------------------------");
+        log.info("results : {}", results);
+
+        return ApiResponse.of(ApiResponseCode.SUCCESS,results);
+    }
+
+
+
 }
