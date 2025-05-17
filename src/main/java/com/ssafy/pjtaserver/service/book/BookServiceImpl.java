@@ -15,8 +15,8 @@ import com.ssafy.pjtaserver.enums.ReservationStatus;
 import com.ssafy.pjtaserver.repository.book.info.BookInfoRepository;
 import com.ssafy.pjtaserver.repository.book.instance.BookInstanceRepository;
 import com.ssafy.pjtaserver.repository.book.reservation.BookReservationRepository;
-import com.ssafy.pjtaserver.repository.user.FavoriteBookListRepository;
-import com.ssafy.pjtaserver.repository.user.UserRepository;
+import com.ssafy.pjtaserver.repository.user.favorite.FavoriteRepository;
+import com.ssafy.pjtaserver.repository.user.user.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,7 +40,7 @@ public class BookServiceImpl implements BookService {
     private final BookInfoRepository bookInfoRepository;
     private final BookInstanceRepository bookInstanceRepository;
     private final UserRepository userRepository;
-    private final FavoriteBookListRepository favoriteBookListRepository;
+    private final FavoriteRepository favoriteRepository;
     private final BookReservationRepository bookReservationRepository;
 
     @Override
@@ -96,12 +96,12 @@ public class BookServiceImpl implements BookService {
 
         // 즐겨찾기 존재 확인
         Optional<FavoriteBookList> favoriteBookHistory =
-                favoriteBookListRepository.findFavoriteBookListByUserAndBookInfo(user, bookInfo);
+                favoriteRepository.findFavoriteBookListByUserAndBookInfo(user, bookInfo);
 
         // 만약 이미 즐겨찾기에 해당 책이 존재한다면 취소처리
         if (favoriteBookHistory.isPresent()) {
             favoriteBookHistory.get().delete();
-            favoriteBookListRepository.delete(favoriteBookHistory.get());
+            favoriteRepository.delete(favoriteBookHistory.get());
 
             log.info("favorite book list removed for user: {}, book: {}", user.getId(), bookInfo.getId());
             return BookResponseType.FAVORITE_CALCLE;
@@ -109,7 +109,7 @@ public class BookServiceImpl implements BookService {
 
         // 즐겨찾기 추가
         FavoriteBookList favoriteBookList = FavoriteBookList.createFavoriteBookList(user, bookInfo);
-        favoriteBookListRepository.save(favoriteBookList);
+        favoriteRepository.save(favoriteBookList);
 
         log.info("favorite book list created: {}", favoriteBookList);
         return BookResponseType.FAVORITE_ADD;

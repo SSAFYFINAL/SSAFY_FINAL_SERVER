@@ -1,4 +1,4 @@
-package com.ssafy.pjtaserver.repository.user;
+package com.ssafy.pjtaserver.repository.user.favorite;
 
 import com.ssafy.pjtaserver.domain.book.BookInfo;
 import com.ssafy.pjtaserver.domain.user.FavoriteBookList;
@@ -9,6 +9,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface FavoriteBookListRepository extends JpaRepository<FavoriteBookList, Long> {
+public interface FavoriteRepository extends JpaRepository<FavoriteBookList, Long>, FavoriteQueryRepository {
     Optional<FavoriteBookList> findFavoriteBookListByUserAndBookInfo(User user, BookInfo bookInfo);
 }
