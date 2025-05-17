@@ -11,4 +11,5 @@ import java.util.Optional;
 public interface BookService {
     PageResponseDto<BookInfoSearchDto> searchPageComplex(BookInfoSearchCondition condition, Pageable updatedPageable);
     BookDetailDto getDetail(Long bookInfoId);
+    boolean addFavoriteBook(String userLoginId, Long bookInfoId);
 }
