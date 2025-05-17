@@ -7,6 +7,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.pjtaserver.dto.response.book.BookInfoSearchCondition;
 import com.ssafy.pjtaserver.dto.response.book.BookInfoSearchDto;
 import com.ssafy.pjtaserver.dto.response.book.QBookInfoSearchDto;
+import com.ssafy.pjtaserver.util.SortUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -14,7 +15,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 
 import java.util.List;
-import java.util.Objects;
 
 import static com.ssafy.pjtaserver.domain.book.QBookInfo.bookInfo;
 import static org.springframework.util.StringUtils.hasText;
@@ -70,25 +70,19 @@ public class BookInfoRepositoryImpl implements BookInfoQueryRepository {
         return hasText(publisherName) ? bookInfo.publisherName.contains(publisherName) : null;
     }
 
-    /**
-     * Pageable 에 정의되어있는 정렬 정보를 queryDsl의 OrderSpecifier 배열로 변환해주는 역할을 한다.
-     * @param pageable : 페이징과 정렬 조건을 갖고있는 Pageable 객체이다. getSort()를 이용해 정렬속성, 방향에 대한 정보를
-     *                 가지고 올 수 있음
-     * @return : queryDsl 쿼리에서 정렬 조건으로 사용할 수 있는 orderSpecifier 배열을 반환
-     *            이게 위의 쿼리문의 orderBy에 들어가 정렬을 진행해준다.
-     */
     private OrderSpecifier<?>[] getOrderSpecifiers(Pageable pageable) {
-        pageable.getSort().forEach(order -> {
-            log.info("Order Property: {}, Direction: {}", order.getProperty(), order.getDirection());
-        });
+        return SortUtils.getOrderSpecifiers(pageable, this::mapSortProperty);
+    }
 
-        return pageable.getSort().stream().map(order -> switch (order.getProperty()) {
-                    case "title" -> order.isAscending() ? bookInfo.title.asc() : bookInfo.title.desc();
-                    case "authorName" -> order.isAscending() ? bookInfo.authorName.asc() : bookInfo.authorName.desc();
-                    case "publisherName" -> order.isAscending() ? bookInfo.publisherName.asc() : bookInfo.publisherName.desc();
-                    default -> null;
-                }).filter(Objects::nonNull)
-                .toArray(OrderSpecifier<?>[]::new);
+    // 정렬 조건정의
+    private OrderSpecifier<?> mapSortProperty(String property, boolean isAscending) {
+        return switch (property) {
+            case "" -> isAscending ? bookInfo.id.asc() : bookInfo.isbn.desc();
+            case "title" -> isAscending ? bookInfo.title.asc() : bookInfo.title.desc();
+            case "authorName" -> isAscending ? bookInfo.authorName.asc() : bookInfo.authorName.desc();
+            case "publisherName" -> isAscending ? bookInfo.publisherName.asc() : bookInfo.publisherName.desc();
+            default -> null;
+        };
     }
 
 }
