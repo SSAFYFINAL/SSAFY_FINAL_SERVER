@@ -77,7 +77,7 @@ public class BookInfoRepositoryImpl implements BookInfoQueryRepository {
     // 정렬 조건정의
     private OrderSpecifier<?> mapSortProperty(String property, boolean isAscending) {
         return switch (property) {
-            case "" -> isAscending ? bookInfo.id.asc() : bookInfo.isbn.desc();
+            case "id" -> isAscending ? bookInfo.id.asc() : bookInfo.isbn.desc();
             case "title" -> isAscending ? bookInfo.title.asc() : bookInfo.title.desc();
             case "authorName" -> isAscending ? bookInfo.authorName.asc() : bookInfo.authorName.desc();
             case "publisherName" -> isAscending ? bookInfo.publisherName.asc() : bookInfo.publisherName.desc();
