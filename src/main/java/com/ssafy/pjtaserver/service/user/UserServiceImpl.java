@@ -2,6 +2,7 @@ package com.ssafy.pjtaserver.service.user;
 
 import com.ssafy.pjtaserver.domain.user.User;
 import com.ssafy.pjtaserver.dto.request.mail.MailSendDto;
+import com.ssafy.pjtaserver.dto.request.user.UserFindIdDto;
 import com.ssafy.pjtaserver.dto.request.user.UserJoinDto;
 import com.ssafy.pjtaserver.dto.request.user.UserResetPwDto;
 import com.ssafy.pjtaserver.enums.EmailType;
@@ -124,7 +125,6 @@ public class UserServiceImpl implements UserService {
         if(!userJoinDto.getIsDuplicatedUserLoginId()) {
             throw new JoinValidationException("아이디 중복 확인 실패, 누락");
         }
-        validatePassword(userJoinDto.getUserPwd());
 
         User joinUser = User.createNormalUser(
                 userJoinDto.getUserLoginId(),
@@ -149,7 +149,6 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public boolean resetUserPwd(String userLoginId, UserResetPwDto userResetPwDto) {
-        validatePassword(userResetPwDto.getResetPwd());
         return userRepository.findByUserLoginId(userLoginId)
                 .map(user -> {
                     String encodedPwd = passwordEncoder.encode(userResetPwDto.getResetPwd());
@@ -161,19 +160,12 @@ public class UserServiceImpl implements UserService {
                 .orElse(false);
     }
 
-    /**
-     * 비밀번호 유효성 검사
-     */
-    private void validatePassword(String password) {
-        if (password.length() < 8) {
-            throw new IllegalArgumentException("비밀번호는 최소 8자 이상이어야 합니다.");
-        }
-        if (!password.matches(".*[0-9].*")) {
-            throw new IllegalArgumentException("비밀번호는 숫자를 포함해야 합니다.");
-        }
-        if (!password.matches(".*[!@#$%^&*()].*")) {
-            throw new IllegalArgumentException("비밀번호는 특수 문자를 포함해야 합니다.");
-        }
+    @Override
+    public String findUserIdByUserEmailAndName(UserFindIdDto userFindIdDto) {
+
+        return userRepository.findByUserEmailAndUsernameMain(userFindIdDto.getEmail(), userFindIdDto.getUsernameMain())
+                .map(User::getUserLoginId)
+                .orElseThrow(() -> new IllegalStateException("해당 Email과 이름을 가진 유저가 존재하지 않습니다."));
     }
 
     /**

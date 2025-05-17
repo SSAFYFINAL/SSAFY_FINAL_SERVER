@@ -1,5 +1,6 @@
 package com.ssafy.pjtaserver.controller.user;
 
+import com.ssafy.pjtaserver.dto.request.user.UserFindIdDto;
 import com.ssafy.pjtaserver.dto.request.user.UserLoginDto;
 import com.ssafy.pjtaserver.dto.request.user.UserCheckedIdDto;
 import com.ssafy.pjtaserver.dto.request.user.UserJoinDto;
@@ -24,7 +25,7 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-@RequestMapping("/api/public")
+@RequestMapping("/api/public/user")
 public class ApiUserPublicController {
 
     private final UserService userService;
@@ -81,7 +82,7 @@ public class ApiUserPublicController {
         return ApiResponse.of(ApiResponseCode.USER_CREATED, claims);
     }
 
-    @PostMapping("/user/join")
+    @PostMapping("/join")
     public ResponseEntity<ApiResponse> joinUser(@Validated @RequestBody UserJoinDto userJoinDto) {
         log.info("------------------------------api user join------------------------------");
         log.info("joinUser : {}", userJoinDto);
@@ -93,11 +94,20 @@ public class ApiUserPublicController {
         return ApiResponse.of(ApiResponseCode.USER_CREATED, userJoinDto.getUserLoginId());
     }
 
-    @GetMapping("/user/check-id")
+    @GetMapping("/check-id")
     public ResponseEntity<ApiResponse> checkId(@Validated @RequestBody UserCheckedIdDto userCheckedIdDto) {
         if(userService.findByUserId(userCheckedIdDto.getUserLoginId())){
             return ApiResponse.of(ApiResponseCode.VALIDATION_ERROR);
         }
         return ApiResponse.of(ApiResponseCode.SUCCESS);
+    }
+
+    @GetMapping("/find-id")
+    public ResponseEntity<ApiResponse> findUserId(@Validated @RequestBody UserFindIdDto userFindIdDto){
+        String userLoginId = userService.findUserIdByUserEmailAndName(userFindIdDto);
+        if(userLoginId == null) {
+            return ApiResponse.of(ApiResponseCode.AUTHENTICATION_FAILED);
+        }
+        return ApiResponse.of(ApiResponseCode.SUCCESS, userLoginId);
     }
 }
