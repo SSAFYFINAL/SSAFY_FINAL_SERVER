@@ -24,8 +24,12 @@ public class BookReservation {
     private User userId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "book_instance_id", unique = true)
+    @JoinColumn(name = "book_instance_id")
     private BookInstance bookInstanceId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "book_info_id")
+    private BookInfo bookInfo;
 
     @Column(name = "reservation_date", nullable = false)
     private LocalDateTime reservationDate;
@@ -38,5 +42,15 @@ public class BookReservation {
     public void prePersist() {
         reservationDate = LocalDateTime.now();
         status = ReservationStatus.ACTIVE;
+    }
+
+    public static BookReservation createBookReservation(User user, BookInfo bookInfo, BookInstance bookInstance, ReservationStatus status) {
+        BookReservation bookReservation = new BookReservation();
+        bookReservation.userId = user;
+        bookReservation.bookInfo = bookInfo;
+        bookReservation.bookInstanceId = bookInstance;
+        bookReservation.status = status;
+
+        return bookReservation;
     }
 }

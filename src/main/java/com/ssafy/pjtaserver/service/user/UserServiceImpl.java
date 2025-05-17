@@ -124,6 +124,7 @@ public class UserServiceImpl implements UserService {
         if(!userJoinDto.getIsDuplicatedUserLoginId()) {
             throw new JoinValidationException("아이디 중복 확인 실패, 누락");
         }
+        validatePassword(userJoinDto.getUserPwd());
 
         User joinUser = User.createNormalUser(
                 userJoinDto.getUserLoginId(),
@@ -148,6 +149,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public boolean resetUserPwd(String userLoginId, UserResetPwDto userResetPwDto) {
+        validatePassword(userResetPwDto.getResetPwd());
         return userRepository.findByUserLoginId(userLoginId)
                 .map(user -> {
                     String encodedPwd = passwordEncoder.encode(userResetPwDto.getResetPwd());
