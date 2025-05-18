@@ -34,7 +34,7 @@ public class User {
     @Column(name = "user_role", nullable = false)
     private List<UserRole> userRoleList = new ArrayList<>();
 
-    @Column(name = "user_name-main", nullable = false)
+    @Column(name = "username-main", nullable = false)
     private String usernameMain;
 
     @Column(name = "user_nick_name", nullable = false)

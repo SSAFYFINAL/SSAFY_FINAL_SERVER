@@ -39,8 +39,8 @@ public class ApiBookAuthController {
         return ApiResponse.of(ApiResponseCode.CHECKOUT_SUCCESS);
     }
 
-    // 찜하기 로직 db 수정 필요해보인다.
-    @PostMapping("/favorites/{bookInfoId}")
+    // 찜하기
+    @PostMapping("/favorite/{bookInfoId}")
     public ResponseEntity<ApiResponse> likeBook(@AuthenticationPrincipal UserDetails userDetails, @PathVariable("bookInfoId") Long bookInfoId) {
         String userLoginId = userDetails.getUsername();
         log.info("------------------------------api like book------------------------------");
@@ -50,12 +50,12 @@ public class ApiBookAuthController {
         if(result == BookResponseType.FAVORITE_ADD) {
             return ApiResponse.of(ApiResponseCode.FAVORITE_ADD);
         }
-
         return ApiResponse.of(ApiResponseCode.FAVORITE_CALCLE);
     }
 
-    @GetMapping("/details/{bookInfoId}")
-    public ResponseEntity<ApiResponse> getBookInfoDetails(@AuthenticationPrincipal UserDetails userDetails,@PathVariable("bookInfoId") Long bookInfoId) {
+    // 상세
+    @GetMapping("/details")
+    public ResponseEntity<ApiResponse> getBookInfoDetails(@AuthenticationPrincipal UserDetails userDetails,@RequestParam Long bookInfoId) {
         BookDetailDto results = bookService.getDetail(bookInfoId, userDetails.getUsername() == null ? empty() : of(userDetails.getUsername()));
 
         log.info("------------------------------api is book available for checkout------------------------------");
@@ -64,7 +64,8 @@ public class ApiBookAuthController {
         return ApiResponse.of(ApiResponseCode.SUCCESS, results);
     }
 
-    @GetMapping("/favorites")
+    // 찜목록
+    @PostMapping("/favorites")
     public ResponseEntity<ApiResponse> getFavoriteList(@AuthenticationPrincipal UserDetails userDetails, @RequestBody BookInfoSearchCondition condition, Pageable pageable) {
         PageResponseDto<BookInfoSearchDto> results = bookService.searchFavoritePageComplex(condition, pageable, userDetails.getUsername());
 
@@ -73,7 +74,4 @@ public class ApiBookAuthController {
 
         return ApiResponse.of(ApiResponseCode.SUCCESS,results);
     }
-
-
-
 }

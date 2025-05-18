@@ -25,8 +25,6 @@ public class ApiMailPublicController {
 
     /**
      * HTML 구성 기반 이메일을 전송합니다.
-     * @param mailSendDto
-     * @return
      */
     @PostMapping("/send-email")
     public ResponseEntity<ApiResponse> sendHtmlEmail(@RequestBody MailSendDto mailSendDto) throws MessagingException {
@@ -40,7 +38,7 @@ public class ApiMailPublicController {
         }
     }
 
-    @PostMapping("/verify-email")
+    @PostMapping("/verify-auth-code")
     public ResponseEntity<ApiResponse> verifyEmail(@Validated @RequestBody MailVerifyDto mailVerifyDto) {
         boolean isVerifyEmail = mailService.verifyEmail(mailVerifyDto);
 

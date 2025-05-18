@@ -21,7 +21,7 @@ public class ApiPublicBookController {
 
     private final BookService bookService;
 
-    @GetMapping("/search/list")
+    @PostMapping("/search/list")
     public ResponseEntity<ApiResponse> searchBookList(@RequestBody BookInfoSearchCondition condition,
             Pageable pageable) {
 
@@ -30,8 +30,8 @@ public class ApiPublicBookController {
         return ApiResponse.of(ApiResponseCode.SUCCESS, results);
     }
 
-    @GetMapping("/details/{bookInfoId}")
-    public ResponseEntity<ApiResponse> getBookInfoDetails(@PathVariable("bookInfoId") Long bookInfoId) {
+    @GetMapping("/details")
+    public ResponseEntity<ApiResponse> getBookInfoDetails(@RequestParam Long bookInfoId) {
         BookDetailDto results = bookService.getDetail(bookInfoId, java.util.Optional.empty());
 
         log.info("------------------------------api is book available for checkout------------------------------");
