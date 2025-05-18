@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -17,23 +18,36 @@ import java.util.List;
 @Slf4j
 public class GlobalExceptionHandler {
 
+    /**
+     * 파라미터 값 누락시 터지는 예외
+     */
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    public ResponseEntity<ApiResponse> handleMissingParams(MissingServletRequestParameterException ex) {
+        String name = ex.getParameterName();
+        return ApiResponse.of(ApiResponseCode.VALIDATION_ERROR, name + " 파라미터가 누락되었습니다.");
+    }
+
+    /**
+     * 상태 이상시 터지는 예외
+     */
     @ExceptionHandler(IllegalStateException.class)
     protected ResponseEntity<ApiResponse> handleIllegalStateException(IllegalStateException e) {
         log.warn("IllegalStateException 발생.: {}", e.getMessage());
         return ApiResponse.of(ApiResponseCode.INVALID_REQUEST, e.getMessage());
     }
-    @ExceptionHandler(DuplicateFavoriteBookException.class)
-    protected ResponseEntity<ApiResponse> handleDuplicateFavoriteBookException(DuplicateFavoriteBookException e) {
-        log.warn("이미 해당 유저의 찜 목록에 추가된 책입니다.: {}", e.getMessage());
-        return ApiResponse.of(ApiResponseCode.INVALID_REQUEST, e.getMessage());
-    }
 
+    /**
+     * 조회하고자 하는 책을 찾을 수 없을때 터지는 예외
+     */
     @ExceptionHandler(EntityNotFoundException.class)
     protected ResponseEntity<ApiResponse> handleEntityNotFoundException(EntityNotFoundException e) {
         log.warn("해당 책을 찾을 수 없습니다: {}", e.getMessage());
         return ApiResponse.of(ApiResponseCode.INVALID_REQUEST, e.getMessage());
     }
 
+    /**
+     * 5번 인증 오류 터져서 계정이 잠긴 상태에서 계속 인증을 요구하면 터지는 예외
+     */
     @ExceptionHandler(CustomEmailException.class)
     protected ResponseEntity<ApiResponse> handleCustomEmailException(CustomEmailException e) {
         log.warn("이메일 발송이 제한됨: {}", e.getMessage());
@@ -41,9 +55,7 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * 
-     * @param e MethodArgumentNotValidException
-     * @return 400 , 필수값 응답 반환
+     *  Valid 관련 예외
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     protected  ResponseEntity<ApiResponse> handleValidationException(MethodArgumentNotValidException e) {

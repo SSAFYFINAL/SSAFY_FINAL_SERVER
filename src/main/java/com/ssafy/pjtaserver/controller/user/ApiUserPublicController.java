@@ -2,7 +2,6 @@ package com.ssafy.pjtaserver.controller.user;
 
 import com.ssafy.pjtaserver.dto.request.user.UserFindIdDto;
 import com.ssafy.pjtaserver.dto.request.user.UserLoginDto;
-import com.ssafy.pjtaserver.dto.request.user.UserCheckedIdDto;
 import com.ssafy.pjtaserver.dto.request.user.UserJoinDto;
 import com.ssafy.pjtaserver.service.user.UserService;
 import com.ssafy.pjtaserver.util.JWTUtil;
@@ -95,15 +94,20 @@ public class ApiUserPublicController {
     }
 
     @GetMapping("/check-id")
-    public ResponseEntity<ApiResponse> checkId(@Validated @RequestBody UserCheckedIdDto userCheckedIdDto) {
-        if(userService.findByUserId(userCheckedIdDto.getUserLoginId())){
-            return ApiResponse.of(ApiResponseCode.VALIDATION_ERROR);
+    public ResponseEntity<ApiResponse> checkId(@RequestParam String userLoginId) {
+
+        if(userService.findByUserId(userLoginId)){
+            return ApiResponse.of(ApiResponseCode.DUPLICATE_LOGIN_ID, false);
         }
-        return ApiResponse.of(ApiResponseCode.SUCCESS);
+        return ApiResponse.of(ApiResponseCode.CAN_USE_LOGIN_ID,true);
     }
 
     @GetMapping("/find-id")
-    public ResponseEntity<ApiResponse> findUserId(@Validated @RequestBody UserFindIdDto userFindIdDto){
+    public ResponseEntity<ApiResponse> findUserId(@RequestParam String email, @RequestParam String usernameMain) {
+        UserFindIdDto userFindIdDto = new UserFindIdDto();
+        userFindIdDto.setEmail(email);
+        userFindIdDto.setUsernameMain(usernameMain);
+
         String userLoginId = userService.findUserIdByUserEmailAndName(userFindIdDto);
         if(userLoginId == null) {
             return ApiResponse.of(ApiResponseCode.AUTHENTICATION_FAILED);
