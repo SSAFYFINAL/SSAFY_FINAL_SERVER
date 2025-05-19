@@ -1,6 +1,7 @@
 package com.ssafy.pjtaserver.controller.guestbook;
 
 import com.ssafy.pjtaserver.dto.request.guestbook.GuestBookWriteDto;
+import com.ssafy.pjtaserver.dto.response.book.PageResponseDto;
 import com.ssafy.pjtaserver.dto.response.guestbook.GuestbookCondition;
 import com.ssafy.pjtaserver.dto.response.guestbook.GuestbookListDto;
 import com.ssafy.pjtaserver.enums.ApiResponseCode;
@@ -15,10 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth/guestbook")
@@ -27,7 +25,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class ApiGuestBookAuthController {
 
     private final GuestBookService guestBookService;
-    private final GuestBookRepository guestBookRepository;
 
     @PostMapping("/write")
     public ResponseEntity<ApiResponse> writeGuestBook(@AuthenticationPrincipal UserDetails userDetails, @Valid @RequestBody GuestBookWriteDto guestBookWriteDto) {
@@ -47,12 +44,10 @@ public class ApiGuestBookAuthController {
         return ApiResponse.of(ApiResponseCode.SUCCESS, true);
     }
 
-    @PostMapping("/list")
-    public ResponseEntity<ApiResponse> getGuestBookList(@AuthenticationPrincipal UserDetails userDetails,
-                                                        Pageable pageable, @RequestBody GuestbookCondition condition) {
+    @PostMapping("/list/{ownerId}")
+    public ResponseEntity<ApiResponse> getGuestBookList(Pageable pageable, @RequestBody GuestbookCondition condition, @PathVariable("ownerId") String ownerId) {
         log.info("------------------------------api guestbook list------------------------------");
-        Page<GuestbookListDto> guestBookList = guestBookRepository.getGuestBookList(condition, pageable, userDetails.getUsername());
-        log.info("guestBookList : {}", guestBookList);
-        return ApiResponse.of(ApiResponseCode.SUCCESS, guestBookList);
+        PageResponseDto<GuestbookListDto> results = guestBookService.searchGuestbookPageComplex(condition, pageable, ownerId);
+        return ApiResponse.of(ApiResponseCode.SUCCESS, results);
     }
 }
