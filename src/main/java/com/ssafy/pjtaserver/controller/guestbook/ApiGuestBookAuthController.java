@@ -26,28 +26,41 @@ public class ApiGuestBookAuthController {
 
     private final GuestBookService guestBookService;
 
+    /**
+     *  ownerId 방명록의 주인은 writer가 방문한 마이페이지의 주인이 된다.
+     */
     @PostMapping("/write")
     public ResponseEntity<ApiResponse> writeGuestBook(@AuthenticationPrincipal UserDetails userDetails, @Valid @RequestBody GuestBookWriteDto guestBookWriteDto) {
-        String userLoginId = userDetails.getUsername();
         log.info("------------------------------api guestbook write------------------------------");
-        log.info("userLoginId : {}", userLoginId);
+        String userLoginId = userDetails.getUsername();
         guestBookWriteDto.setWriterId(userLoginId);
-
-        log.info("guestBookWriteDto : {}", guestBookWriteDto);
 
         boolean result = guestBookService.writeGuestBook(guestBookWriteDto);
 
         if(!result) {
             return ApiResponse.of(ApiResponseCode.INVALID_REQUEST,false);
         }
-
         return ApiResponse.of(ApiResponseCode.SUCCESS, true);
     }
 
     @PostMapping("/list/{ownerId}")
-    public ResponseEntity<ApiResponse> getGuestBookList(Pageable pageable, @RequestBody GuestbookCondition condition, @PathVariable("ownerId") String ownerId) {
+    public ResponseEntity<ApiResponse> getGuestBookList(Pageable pageable, @RequestBody GuestbookCondition condition, @PathVariable("ownerId") Long ownerId) {
         log.info("------------------------------api guestbook list------------------------------");
         PageResponseDto<GuestbookListDto> results = guestBookService.searchGuestbookPageComplex(condition, pageable, ownerId);
         return ApiResponse.of(ApiResponseCode.SUCCESS, results);
     }
+
+    @DeleteMapping("/delete/{guestBookId}")
+    public ResponseEntity<ApiResponse> deleteGuestBook(@AuthenticationPrincipal UserDetails userDetails, @PathVariable String guestBookId) {
+        log.info("------------------------------api guestbook delete------------------------------");
+        String userLoginId = userDetails.getUsername();
+
+        boolean result = guestBookService.deleteGuestBook(userLoginId, Long.parseLong(guestBookId));
+
+        if (!result) {
+            return ApiResponse.of(ApiResponseCode.INVALID_REQUEST, false);
+        }
+        return ApiResponse.of(ApiResponseCode.SUCCESS, true);
+    }
+
 }

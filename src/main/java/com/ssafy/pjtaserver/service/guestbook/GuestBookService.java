@@ -8,5 +8,6 @@ import org.springframework.data.domain.Pageable;
 
 public interface GuestBookService {
     boolean writeGuestBook(GuestBookWriteDto guestBookWriteDto);
-    PageResponseDto<GuestbookListDto> searchGuestbookPageComplex(GuestbookCondition condition, Pageable pageable, String ownerId);
+    PageResponseDto<GuestbookListDto> searchGuestbookPageComplex(GuestbookCondition condition, Pageable pageable, Long ownerId);
+    boolean deleteGuestBook(String userLoginId, Long guestBookId);
 }
