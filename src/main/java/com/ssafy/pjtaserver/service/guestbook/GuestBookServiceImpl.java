@@ -15,17 +15,20 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class GuestBookServiceImpl implements GuestBookService{
 
     private final GuestBookRepository guestBookRepository;
     private final UserRepository userRepository;
 
+    @Transactional
     @Override
     public boolean writeGuestBook(GuestBookWriteDto guestBookWriteDto) {
 
@@ -61,4 +64,28 @@ public class GuestBookServiceImpl implements GuestBookService{
                 guestBookList.getSize()
         );
     }
+
+    /**
+        본인의 마이페이지에 존재하는 게스트 북이라면 삭제가 가능해야함
+        본인의 마이페이지가 아닌경우에는 작성자가 본이이여야만 삭제가 가능해야한다.
+     */
+    @Transactional
+    @Override
+    public boolean deleteGuestBook(String userLoginId, Long guestBookId) {
+        GuestBook guestBook = guestBookRepository.findById(guestBookId)
+                .orElseThrow(() -> new IllegalStateException("해당 ID의 게스트북이 존재하지 않습니다."));
+
+        User owner = guestBook.getOwnerId();
+        User writer = guestBook.getWriterId();
+
+        if (!owner.getUserLoginId().equals(userLoginId) && !writer.getUserLoginId().equals(userLoginId)) {
+            throw new IllegalStateException(
+                    "해당 게스트북(" + guestBookId + ")에 대한 삭제 권한이 없습니다."
+            );
+        }
+        guestBookRepository.delete(guestBook);
+
+        return true;
+    }
 }
+
