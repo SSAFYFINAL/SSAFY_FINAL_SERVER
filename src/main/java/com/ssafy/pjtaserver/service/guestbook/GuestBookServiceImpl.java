@@ -46,7 +46,7 @@ public class GuestBookServiceImpl implements GuestBookService{
     }
 
     @Override
-    public PageResponseDto<GuestbookListDto> searchGuestbookPageComplex(GuestbookCondition condition, Pageable pageable, String ownerId) {
+    public PageResponseDto<GuestbookListDto> searchGuestbookPageComplex(GuestbookCondition condition, Pageable pageable, Long ownerId) {
 
         Sort sort = Sort.by(Sort.Direction.fromString(condition.getOrderDirection()), condition.getOrderBy());
         PageRequest updatedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);

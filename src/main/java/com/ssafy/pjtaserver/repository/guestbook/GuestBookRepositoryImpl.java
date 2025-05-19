@@ -22,7 +22,7 @@ public class GuestBookRepositoryImpl implements GuestBookQueryRepository{
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Page<GuestbookListDto> getGuestBookList(GuestbookCondition condition, Pageable pageable, String ownerId) {
+    public Page<GuestbookListDto> getGuestBookList(GuestbookCondition condition, Pageable pageable, Long ownerId) {
 
         List<GuestbookListDto> result = queryFactory
                 .select(new QGuestbookListDto(
@@ -34,7 +34,7 @@ public class GuestBookRepositoryImpl implements GuestBookQueryRepository{
                         guestBook.isDeleted
                 ))
                 .from(guestBook)
-                .where(guestBook.ownerId.userLoginId.eq(ownerId))
+                .where(guestBook.ownerId.id.eq(ownerId), guestBook.isDeleted.isFalse())
                 .orderBy(getOrderSpecifiers(pageable))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -43,7 +43,7 @@ public class GuestBookRepositoryImpl implements GuestBookQueryRepository{
         JPAQuery<Long> countQuery = queryFactory
                 .select(guestBook.count())
                 .from(guestBook)
-                .where(guestBook.ownerId.userLoginId.eq(ownerId));
+                .where(guestBook.ownerId.id.eq(ownerId), guestBook.isDeleted.isFalse());
 
 
         return PageableExecutionUtils.getPage(result, pageable, countQuery::fetchOne);
@@ -54,11 +54,6 @@ public class GuestBookRepositoryImpl implements GuestBookQueryRepository{
     }
 
     private OrderSpecifier<?> mapSortProperty(String property, boolean isAscending) {
-        switch (property) {
-            case "writeDate":
-                return isAscending ? guestBook.writeDate.asc() : guestBook.writeDate.desc();
-            default:
-                return guestBook.writeDate.desc();
-        }
+        return isAscending ? guestBook.writeDate.asc() : guestBook.writeDate.desc();
     }
 }

@@ -45,7 +45,7 @@ public class ApiGuestBookAuthController {
     }
 
     @PostMapping("/list/{ownerId}")
-    public ResponseEntity<ApiResponse> getGuestBookList(Pageable pageable, @RequestBody GuestbookCondition condition, @PathVariable("ownerId") String ownerId) {
+    public ResponseEntity<ApiResponse> getGuestBookList(Pageable pageable, @RequestBody GuestbookCondition condition, @PathVariable("ownerId") Long ownerId) {
         log.info("------------------------------api guestbook list------------------------------");
         PageResponseDto<GuestbookListDto> results = guestBookService.searchGuestbookPageComplex(condition, pageable, ownerId);
         return ApiResponse.of(ApiResponseCode.SUCCESS, results);
