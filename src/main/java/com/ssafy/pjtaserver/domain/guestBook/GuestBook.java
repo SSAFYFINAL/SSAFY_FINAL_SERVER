@@ -45,6 +45,10 @@ public class GuestBook {
         this.isDeleted = isDeleted;
     }
 
+    public void changeContent(String content) {
+        this.content = content;
+    }
+
     public GuestBook(User ownerId, User writerId, String content) {
         this.ownerId = ownerId;
         this.writerId = writerId;

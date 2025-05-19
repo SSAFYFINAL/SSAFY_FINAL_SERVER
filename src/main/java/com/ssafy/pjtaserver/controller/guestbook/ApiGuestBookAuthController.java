@@ -1,5 +1,6 @@
 package com.ssafy.pjtaserver.controller.guestbook;
 
+import com.ssafy.pjtaserver.dto.request.guestbook.GuestBookUpdateDto;
 import com.ssafy.pjtaserver.dto.request.guestbook.GuestBookWriteDto;
 import com.ssafy.pjtaserver.dto.response.book.PageResponseDto;
 import com.ssafy.pjtaserver.dto.response.guestbook.GuestbookCondition;
@@ -9,6 +10,7 @@ import com.ssafy.pjtaserver.repository.guestbook.GuestBookRepository;
 import com.ssafy.pjtaserver.service.guestbook.GuestBookService;
 import com.ssafy.pjtaserver.util.ApiResponse;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -64,8 +66,17 @@ public class ApiGuestBookAuthController {
     }
 
     @PutMapping("/update/{guestBookId}")
-    public ResponseEntity<ApiResponse> updateGuestBook(@AuthenticationPrincipal UserDetails userDetails, @PathVariable String guestBookId){
-        return null;
+    public ResponseEntity<ApiResponse> updateGuestBook(@AuthenticationPrincipal UserDetails userDetails,
+                                                       @PathVariable String guestBookId,
+                                                       @Valid @RequestBody GuestBookUpdateDto guestBookUpdateDto) {
+        log.info("------------------------------api guestbook update------------------------------");
+        String userLoginId = userDetails.getUsername();
+        boolean result = guestBookService.updateGuestBook(userLoginId, Long.parseLong(guestBookId), guestBookUpdateDto.getContent());
+
+        if (!result) {
+            return ApiResponse.of(ApiResponseCode.INVALID_REQUEST, false);
+        }
+        return ApiResponse.of(ApiResponseCode.SUCCESS, true);
     }
 
 }
