@@ -63,4 +63,9 @@ public class ApiGuestBookAuthController {
         return ApiResponse.of(ApiResponseCode.SUCCESS, true);
     }
 
+    @PutMapping("/update/{guestBookId}")
+    public ResponseEntity<ApiResponse> updateGuestBook(@AuthenticationPrincipal UserDetails userDetails, @PathVariable String guestBookId){
+        return null;
+    }
+
 }

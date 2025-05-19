@@ -82,8 +82,13 @@ public class GuestBookServiceImpl implements GuestBookService{
             throw new IllegalStateException(
                     "해당 게스트북(" + guestBookId + ")에 대한 삭제 권한이 없습니다."
             );
+        } else if (guestBook.isDeleted()) {
+            throw new IllegalStateException(
+                    "해당 게스트북(" + guestBookId + ")은 이미 삭제 되었습니다."
+            );
         }
-        guestBookRepository.delete(guestBook);
+        guestBook.setIsDeleted(true);
+        guestBookRepository.save(guestBook);
 
         return true;
     }
