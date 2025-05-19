@@ -169,7 +169,6 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public PageResponseDto<BookInfoSearchDto> searchFavoritePageComplex(BookInfoSearchCondition condition, Pageable pageable, String userLoginId) {
-
         Sort sort = Sort.by(Sort.Direction.fromString(condition.getOrderDirection()), condition.getOrderBy());
         Pageable updatedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
 

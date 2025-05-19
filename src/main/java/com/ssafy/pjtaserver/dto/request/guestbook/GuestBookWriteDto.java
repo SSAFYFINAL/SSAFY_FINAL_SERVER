@@ -5,9 +5,9 @@ import lombok.Data;
 
 @Data
 public class GuestBookWriteDto {
+    @NotBlank(message = "ownerId는 필수 입력값 입니다.")
     private String ownerId;
 
-    @NotBlank(message = "wirterId는 필수 입력값 입니다.")
     private String writerId;
 
     @NotBlank(message = "content는 필수 입력값 입니다.")
