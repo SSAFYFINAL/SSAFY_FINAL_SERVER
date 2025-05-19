@@ -41,7 +41,6 @@ public class GuestBook {
         isDeleted = false;
     }
 
-    // userLintener 에 사용할 목적으로 생성
     public void setIsDeleted(boolean isDeleted) {
         this.isDeleted = isDeleted;
     }
@@ -50,6 +49,10 @@ public class GuestBook {
         this.ownerId = ownerId;
         this.writerId = writerId;
         this.content = content;
+    }
+
+    public static GuestBook createGuestBook(User ownerId, User writerId, String content) {
+        return new GuestBook(ownerId, writerId, content);
     }
 
 }
