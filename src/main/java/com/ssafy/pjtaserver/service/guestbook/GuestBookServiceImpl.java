@@ -92,5 +92,29 @@ public class GuestBookServiceImpl implements GuestBookService{
 
         return true;
     }
+
+    @Transactional
+    @Override
+    public boolean updateGuestBook(String userLoginId, Long guestBookId, String content) {
+        GuestBook guestBook = guestBookRepository.findById(guestBookId)
+                .orElseThrow(() -> new IllegalStateException("해당 ID의 게스트북이 존재하지 않습니다."));
+
+        User owner = guestBook.getOwnerId();
+        User writer = guestBook.getWriterId();
+
+        if (!owner.getUserLoginId().equals(userLoginId) && !writer.getUserLoginId().equals(userLoginId)) {
+            throw new IllegalStateException(
+                    "해당 게스트북(" + guestBookId + ")에 대한 수정 권한이 없습니다."
+            );
+        } else if (guestBook.isDeleted()) {
+            throw new IllegalStateException(
+                    "해당 게스트북(" + guestBookId + ")은 이미 삭제 되었습니다."
+            );
+        }
+        guestBook.changeContent(content);
+        guestBookRepository.save(guestBook);
+
+        return true;
+    }
 }
 

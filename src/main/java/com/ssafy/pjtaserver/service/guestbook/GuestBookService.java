@@ -10,4 +10,5 @@ public interface GuestBookService {
     boolean writeGuestBook(GuestBookWriteDto guestBookWriteDto);
     PageResponseDto<GuestbookListDto> searchGuestbookPageComplex(GuestbookCondition condition, Pageable pageable, Long ownerId);
     boolean deleteGuestBook(String userLoginId, Long guestBookId);
+    boolean updateGuestBook(String userLoginId, Long guestBookId, String content);
 }
