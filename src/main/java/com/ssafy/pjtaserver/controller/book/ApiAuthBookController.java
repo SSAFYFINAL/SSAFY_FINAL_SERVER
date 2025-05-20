@@ -31,9 +31,9 @@ public class ApiAuthBookController {
         BookResponseType result = bookService.checkoutAndReservationManager(userLoginId, bookInfoId);
         log.info("------------------------------api checkout-reservation------------------------------");
         if(result == BookResponseType.RESERVATION_SUCCESS){
-            return ApiResponse.of(ApiResponseCode.RESERVATION_SUCCESS);
+            return ApiResponse.of(ApiResponseCode.RESERVATION_SUCCESS,true);
         }
-        return ApiResponse.of(ApiResponseCode.CHECKOUT_SUCCESS);
+        return ApiResponse.of(ApiResponseCode.CHECKOUT_SUCCESS, true);
     }
 
     // 찜하기
@@ -45,9 +45,9 @@ public class ApiAuthBookController {
         BookResponseType result = bookService.favoriteBookManager(userLoginId, bookInfoId);
 
         if(result == BookResponseType.FAVORITE_ADD) {
-            return ApiResponse.of(ApiResponseCode.FAVORITE_ADD);
+            return ApiResponse.of(ApiResponseCode.FAVORITE_ADD, true);
         }
-        return ApiResponse.of(ApiResponseCode.FAVORITE_CALCLE);
+        return ApiResponse.of(ApiResponseCode.FAVORITE_CALCLE, true);
     }
 
     // 상세

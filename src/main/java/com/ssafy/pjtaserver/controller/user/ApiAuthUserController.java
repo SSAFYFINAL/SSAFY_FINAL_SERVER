@@ -30,8 +30,8 @@ public class ApiAuthUserController {
         boolean isReset = userService.resetUserPwd(userLoginId, userResetPwDto);
 
         if(!isReset) {
-            return ApiResponse.of(ApiResponseCode.INVALID_REQUEST);
+            return ApiResponse.of(ApiResponseCode.REQUEST_FAILED, false);
         }
-        return ApiResponse.of(ApiResponseCode.SUCCESS);
+        return ApiResponse.of(ApiResponseCode.SUCCESS, true);
     }
 }

@@ -109,7 +109,6 @@ public class UserServiceImpl implements UserService {
                 rawPassword,
                 EmailType.TEMP_PASSWORD
         ));
-
         return entityToDto(socialUser);
     }
 
@@ -134,7 +133,6 @@ public class UserServiceImpl implements UserService {
                 userJoinDto.getUserEmail(),
                 userJoinDto.getUserPhone()
         );
-
         userRepository.save(joinUser);
 
         return true;
@@ -154,8 +152,7 @@ public class UserServiceImpl implements UserService {
                     String encodedPwd = passwordEncoder.encode(userResetPwDto.getResetPwd());
                     user.changePwd(encodedPwd);
                     userRepository.save(user);
-                    log.info("------------------------성공----------------------");
-                    return true; // 성공
+                    return true;
                 })
                 .orElse(false);
     }
@@ -165,7 +162,7 @@ public class UserServiceImpl implements UserService {
 
         return userRepository.findByUserEmailAndUsernameMain(userFindIdDto.getEmail(), userFindIdDto.getUsernameMain())
                 .map(User::getUserLoginId)
-                .orElseThrow(() -> new IllegalStateException("해당 Email과 이름을 가진 유저가 존재하지 않습니다."));
+                .orElseThrow(() -> new IllegalStateException("해당 " + userFindIdDto.getEmail() + "과 " + userFindIdDto.getUsernameMain() + "을 가진 유저가 존재하지 않습니다."));
     }
 
     /**
@@ -177,7 +174,6 @@ public class UserServiceImpl implements UserService {
      */
     private Map<String, String> getUserInfoFromSocial(String accessToken, SocialLogin socialLogin) {
         validateAccessToken(accessToken); // 액세스 토큰 유효성 검사
-        Class<?> responseType = socialLogin.getResponseType();
 
         // 요청 헤더 생성
         HttpHeaders headers = new HttpHeaders();

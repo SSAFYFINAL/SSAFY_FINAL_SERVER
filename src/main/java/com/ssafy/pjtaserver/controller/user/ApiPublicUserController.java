@@ -110,7 +110,7 @@ public class ApiPublicUserController {
 
         String userLoginId = userService.findUserIdByUserEmailAndName(userFindIdDto);
         if(userLoginId == null) {
-            return ApiResponse.of(ApiResponseCode.AUTHENTICATION_FAILED);
+            return ApiResponse.of(ApiResponseCode.REQUEST_FAILED);
         }
         return ApiResponse.of(ApiResponseCode.SUCCESS, userLoginId);
     }

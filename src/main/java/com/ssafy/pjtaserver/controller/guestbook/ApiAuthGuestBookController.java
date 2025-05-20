@@ -37,7 +37,7 @@ public class ApiAuthGuestBookController {
         boolean result = guestBookService.writeGuestBook(guestBookWriteDto);
 
         if(!result) {
-            return ApiResponse.of(ApiResponseCode.INVALID_REQUEST,false);
+            return ApiResponse.of(ApiResponseCode.REQUEST_FAILED,false);
         }
         return ApiResponse.of(ApiResponseCode.SUCCESS, true);
     }
@@ -57,7 +57,7 @@ public class ApiAuthGuestBookController {
         boolean result = guestBookService.deleteGuestBook(userLoginId, Long.parseLong(guestBookId));
 
         if (!result) {
-            return ApiResponse.of(ApiResponseCode.INVALID_REQUEST, false);
+            return ApiResponse.of(ApiResponseCode.REQUEST_FAILED, false);
         }
         return ApiResponse.of(ApiResponseCode.SUCCESS, true);
     }
@@ -71,7 +71,7 @@ public class ApiAuthGuestBookController {
         boolean result = guestBookService.updateGuestBook(userLoginId, Long.parseLong(guestBookId), guestBookUpdateDto.getContent());
 
         if (!result) {
-            return ApiResponse.of(ApiResponseCode.INVALID_REQUEST, false);
+            return ApiResponse.of(ApiResponseCode.REQUEST_FAILED, false);
         }
         return ApiResponse.of(ApiResponseCode.SUCCESS, true);
     }

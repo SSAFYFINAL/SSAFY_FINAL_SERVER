@@ -6,7 +6,8 @@ import jakarta.mail.MessagingException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -19,105 +20,144 @@ import java.util.List;
 public class GlobalExceptionHandler {
 
     /**
-     * 파라미터 값 누락시 터지는 예외
+     * 공통 예외 응답 생성 (경고 수준 로그)
+     */
+    private ResponseEntity<ApiResponse> buildErrorResponse(ApiResponseCode responseCode, String message, Exception e) {
+        log.warn("[WARN] {}: {}", e.getClass().getSimpleName(), message);
+        log.debug("[DETAIL] Exception: ", e);
+        return ApiResponse.of(responseCode, message);
+    }
+
+    /**
+     * 공통 예외 응답 생성 (에러 수준 로그 - 스택 트레이스 포함)
+     */
+    private ResponseEntity<ApiResponse> buildErrorResponseWithLog(String message, Exception e) {
+        log.error("[ERROR] {}: {}", e.getClass().getSimpleName(), message, e);
+        return ApiResponse.of(ApiResponseCode.SERVER_ERROR, message);
+    }
+
+    /**
+     * 파라미터 값 누락 시 예외 처리
      */
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public ResponseEntity<ApiResponse> handleMissingParams(MissingServletRequestParameterException ex) {
-        String name = ex.getParameterName();
-        return ApiResponse.of(ApiResponseCode.VALIDATION_ERROR, name + " 파라미터가 누락되었습니다.");
+        String message = ex.getParameterName() + " 파라미터가 누락되었습니다.";
+        log.warn("[PARAMETER MISSING] ParameterName: {}", ex.getParameterName());
+        return buildErrorResponse(ApiResponseCode.VALIDATION_ERROR, message, ex);
     }
 
     /**
-     * 상태 이상시 터지는 예외
+     * 상태 이상 시 예외 처리
      */
     @ExceptionHandler(IllegalStateException.class)
     protected ResponseEntity<ApiResponse> handleIllegalStateException(IllegalStateException e) {
-        log.warn("IllegalStateException 발생.: {}", e.getMessage());
-        return ApiResponse.of(ApiResponseCode.INVALID_REQUEST, e.getMessage());
+        String message = "요청 처리 중 잘못된 상태로 인해 오류가 발생했습니다: " + e.getMessage();
+        log.warn("[ILLEGAL STATE] {}", message);
+        return buildErrorResponse(ApiResponseCode.INVALID_REQUEST, message, e);
     }
 
     /**
-     * 조회하고자 하는 책을 찾을 수 없을때 터지는 예외
+     * 조회하고자 하는 엔티티가 존재하지 않는 경우 처리
      */
     @ExceptionHandler(EntityNotFoundException.class)
     protected ResponseEntity<ApiResponse> handleEntityNotFoundException(EntityNotFoundException e) {
-        log.warn("해당 책을 찾을 수 없습니다: {}", e.getMessage());
-        return ApiResponse.of(ApiResponseCode.INVALID_REQUEST, e.getMessage());
+        String message = "해당 엔티티를 찾을 수 없습니다: " + e.getMessage();
+        log.warn("[ENTITY NOT FOUND] {}", message);
+        return buildErrorResponse(ApiResponseCode.NOT_FOUND, message, e);
     }
 
     /**
-     * 5번 인증 오류 터져서 계정이 잠긴 상태에서 계속 인증을 요구하면 터지는 예외
+     * 이메일 발송 관련 커스텀 예외 처리
      */
     @ExceptionHandler(CustomEmailException.class)
     protected ResponseEntity<ApiResponse> handleCustomEmailException(CustomEmailException e) {
-        log.warn("이메일 발송이 제한됨: {}", e.getMessage());
-        return ApiResponse.of(ApiResponseCode.EMAIL_SEND_ERROR, e.getMessage());
+        String message = "이메일 전송 중 오류가 발생했습니다: " + e.getMessage();
+        log.error("[EMAIL ERROR] {}", message, e);
+        return buildErrorResponse(ApiResponseCode.EMAIL_SEND_ERROR, message, e);
     }
 
     /**
-     *  Valid 관련 예외
+     * Validation 관련 예외 처리
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    protected  ResponseEntity<ApiResponse> handleValidationException(MethodArgumentNotValidException e) {
-        List<String> errMsg = e.getBindingResult()
+    protected ResponseEntity<ApiResponse> handleValidationException(MethodArgumentNotValidException e) {
+        List<String> errors = e.getBindingResult()
                 .getFieldErrors()
                 .stream()
-                .map(FieldError::getDefaultMessage)
+                .map(fieldError -> String.format("%s: %s", fieldError.getField(), fieldError.getDefaultMessage()))
                 .toList();
-
-        return ApiResponse.of(ApiResponseCode.INVALID_REQUEST, errMsg);
+        String message = "Validation 오류 발생: " + String.join(", ", errors);
+        log.warn("[VALIDATION ERROR] {}", message);
+        return buildErrorResponse(ApiResponseCode.VALIDATION_ERROR, message, e);
     }
 
     /**
      * JWT 관련 커스텀 예외 처리
-     *
-     * @param e CustomJWTException
-     * @return 401 Unauthorized 응답 반환
      */
     @ExceptionHandler(CustomJWTException.class)
     protected ResponseEntity<ApiResponse> handleJWTException(CustomJWTException e) {
-        return ApiResponse.of(ApiResponseCode.ERROR_ACCESS_TOKEN, e.getMessage());
+        String message = "JWT 처리 중 오류가 발생했습니다: " + e.getMessage();
+        log.warn("[JWT ERROR] {}", message);
+        return buildErrorResponse(ApiResponseCode.ERROR_ACCESS_TOKEN, message, e);
     }
 
     /**
-     * 메시징 예외 처리
-     *
-     * @param e MessagingException
-     * @return 500 Internal Server Error 응답 반환
+     * 메시징 관련 예외 처리
      */
     @ExceptionHandler(MessagingException.class)
     protected ResponseEntity<ApiResponse> handleMessagingException(MessagingException e) {
-        log.error("MessagingException 발생: {}", e.getMessage(), e);
-        return ApiResponse.of(ApiResponseCode.SERVER_ERROR, e.getMessage());
+        String message = "메시지 전송 중 문제가 발생했습니다.";
+        log.error("[MESSAGING ERROR] {}", message, e);
+        return buildErrorResponseWithLog(message, e);
     }
 
-
     /**
-     * 잘못된 입력 처리 (예: IllegalArgumentException 등)
-     *
-     * @param e IllegalArgumentException
-     * @return 400 Bad Request 응답 반환
+     * 잘못된 입력 처리 (IllegalArgumentException 등)
      */
     @ExceptionHandler(IllegalArgumentException.class)
     protected ResponseEntity<ApiResponse> handleIllegalArgumentException(IllegalArgumentException e) {
-        return ApiResponse.of(ApiResponseCode.INVALID_REQUEST, e.getMessage());
+        String message = "잘못된 요청입니다: " + e.getMessage();
+        log.warn("[INVALID ARGUMENT] {}", message);
+        return buildErrorResponse(ApiResponseCode.INVALID_REQUEST, message, e);
     }
 
-    @ExceptionHandler(JoinValidationException.class)
-    protected ResponseEntity<ApiResponse> handleJoinValidationException(JoinValidationException e) {
-        return ApiResponse.of(ApiResponseCode.INVALID_REQUEST, e.getMessage());
+    /**
+     * HTTP 메서드가 잘못된 경우 예외 처리
+     */
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public ResponseEntity<ApiResponse> handleMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
+        String message = "지원하지 않는 HTTP 메서드 요청입니다.";
+        log.warn("[METHOD NOT SUPPORTED] {}", message);
+        return buildErrorResponse(ApiResponseCode.INVALID_REQUEST, message, e);
+    }
+
+    /**
+     * HTTP Content-Type이 잘못된 요청 처리
+     */
+    @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
+    public ResponseEntity<ApiResponse> handleMediaTypeNotSupportedException(HttpMediaTypeNotSupportedException e) {
+        String message = "지원하지 않는 Content-Type 요청입니다.";
+        log.warn("[CONTENT-TYPE NOT SUPPORTED] {}", message);
+        return buildErrorResponse(ApiResponseCode.INVALID_REQUEST, message, e);
     }
 
     /**
      * 예상하지 못한(Runtime) 예외 처리
-     *
-     * @param e RuntimeException
-     * @return 500 Internal Server Error 응답 반환
      */
     @ExceptionHandler(RuntimeException.class)
     protected ResponseEntity<ApiResponse> handleRuntimeException(RuntimeException e) {
-        log.error("예상치 못한 에러 발생: {}", e.getMessage(), e);
-        return ApiResponse.of(ApiResponseCode.SERVER_ERROR, "예상하지 못한 오류가 발생했습니다.");
+        String message = "시스템 내부 에러가 발생했습니다. 관리자에게 문의하세요.";
+        log.error("[RUNTIME ERROR] {}", message, e);
+        return buildErrorResponseWithLog(message, e);
     }
 
+    /**
+     * 내부 컨트롤러에서 발생하지 않은 모든 예외 처리
+     */
+    @ExceptionHandler(Exception.class)
+    protected ResponseEntity<ApiResponse> handleGeneralException(Exception e) {
+        String message = "예상하지 못한 오류가 발생했습니다. 관리자에게 문의하세요.";
+        log.error("[UNEXPECTED ERROR] {}", message, e);
+        return buildErrorResponseWithLog(message, e);
+    }
 }
