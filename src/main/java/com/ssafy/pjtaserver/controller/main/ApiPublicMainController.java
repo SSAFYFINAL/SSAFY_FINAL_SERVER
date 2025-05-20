@@ -1,6 +1,7 @@
 package com.ssafy.pjtaserver.controller.main;
 
 import com.ssafy.pjtaserver.dto.response.user.WeeklyPopularBookDto;
+import com.ssafy.pjtaserver.enums.ApiResponseCode;
 import com.ssafy.pjtaserver.service.book.BookService;
 import com.ssafy.pjtaserver.util.ApiResponse;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,6 @@ public class ApiPublicMainController {
         List<WeeklyPopularBookDto> weeklyPopular = bookService.getWeeklyPopular();
         log.info("weeklyPopular : {}", weeklyPopular);
 
-        return null;
+        return ApiResponse.of(ApiResponseCode.SUCCESS, weeklyPopular);
     }
 }

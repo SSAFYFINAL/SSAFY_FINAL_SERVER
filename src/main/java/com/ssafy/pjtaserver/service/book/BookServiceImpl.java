@@ -32,6 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.IntStream;
 
 import static com.ssafy.pjtaserver.enums.BookResponseType.*;
 
@@ -193,24 +194,28 @@ public class BookServiceImpl implements BookService {
     public List<WeeklyPopularBookDto> getWeeklyPopular() {
         List<Tuple> tuples = favoriteRepository.weeklyPopular();
 
-        return tuples.stream()
-                .map(this::convertToWeeklyPopularDto)
-                .toList();
+        return convertTuplesToDtos(tuples);
     }
 
-    // tuple 객체 repdto 로 변환
-    private WeeklyPopularBookDto convertToWeeklyPopularDto(Tuple tuple) {
-        Long bookInfoId = tuple.get(1, Long.class);
+    public List<WeeklyPopularBookDto> convertTuplesToDtos(List<Tuple> tuples) {
+        return IntStream.range(0, tuples.size())
+                .mapToObj(i -> {
+                    Tuple tuple = tuples.get(i);
+                    Long bookInfoId = tuple.get(1, Long.class);
 
-        BookInfo bookInfo = bookInfoRepository.findBookInfoById(bookInfoId)
-                .orElseThrow(() -> new IllegalStateException("해당 책이 존재하지 않습니다. ID: " + bookInfoId));
+                    BookInfo bookInfo = bookInfoRepository.findBookInfoById(bookInfoId)
+                            .orElseThrow(() -> new IllegalStateException("해당 책이 존재하지 않습니다. ID: " + bookInfoId));
 
-        return WeeklyPopularBookDto.builder()
-                .bookInfoId(bookInfoId)
-                .title(bookInfo.getTitle())
-                .authorName(bookInfo.getAuthorName())
-                .imgPath(bookInfo.getBookImgPath())
-                .build();
+                    return WeeklyPopularBookDto.builder()
+                            .bookInfoId(bookInfoId)
+                            .title(bookInfo.getTitle())
+                            .authorName(bookInfo.getAuthorName())
+                            .imgPath(bookInfo.getBookImgPath())
+                            .ranking((long) i + 1)
+                            .description(bookInfo.getDescription())
+                            .build();
+                })
+                .toList();
     }
 
     // 책의 대출여부를 확인해주는 메서드

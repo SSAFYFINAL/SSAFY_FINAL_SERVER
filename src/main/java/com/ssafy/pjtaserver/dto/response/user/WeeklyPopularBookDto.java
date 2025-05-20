@@ -9,6 +9,9 @@ public class WeeklyPopularBookDto {
     private Long bookInfoId;
     private String title;
     private String authorName;
+    private String description;
     private String imgPath;
+    private Long ranking;
+    private String categoryName;
 
 }
