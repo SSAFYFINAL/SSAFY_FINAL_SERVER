@@ -4,9 +4,11 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.ssafy.pjtaserver.domain.book.BookInfo;
 import com.ssafy.pjtaserver.dto.response.book.BookInfoSearchCondition;
 import com.ssafy.pjtaserver.dto.response.book.BookInfoSearchDto;
 import com.ssafy.pjtaserver.dto.response.book.QBookInfoSearchDto;
+import com.ssafy.pjtaserver.dto.response.book.RecentBooksDto;
 import com.ssafy.pjtaserver.util.SortUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -56,6 +58,17 @@ public class BookInfoRepositoryImpl implements BookInfoQueryRepository {
                         publisherNameEq(condition.getPublisherName())
                 );
         return PageableExecutionUtils.getPage(results, pageable, countQuery::fetchOne);
+    }
+
+    @Override
+    public List<BookInfo> searchRecentBooks() {
+
+        return jpaQueryFactory
+                .select(bookInfo)
+                .from(bookInfo)
+                .orderBy(bookInfo.registryDate.desc())
+                .limit(5)
+                .fetch();
     }
 
     private BooleanExpression titleEq(String title) {

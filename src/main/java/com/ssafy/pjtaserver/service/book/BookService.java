@@ -1,9 +1,6 @@
 package com.ssafy.pjtaserver.service.book;
 
-import com.ssafy.pjtaserver.dto.response.book.BookDetailDto;
-import com.ssafy.pjtaserver.dto.response.book.BookInfoSearchCondition;
-import com.ssafy.pjtaserver.dto.response.book.BookInfoSearchDto;
-import com.ssafy.pjtaserver.dto.response.book.PageResponseDto;
+import com.ssafy.pjtaserver.dto.response.book.*;
 import com.ssafy.pjtaserver.dto.response.user.WeeklyPopularBookDto;
 import com.ssafy.pjtaserver.enums.BookResponseType;
 import org.springframework.data.domain.Pageable;
@@ -18,4 +15,5 @@ public interface BookService {
     BookResponseType checkoutAndReservationManager(String userLoginId, Long bookInfoId);
     PageResponseDto<BookInfoSearchDto> searchFavoritePageComplex(BookInfoSearchCondition condition, Pageable updatedPageable, String userLoginId);
     List<WeeklyPopularBookDto> getWeeklyPopular();
+    List<RecentBooksDto> getRecentBooks();
 }
