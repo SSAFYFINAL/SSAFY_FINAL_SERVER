@@ -55,6 +55,7 @@ public class BookServiceImpl implements BookService {
 
         // page 객체를 pageResponseDto 로 변환해서 반환해준다 안그러면 warn 로그 찍힘
         Page<BookInfoSearchDto> bookInfoSearchDto = bookInfoRepository.searchPageComplex(condition, updatedPageable);
+
         return new PageResponseDto<>(
                 bookInfoSearchDto.getContent(),
                 bookInfoSearchDto.getTotalElements(),
@@ -74,7 +75,6 @@ public class BookServiceImpl implements BookService {
                 .orElse(false);
 
         boolean isAvailableForCheckout = isBookAvailableForCheckout(bookInfoId);
-
 
         return bookInfoRepository.findBookInfoById(bookInfoId)
                 .map(info -> BookDetailDto.builder()
@@ -178,7 +178,6 @@ public class BookServiceImpl implements BookService {
         Sort sort = Sort.by(Sort.Direction.fromString(condition.getOrderDirection()), condition.getOrderBy());
         Pageable updatedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
 
-        // page 객체를 pageResponseDto 로 변환해서 반환해준다 안그러면 warn 로그 찍힘
         Page<BookInfoSearchDto> bookInfoSearchDto = favoriteRepository.searchFavoriteBook(condition, updatedPageable, userLoginId);
 
         return new PageResponseDto<>(
@@ -234,7 +233,7 @@ public class BookServiceImpl implements BookService {
                     Long bookInfoId = tuple.get(1, Long.class);
 
                     BookInfo bookInfo = bookInfoRepository.findBookInfoById(bookInfoId)
-                            .orElseThrow(() -> new IllegalStateException("해당 책이 존재하지 않습니다. ID: " + bookInfoId));
+                            .orElseThrow(() -> new EntityNotFoundException("해당 책이 존재하지 않습니다. ID: " + bookInfoId));
 
                     return WeeklyPopularBookDto.builder()
                             .bookInfoId(bookInfoId)
@@ -263,7 +262,7 @@ public class BookServiceImpl implements BookService {
         return bookInstanceRepository.findByStatusAndBookInfo_IdOrderByIdAsc(BookCheckoutStatus.AVAILABLE, bookInfoId)
                 .stream()
                 .findFirst()
-                .orElse(null);
+                .orElseThrow(() -> new IllegalStateException("대출 가능한 책이 없습니다. bookInfoId: " + bookInfoId));
     }
 
     // id로 유저정보 가져오는 메서드

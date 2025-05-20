@@ -11,20 +11,15 @@ import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StreamUtils;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
-import java.io.IOException;
 import java.security.SecureRandom;
-import java.util.Base64;
 import java.util.Optional;
 
 @Service
@@ -42,7 +37,6 @@ public class MailServiceImpl implements MailService {
 
     /**
      * html 기반 메일 전송
-     * @param mailSendDto
      */
     @Transactional
     @Override
@@ -53,8 +47,7 @@ public class MailServiceImpl implements MailService {
             // 잠김 상태 여부 확인
             emailHistory.ifPresent(email -> {
                 if (email.isLocked()) {
-                    throw new CustomEmailException("이메일 인증 횟수가 초과되었습니다. " +
-                            "잠금 해제까지 남은 시간: " + email.getLockedUntil());
+                    throw new CustomEmailException("이메일 인증 횟수가 초과되었습니다. " + "잠금 해제까지 남은 시간: " + email.getLockedUntil());
                 }
             });
 
@@ -117,8 +110,6 @@ public class MailServiceImpl implements MailService {
                 .orElse(false);
     }
 
-
-
     // 인증번호 생성기
     private String getCertifyCode() {
         String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -129,7 +120,6 @@ public class MailServiceImpl implements MailService {
         for (int i = 0; i < length; i++) {
             certifyCode.append(chars.charAt(secureRandom.nextInt(chars.length())));
         }
-
         return certifyCode.toString();
     }
 
@@ -156,14 +146,6 @@ public class MailServiceImpl implements MailService {
             email.unlockAccount();
             email.settingVerified();
         }
-
         mailRepository.save(email);
-    }
-
-    // 추후 이미지도 메일에 포함될경우 사용
-    private String getBase64EncodedImage(String imagePath) throws IOException {
-        Resource resource = new ClassPathResource(imagePath);
-        byte[] bytes = StreamUtils.copyToByteArray(resource.getInputStream());
-        return Base64.getEncoder().encodeToString(bytes);
     }
 }

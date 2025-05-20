@@ -1,10 +1,7 @@
 package com.ssafy.pjtaserver.service.user;
 
 import com.ssafy.pjtaserver.domain.user.User;
-import com.ssafy.pjtaserver.dto.request.user.UserFindIdDto;
-import com.ssafy.pjtaserver.dto.request.user.UserLoginDto;
-import com.ssafy.pjtaserver.dto.request.user.UserJoinDto;
-import com.ssafy.pjtaserver.dto.request.user.UserResetPwDto;
+import com.ssafy.pjtaserver.dto.request.user.*;
 import com.ssafy.pjtaserver.enums.SocialLogin;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.ServletException;
@@ -29,6 +26,8 @@ public interface UserService {
     boolean resetUserPwd(String userLoginId, UserResetPwDto userResetPwDto);
 
     String findUserIdByUserEmailAndName(UserFindIdDto userFindIdDto);
+
+    boolean updateUser(String userLoginId, UserUpdateDto userUpdateDto);
 
     // user 엔티티를 userDto로 변환시켜주는 로직
     default UserLoginDto entityToDto(User user) {

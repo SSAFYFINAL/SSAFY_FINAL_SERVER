@@ -18,8 +18,9 @@ public enum ApiResponseCode {
     CAN_USE_LOGIN_ID(HttpStatus.OK, 109, "사용가능한 로그인 아이디입니다."),
 
     // 실패
-    DUPLICATE_LOGIN_ID(HttpStatus.OK, 409, "이미 존재하는 로그인 아이디입니다."),
+    REQUEST_FAILED(HttpStatus.OK, 400, "요청이 실패하였습니다."),
     INVALID_REQUEST(HttpStatus.OK, 400, "잘못된 요청입니다."),
+    DUPLICATE_LOGIN_ID(HttpStatus.OK, 409, "이미 존재하는 로그인 아이디입니다."),
     VALIDATION_ERROR(HttpStatus.OK, 401, "필수 요청값 누락"),
     AUTHENTICATION_FAILED(HttpStatus.OK, 402, "인증 실패"),
     FORBIDDEN(HttpStatus.OK, 403, "권한이 없습니다."),

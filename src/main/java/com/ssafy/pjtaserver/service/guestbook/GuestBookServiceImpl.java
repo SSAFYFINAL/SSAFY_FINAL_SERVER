@@ -8,6 +8,7 @@ import com.ssafy.pjtaserver.dto.response.guestbook.GuestbookCondition;
 import com.ssafy.pjtaserver.dto.response.guestbook.GuestbookListDto;
 import com.ssafy.pjtaserver.repository.guestbook.GuestBookRepository;
 import com.ssafy.pjtaserver.repository.user.user.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -36,11 +37,11 @@ public class GuestBookServiceImpl implements GuestBookService{
         Optional<User> owner = userRepository.findByUserLoginId(guestBookWriteDto.getOwnerId());
 
         if(writer.isEmpty()) {
-            throw new IllegalStateException("writer가 없음");
+            throw new EntityNotFoundException("해당 아이디의 유저를 찾을 수 없습니다." + guestBookWriteDto.getWriterId());
         }
 
         if(owner.isEmpty()) {
-            throw new IllegalStateException("owner가 없음");
+            throw new EntityNotFoundException("해당 아이디의 유저를 찾을 수 없습니다." + guestBookWriteDto.getOwnerId());
         }
 
         guestBookRepository.save(GuestBook.createGuestBook(owner.get(), writer.get(), guestBookWriteDto.getContent()));
@@ -79,14 +80,11 @@ public class GuestBookServiceImpl implements GuestBookService{
         User writer = guestBook.getWriter();
 
         if (!owner.getUserLoginId().equals(userLoginId) && !writer.getUserLoginId().equals(userLoginId)) {
-            throw new IllegalStateException(
-                    "해당 게스트북(" + guestBookId + ")에 대한 삭제 권한이 없습니다."
-            );
+            throw new IllegalStateException("해당 게스트북(" + guestBookId + ")에 대한 삭제 권한이 없습니다.");
         } else if (guestBook.isDeleted()) {
-            throw new IllegalStateException(
-                    "해당 게스트북(" + guestBookId + ")은 이미 삭제 되었습니다."
-            );
+            throw new IllegalStateException("해당 게스트북(" + guestBookId + ")은 이미 삭제 되었습니다.");
         }
+
         guestBook.setIsDeleted(true);
         guestBookRepository.save(guestBook);
 
@@ -103,14 +101,11 @@ public class GuestBookServiceImpl implements GuestBookService{
         User writer = guestBook.getWriter();
 
         if (!owner.getUserLoginId().equals(userLoginId) && !writer.getUserLoginId().equals(userLoginId)) {
-            throw new IllegalStateException(
-                    "해당 게스트북(" + guestBookId + ")에 대한 수정 권한이 없습니다."
-            );
+            throw new IllegalStateException("해당 게스트북(" + guestBookId + ")에 대한 수정 권한이 없습니다.");
         } else if (guestBook.isDeleted()) {
-            throw new IllegalStateException(
-                    "해당 게스트북(" + guestBookId + ")은 이미 삭제 되었습니다."
-            );
+            throw new IllegalStateException("해당 게스트북(" + guestBookId + ")은 이미 삭제 되었습니다.");
         }
+
         guestBook.changeContent(content);
         guestBookRepository.save(guestBook);
 
