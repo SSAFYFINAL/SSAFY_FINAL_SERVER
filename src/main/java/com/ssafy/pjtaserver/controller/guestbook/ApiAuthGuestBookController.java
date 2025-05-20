@@ -6,14 +6,11 @@ import com.ssafy.pjtaserver.dto.response.book.PageResponseDto;
 import com.ssafy.pjtaserver.dto.response.guestbook.GuestbookCondition;
 import com.ssafy.pjtaserver.dto.response.guestbook.GuestbookListDto;
 import com.ssafy.pjtaserver.enums.ApiResponseCode;
-import com.ssafy.pjtaserver.repository.guestbook.GuestBookRepository;
 import com.ssafy.pjtaserver.service.guestbook.GuestBookService;
 import com.ssafy.pjtaserver.util.ApiResponse;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -24,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/auth/guestbook")
 @Slf4j
 @RequiredArgsConstructor
-public class ApiGuestBookAuthController {
+public class ApiAuthGuestBookController {
 
     private final GuestBookService guestBookService;
 
