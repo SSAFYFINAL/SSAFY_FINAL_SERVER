@@ -75,8 +75,8 @@ public class GuestBookServiceImpl implements GuestBookService{
         GuestBook guestBook = guestBookRepository.findById(guestBookId)
                 .orElseThrow(() -> new IllegalStateException("해당 ID의 게스트북이 존재하지 않습니다."));
 
-        User owner = guestBook.getOwnerId();
-        User writer = guestBook.getWriterId();
+        User owner = guestBook.getOwner();
+        User writer = guestBook.getWriter();
 
         if (!owner.getUserLoginId().equals(userLoginId) && !writer.getUserLoginId().equals(userLoginId)) {
             throw new IllegalStateException(
@@ -99,8 +99,8 @@ public class GuestBookServiceImpl implements GuestBookService{
         GuestBook guestBook = guestBookRepository.findById(guestBookId)
                 .orElseThrow(() -> new IllegalStateException("해당 ID의 게스트북이 존재하지 않습니다."));
 
-        User owner = guestBook.getOwnerId();
-        User writer = guestBook.getWriterId();
+        User owner = guestBook.getOwner();
+        User writer = guestBook.getWriter();
 
         if (!owner.getUserLoginId().equals(userLoginId) && !writer.getUserLoginId().equals(userLoginId)) {
             throw new IllegalStateException(

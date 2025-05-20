@@ -6,6 +6,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -22,6 +24,14 @@ public class FavoriteBookList {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "book_info_id", nullable = false)
     private BookInfo bookInfo;
+
+    @Column(name = "like_at", nullable = false)
+    private LocalDateTime likeAt;
+
+    @PrePersist
+    public void prePersist() {
+        likeAt = LocalDateTime.now();
+    }
 
     private FavoriteBookList(User user, BookInfo bookInfo) {
         this.user = user;
