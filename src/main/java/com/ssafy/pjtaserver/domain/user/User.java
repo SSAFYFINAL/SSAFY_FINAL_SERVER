@@ -111,6 +111,13 @@ public class User {
         this.userPhone = userPhone;
         this.social = social;
     }
+    public void updateUserInfo(String profileImgPath, String usernameMain, String nickName, String userPhone, String userPwd) {
+        this.profileImgPath = profileImgPath;
+        this.usernameMain = usernameMain;
+        this.nickName = nickName;
+        this.userPhone = userPhone;
+        this.userPwd = userPwd;
+    }
 
     public void addRole(UserRole role) {
         this.userRoleList.add(role);

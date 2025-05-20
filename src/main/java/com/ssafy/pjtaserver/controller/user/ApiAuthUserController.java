@@ -1,9 +1,11 @@
 package com.ssafy.pjtaserver.controller.user;
 
 import com.ssafy.pjtaserver.dto.request.user.UserResetPwDto;
+import com.ssafy.pjtaserver.dto.request.user.UserUpdateDto;
 import com.ssafy.pjtaserver.enums.ApiResponseCode;
 import com.ssafy.pjtaserver.service.user.UserService;
 import com.ssafy.pjtaserver.util.ApiResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +32,18 @@ public class ApiAuthUserController {
         boolean isReset = userService.resetUserPwd(userLoginId, userResetPwDto);
 
         if(!isReset) {
+            return ApiResponse.of(ApiResponseCode.REQUEST_FAILED, false);
+        }
+        return ApiResponse.of(ApiResponseCode.SUCCESS, true);
+    }
+
+    @PutMapping(value = "/update", consumes = "multipart/form-data")
+    public ResponseEntity<ApiResponse> updateUserInfo(@AuthenticationPrincipal UserDetails userDetails,
+                                                      @Valid @ModelAttribute UserUpdateDto userUpdateDto) {
+        log.info("------------------------------api user update------------------------------");
+        log.info("userUpdateDto : {}", userUpdateDto);
+
+        if(!userService.updateUser(userDetails.getUsername(), userUpdateDto)) {
             return ApiResponse.of(ApiResponseCode.REQUEST_FAILED, false);
         }
         return ApiResponse.of(ApiResponseCode.SUCCESS, true);
