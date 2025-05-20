@@ -20,11 +20,11 @@ public class GuestBook {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id", nullable = false)
-    private User ownerId;
+    private User owner;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "writer_id", nullable = false)
-    private User writerId;
+    private User writer;
 
     @Column(name = "content", nullable = false)
     private String content;
@@ -49,9 +49,9 @@ public class GuestBook {
         this.content = content;
     }
 
-    public GuestBook(User ownerId, User writerId, String content) {
-        this.ownerId = ownerId;
-        this.writerId = writerId;
+    public GuestBook(User owner, User writer, String content) {
+        this.owner = owner;
+        this.writer = writer;
         this.content = content;
     }
 

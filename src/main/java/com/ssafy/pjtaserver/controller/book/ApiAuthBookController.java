@@ -22,7 +22,7 @@ import static java.util.Optional.*;
 @RequiredArgsConstructor
 @Slf4j
 @RequestMapping("/api/auth/book")
-public class ApiBookAuthController {
+public class ApiAuthBookController {
 
     private final BookService bookService;
 

@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/api/public")
 @RequiredArgsConstructor
 @Slf4j
-public class ApiMailPublicController {
+public class ApiPublicMailController {
 
     private final MailService mailService;
 

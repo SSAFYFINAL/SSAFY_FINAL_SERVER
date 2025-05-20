@@ -27,14 +27,14 @@ public class GuestBookRepositoryImpl implements GuestBookQueryRepository{
         List<GuestbookListDto> result = queryFactory
                 .select(new QGuestbookListDto(
                         guestBook.id.as("guestBookId"),
-                        guestBook.ownerId.userLoginId,
-                        guestBook.writerId.userLoginId,
+                        guestBook.owner.userLoginId,
+                        guestBook.writer.userLoginId,
                         guestBook.content,
                         guestBook.writeDate,
                         guestBook.isDeleted
                 ))
                 .from(guestBook)
-                .where(guestBook.ownerId.id.eq(ownerId), guestBook.isDeleted.isFalse())
+                .where(guestBook.owner.id.eq(ownerId), guestBook.isDeleted.isFalse())
                 .orderBy(getOrderSpecifiers(pageable))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -43,7 +43,7 @@ public class GuestBookRepositoryImpl implements GuestBookQueryRepository{
         JPAQuery<Long> countQuery = queryFactory
                 .select(guestBook.count())
                 .from(guestBook)
-                .where(guestBook.ownerId.id.eq(ownerId), guestBook.isDeleted.isFalse());
+                .where(guestBook.owner.id.eq(ownerId), guestBook.isDeleted.isFalse());
 
 
         return PageableExecutionUtils.getPage(result, pageable, countQuery::fetchOne);
