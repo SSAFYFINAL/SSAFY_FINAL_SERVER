@@ -16,4 +16,5 @@ public interface BookService {
     PageResponseDto<BookInfoSearchDto> searchFavoritePageComplex(BookInfoSearchCondition condition, Pageable updatedPageable, String userLoginId);
     List<WeeklyPopularBookDto> getWeeklyPopular();
     List<RecentBooksDto> getRecentBooks();
+    PageResponseDto<CheckoutHistoryDto> getCheckoutHistory(BookInfoSearchCondition condition ,String userLoginId, Pageable updatedPageable);
 }

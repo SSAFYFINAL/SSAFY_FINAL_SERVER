@@ -1,9 +1,6 @@
 package com.ssafy.pjtaserver.controller.book;
 
-import com.ssafy.pjtaserver.dto.response.book.BookDetailDto;
-import com.ssafy.pjtaserver.dto.response.book.BookInfoSearchCondition;
-import com.ssafy.pjtaserver.dto.response.book.BookInfoSearchDto;
-import com.ssafy.pjtaserver.dto.response.book.PageResponseDto;
+import com.ssafy.pjtaserver.dto.response.book.*;
 import com.ssafy.pjtaserver.enums.ApiResponseCode;
 import com.ssafy.pjtaserver.enums.BookResponseType;
 import com.ssafy.pjtaserver.service.book.BookService;
@@ -73,5 +70,14 @@ public class ApiAuthBookController {
         log.info("results : {}", results);
 
         return ApiResponse.of(ApiResponseCode.SUCCESS,results);
+    }
+
+    @PostMapping("/checkout-history")
+    public ResponseEntity<ApiResponse> getCheckoutHistory(@AuthenticationPrincipal UserDetails userDetails, @RequestBody BookInfoSearchCondition condition, Pageable pageable) {
+        log.info("------------------------------api get checkout history------------------------------");
+
+        PageResponseDto<CheckoutHistoryDto> results = bookService.getCheckoutHistory(condition, userDetails.getUsername(), pageable);
+
+        return ApiResponse.of(ApiResponseCode.SUCCESS, results);
     }
 }

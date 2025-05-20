@@ -1,6 +1,7 @@
 package com.ssafy.pjtaserver.service.book;
 
 import com.querydsl.core.Tuple;
+import com.ssafy.pjtaserver.domain.book.BookCheckout;
 import com.ssafy.pjtaserver.domain.book.BookInfo;
 import com.ssafy.pjtaserver.domain.book.BookInstance;
 import com.ssafy.pjtaserver.domain.book.BookReservation;
@@ -11,6 +12,7 @@ import com.ssafy.pjtaserver.dto.response.user.WeeklyPopularBookDto;
 import com.ssafy.pjtaserver.enums.BookCheckoutStatus;
 import com.ssafy.pjtaserver.enums.BookResponseType;
 import com.ssafy.pjtaserver.enums.ReservationStatus;
+import com.ssafy.pjtaserver.repository.book.checkout.CheckoutRepository;
 import com.ssafy.pjtaserver.repository.book.info.BookInfoRepository;
 import com.ssafy.pjtaserver.repository.book.instance.BookInstanceRepository;
 import com.ssafy.pjtaserver.repository.book.reservation.BookReservationRepository;
@@ -44,6 +46,7 @@ public class BookServiceImpl implements BookService {
     private final UserRepository userRepository;
     private final FavoriteRepository favoriteRepository;
     private final BookReservationRepository bookReservationRepository;
+    private final CheckoutRepository checkoutRepository;
 
     @Override
     public PageResponseDto<BookInfoSearchDto> searchPageComplex(BookInfoSearchCondition condition, Pageable pageable) {
@@ -164,6 +167,7 @@ public class BookServiceImpl implements BookService {
             return RESERVATION_SUCCESS;
         } else {
             bookInstance.checkout(user);
+            checkoutRepository.save(BookCheckout.createCheckout(user, bookInstance));
             log.info("대출 성공 - BookInstanceId: {}, UserId: {}", bookInstance.getId(), user.getId());
             return CHECKOUT_SUCCESS;
         }
@@ -186,11 +190,9 @@ public class BookServiceImpl implements BookService {
         );
     }
 
-    // DTO를 생성하는 주요 로직 분리
     @Override
     public List<WeeklyPopularBookDto> getWeeklyPopular() {
         List<Tuple> tuples = favoriteRepository.weeklyPopular();
-
         return convertTuplesToDtos(tuples);
     }
 
@@ -207,6 +209,22 @@ public class BookServiceImpl implements BookService {
                     .build());
         }
         return results;
+    }
+
+    @Override
+    public PageResponseDto<CheckoutHistoryDto> getCheckoutHistory(BookInfoSearchCondition condition, String userLoginId, Pageable pageable) {
+        Sort sort = Sort.by(Sort.Direction.fromString(condition.getOrderDirection()), condition.getOrderBy());
+        Pageable updatedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
+
+        Page<CheckoutHistoryDto> checkoutHistory = checkoutRepository.searchCheckoutHistory(condition, updatedPageable, userLoginId);
+
+        return new PageResponseDto<>(
+                checkoutHistory.getContent(),
+                checkoutHistory.getTotalElements(),
+                checkoutHistory.getTotalPages(),
+                checkoutHistory.getNumber(),
+                checkoutHistory.getSize()
+        );
     }
 
     public List<WeeklyPopularBookDto> convertTuplesToDtos(List<Tuple> tuples) {
