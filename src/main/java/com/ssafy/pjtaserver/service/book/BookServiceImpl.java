@@ -6,10 +6,7 @@ import com.ssafy.pjtaserver.domain.book.BookInstance;
 import com.ssafy.pjtaserver.domain.book.BookReservation;
 import com.ssafy.pjtaserver.domain.user.FavoriteBookList;
 import com.ssafy.pjtaserver.domain.user.User;
-import com.ssafy.pjtaserver.dto.response.book.BookDetailDto;
-import com.ssafy.pjtaserver.dto.response.book.BookInfoSearchCondition;
-import com.ssafy.pjtaserver.dto.response.book.BookInfoSearchDto;
-import com.ssafy.pjtaserver.dto.response.book.PageResponseDto;
+import com.ssafy.pjtaserver.dto.response.book.*;
 import com.ssafy.pjtaserver.dto.response.user.WeeklyPopularBookDto;
 import com.ssafy.pjtaserver.enums.BookCheckoutStatus;
 import com.ssafy.pjtaserver.enums.BookResponseType;
@@ -195,6 +192,21 @@ public class BookServiceImpl implements BookService {
         List<Tuple> tuples = favoriteRepository.weeklyPopular();
 
         return convertTuplesToDtos(tuples);
+    }
+
+    @Override
+    public List<RecentBooksDto> getRecentBooks() {
+        List<BookInfo> bookInfos = bookInfoRepository.searchRecentBooks();
+        List<RecentBooksDto> results = new ArrayList<>();
+        for (BookInfo bookInfo : bookInfos) {
+            results.add(RecentBooksDto.builder()
+                    .bookInfoId(bookInfo.getId())
+                    .title(bookInfo.getTitle())
+                    .authorName(bookInfo.getAuthorName())
+                    .bookImgPath(bookInfo.getBookImgPath())
+                    .build());
+        }
+        return results;
     }
 
     public List<WeeklyPopularBookDto> convertTuplesToDtos(List<Tuple> tuples) {

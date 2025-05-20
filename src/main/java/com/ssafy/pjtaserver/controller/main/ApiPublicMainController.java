@@ -1,5 +1,6 @@
 package com.ssafy.pjtaserver.controller.main;
 
+import com.ssafy.pjtaserver.dto.response.book.RecentBooksDto;
 import com.ssafy.pjtaserver.dto.response.user.WeeklyPopularBookDto;
 import com.ssafy.pjtaserver.enums.ApiResponseCode;
 import com.ssafy.pjtaserver.service.book.BookService;
@@ -24,9 +25,17 @@ public class ApiPublicMainController {
     @GetMapping("/weekly-popular")
     public ResponseEntity<ApiResponse> getWeeklyPopular() {
         log.info("------------------------------api weekly popular------------------------------");
-        List<WeeklyPopularBookDto> weeklyPopular = bookService.getWeeklyPopular();
-        log.info("weeklyPopular : {}", weeklyPopular);
+        List<WeeklyPopularBookDto> results = bookService.getWeeklyPopular();
+        log.info("weeklyPopular : {}", results);
 
-        return ApiResponse.of(ApiResponseCode.SUCCESS, weeklyPopular);
+        return ApiResponse.of(ApiResponseCode.SUCCESS, results);
     }
+
+    @GetMapping("/recent-book-list")
+    public ResponseEntity<ApiResponse> getRecentBooks() {
+        log.info("------------------------------api recent book list------------------------------");
+        List<RecentBooksDto> results = bookService.getRecentBooks();
+        return ApiResponse.of(ApiResponseCode.SUCCESS, results);
+    }
+
 }
