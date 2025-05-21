@@ -8,7 +8,7 @@ import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.pjtaserver.dto.request.book.BookInfoSearchCondition;
 import com.ssafy.pjtaserver.dto.request.book.BookInfoSearchDto;
-import com.ssafy.pjtaserver.dto.response.book.QBookInfoSearchDto;
+import com.ssafy.pjtaserver.dto.request.book.QBookInfoSearchDto;
 import com.ssafy.pjtaserver.util.SortUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
