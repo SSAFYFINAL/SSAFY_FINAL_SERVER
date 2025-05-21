@@ -19,11 +19,11 @@ public class Follow {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "follower_id", nullable = false)
-    private User followerId;
+    private User follower;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "following_id", nullable = false)
-    private User followingId;
+    private User following;
 
     @Column(name = "follow_date", nullable = false)
     private LocalDateTime followDate;
@@ -35,9 +35,13 @@ public class Follow {
         }
     }
 
-    public Follow(User followerId, User followingId) {
-        this.followerId = followerId;
-        this.followingId = followingId;
+    public Follow(User follower, User following) {
+        this.follower = follower;
+        this.following = following;
+    }
+
+    public static Follow createFollow(User followerId, User followingId) {
+        return new Follow(followerId, followingId);
     }
 
 }
