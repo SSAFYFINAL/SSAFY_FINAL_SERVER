@@ -49,16 +49,21 @@ public class ApiAuthUserController {
         return ApiResponse.of(ApiResponseCode.SUCCESS, true);
     }
 
-    @PostMapping("/follow/{targetUserLoginId}")
-    public ResponseEntity<ApiResponse> followAdd(@AuthenticationPrincipal UserDetails userDetails, @PathVariable String targetUserLoginId) {
+    @PostMapping("/follow/{targetUserID}")
+    public ResponseEntity<ApiResponse> followAdd(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long targetUserID) {
         log.info("------------------------------api follow add------------------------------");
-        log.info("targetUserLoginId : {}", targetUserLoginId);
+        log.info("targetUserID : {}", targetUserID);
 
-        boolean results = userService.followManager(userDetails.getUsername(), targetUserLoginId);
+        boolean results = userService.followManager(userDetails.getUsername(), targetUserID);
         if(!results) {
             return ApiResponse.of(ApiResponseCode.FAVORITE_CALCLE);
         }
         return ApiResponse.of(ApiResponseCode.UNFOLLOW_SUCCESS);
+    }
+
+    @PostMapping("/follow-list")
+    public ResponseEntity<ApiResponse> getFollowRelation( ) {
+        return null;
     }
 
 }

@@ -1,4 +1,4 @@
-package com.ssafy.pjtaserver.dto.response.book;
+package com.ssafy.pjtaserver.dto.request.book;
 
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Data;

@@ -211,12 +211,12 @@ public class UserServiceImpl implements UserService {
     // true면 팔로우 관계 추가 완료, false 면 이미 동일한 팔로우 관계가 존재한다는 뜻이므로 팔로우 취소처리
     @Transactional
     @Override
-    public boolean followManager(String followerLoginId, String followingLoginId) {
-        return canFollow(followerLoginId, followingLoginId);
+    public boolean followManager(String followerId, Long followingId) {
+        return canFollow(followerId, followingId);
     }
 
 
-    private boolean canFollow(String followerId, String followingId) {
+    private boolean canFollow(String followerId, Long followingId) {
 
         User follower = existsUser(followerId);
         User following = existsUser(followingId);
@@ -231,6 +231,10 @@ public class UserServiceImpl implements UserService {
 
         followRepository.save(follow);
         return true;
+    }
+
+    private User existsUser(Long userId) {
+        return userRepository.findUserById(userId).orElseThrow(() -> new EntityNotFoundException("해당 아이디의 유저를 찾을 수 없습니다.: " + userId));
     }
 
     private User existsUser(String userId) {

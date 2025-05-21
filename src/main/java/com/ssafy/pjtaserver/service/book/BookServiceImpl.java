@@ -7,6 +7,8 @@ import com.ssafy.pjtaserver.domain.book.BookInstance;
 import com.ssafy.pjtaserver.domain.book.BookReservation;
 import com.ssafy.pjtaserver.domain.user.FavoriteBookList;
 import com.ssafy.pjtaserver.domain.user.User;
+import com.ssafy.pjtaserver.dto.request.book.BookInfoSearchCondition;
+import com.ssafy.pjtaserver.dto.request.book.BookInfoSearchDto;
 import com.ssafy.pjtaserver.dto.response.book.*;
 import com.ssafy.pjtaserver.dto.response.user.WeeklyPopularBookDto;
 import com.ssafy.pjtaserver.enums.BookCheckoutStatus;
