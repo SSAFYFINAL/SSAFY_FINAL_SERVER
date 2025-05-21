@@ -16,7 +16,8 @@ public enum ApiResponseCode {
     RESERVATION_SUCCESS(HttpStatus.OK, 107, "예약이 완료되었습니다."),
     FAVORITE_CALCLE(HttpStatus.OK, 108, "즐겨찾기 취소 완료되었습니다."),
     CAN_USE_LOGIN_ID(HttpStatus.OK, 109, "사용가능한 로그인 아이디입니다."),
-
+    FOLLOW_COMPLETED(HttpStatus.OK, 110, "팔로우 추가 완료."),
+    UNFOLLOW_SUCCESS(HttpStatus.OK, 111, "팔로우 취소 완료."),
     // 실패
     REQUEST_FAILED(HttpStatus.OK, 400, "요청이 실패하였습니다."),
     INVALID_REQUEST(HttpStatus.OK, 400, "잘못된 요청입니다."),

@@ -29,6 +29,8 @@ public interface UserService {
 
     boolean updateUser(String userLoginId, UserUpdateDto userUpdateDto);
 
+    boolean followManager(String userLoginId, String followingUserId);
+
     // user 엔티티를 userDto로 변환시켜주는 로직
     default UserLoginDto entityToDto(User user) {
         return new UserLoginDto(
