@@ -3,6 +3,7 @@ package com.ssafy.pjtaserver.controller.user;
 import com.ssafy.pjtaserver.dto.request.user.UserFindIdDto;
 import com.ssafy.pjtaserver.dto.request.user.UserLoginDto;
 import com.ssafy.pjtaserver.dto.request.user.UserJoinDto;
+import com.ssafy.pjtaserver.dto.request.user.UserResetPwDto;
 import com.ssafy.pjtaserver.service.user.UserService;
 import com.ssafy.pjtaserver.util.JWTUtil;
 import com.ssafy.pjtaserver.enums.SocialLogin;
@@ -15,6 +16,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -113,5 +116,20 @@ public class ApiPublicUserController {
             return ApiResponse.of(ApiResponseCode.REQUEST_FAILED);
         }
         return ApiResponse.of(ApiResponseCode.SUCCESS, userLoginId);
+    }
+
+    @PutMapping("/password-reset")
+    public ResponseEntity<ApiResponse> updatePassword(@Validated @RequestBody UserResetPwDto userResetPwDto) {
+        log.info("------------------------------api user password reset------------------------------");
+        log.info("userResetPwDto : {}", userResetPwDto);
+        log.info("userDetails : {}", userResetPwDto.getUserLoginId());
+        String userLoginId = userResetPwDto.getUserLoginId();
+
+        boolean isReset = userService.resetUserPwd(userLoginId, userResetPwDto);
+
+        if(!isReset) {
+            return ApiResponse.of(ApiResponseCode.REQUEST_FAILED, false);
+        }
+        return ApiResponse.of(ApiResponseCode.SUCCESS, true);
     }
 }
