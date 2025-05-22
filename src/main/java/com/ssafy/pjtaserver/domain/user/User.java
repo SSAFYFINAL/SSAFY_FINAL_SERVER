@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ssafy.pjtaserver.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,6 +56,9 @@ public class User {
     @Column(name = "profile_img_path")
     private String profileImgPath;
 
+    @Column(name = "is_deleted", nullable = false)
+    private boolean isDeleted;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<FavoriteBookList> favoriteBookList = new ArrayList<>();
 
@@ -77,6 +82,7 @@ public class User {
         user.userEmail = userEmail;
         user.userPhone = userPhone;
         user.userRoleList.add(UserRole.USER);
+        user.isDeleted = false;
         return user;
     }
 
@@ -100,6 +106,7 @@ public class User {
         admin.userEmail = userEmail;
         admin.userPhone = userPhone;
         admin.userRoleList.add(UserRole.ADMIN);
+        admin.isDeleted = false;
         return admin;
     }
 
@@ -113,6 +120,7 @@ public class User {
         this.userPhone = userPhone;
         this.social = social;
     }
+
     public void updateUserInfo(String profileImgPath, String usernameMain, String nickName, String userPhone, String userPwd) {
         this.profileImgPath = profileImgPath;
         this.usernameMain = usernameMain;
@@ -120,6 +128,12 @@ public class User {
         this.userPhone = userPhone;
         this.userPwd = userPwd;
     }
+
+    public User deleteUser() {
+        this.isDeleted = true; // `this`를 직접 사용하여 내부 상태 변경
+        return this;
+    }
+
 
     public void addRole(UserRole role) {
         this.userRoleList.add(role);

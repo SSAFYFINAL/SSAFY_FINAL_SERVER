@@ -1,5 +1,6 @@
 package com.ssafy.pjtaserver.config;
 
+import com.ssafy.pjtaserver.enums.UserRole;
 import com.ssafy.pjtaserver.security.filter.JWTCheckFilter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +37,7 @@ public class CustomSecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // CORS 설정 추가
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // OPTIONS 메서드 허용
-                        .requestMatchers("/api/public/**").permitAll() // /api/public/** 경로는 인증 불필요
+                        .requestMatchers("/api/public/**").permitAll()
                         .anyRequest().authenticated() // 나머지는 인증 필요
                 )
                 .sessionManagement(sessionManagement -> sessionManagement

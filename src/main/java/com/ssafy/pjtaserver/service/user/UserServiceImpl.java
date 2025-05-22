@@ -1,17 +1,22 @@
 package com.ssafy.pjtaserver.service.user;
 
+import com.ssafy.pjtaserver.domain.book.BookInstance;
 import com.ssafy.pjtaserver.domain.user.User;
 import com.ssafy.pjtaserver.dto.request.mail.MailSendDto;
 import com.ssafy.pjtaserver.dto.request.user.*;
-import com.ssafy.pjtaserver.dto.response.book.PageResponseDto;
 import com.ssafy.pjtaserver.enums.EmailType;
+import com.ssafy.pjtaserver.enums.SocialLogin;
 import com.ssafy.pjtaserver.enums.UserRole;
 import com.ssafy.pjtaserver.exception.JoinValidationException;
+import com.ssafy.pjtaserver.repository.book.checkout.CheckoutRepository;
+import com.ssafy.pjtaserver.repository.book.instance.BookInstanceRepository;
+import com.ssafy.pjtaserver.repository.book.reservation.BookReservationRepository;
+import com.ssafy.pjtaserver.repository.guestbook.GuestBookRepository;
+import com.ssafy.pjtaserver.repository.user.favorite.FavoriteRepository;
 import com.ssafy.pjtaserver.repository.user.follow.FollowRepository;
 import com.ssafy.pjtaserver.repository.user.user.UserRepository;
 import com.ssafy.pjtaserver.security.handler.ApiLoginFailHandler;
 import com.ssafy.pjtaserver.security.handler.ApiLoginSuccessHandler;
-import com.ssafy.pjtaserver.enums.SocialLogin;
 import com.ssafy.pjtaserver.service.mail.MailService;
 import jakarta.mail.MessagingException;
 import jakarta.persistence.EntityNotFoundException;
@@ -21,6 +26,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -62,6 +68,11 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final RestTemplate restTemplate;
     private final FollowRepository followRepository;
+    private final GuestBookRepository guestBookRepository;
+    private final BookReservationRepository bookReservationRepository;
+    private final BookInstanceRepository bookInstanceRepository;
+    private final FavoriteRepository favoriteRepository;
+    private final CheckoutRepository checkoutRepository;
 
     /**
      * 로그인 성공/실패 핸들러를 통해 결과를 응답
@@ -197,6 +208,54 @@ public class UserServiceImpl implements UserService {
         return true;
     }
 
+    @Transactional
+    @Override
+    public boolean deleteUser(String userLoginId) {
+        try {
+            // 사용자 조회
+            User user = userRepository.findByUserLoginId(userLoginId)
+                    .orElseThrow(() -> new EntityNotFoundException("해당 아이디의 유저를 찾을 수 없습니다.: " + userLoginId));
+
+            // 1. GuestBook 소프트 삭제
+            guestBookRepository.findByOwner(user)
+                    .forEach(guestBook -> guestBook.setIsDeleted(true));
+
+            // 2. 사용자 비활성화
+            user.deleteUser();
+            userRepository.save(user);
+            userRepository.flush();
+
+            // 책 예약 내역 삭제처리
+            bookReservationRepository.deleteAll(
+                    bookReservationRepository.findByUserId(user)
+            );
+
+            // 해당유저의 대출 히스토리 삭제
+            checkoutRepository.deleteAll(checkoutRepository.findByUser(user));
+
+            // 해당 유저가 좋아요한 것들 다 삭제
+            favoriteRepository.deleteAll(favoriteRepository.findByUser(user));
+
+            // 대출 다 반납처리
+            bookInstanceRepository.findBookInstanceByCurrentUserId(user)
+                    .forEach(BookInstance::returnBook);
+
+            // 해당 유저의 팔로워, 팔로잉 관계 삭제
+            followRepository.deleteByFollowOwner(user);
+            followRepository.deleteByFollower(user);
+
+            return true;
+
+        } catch (EntityNotFoundException e) {
+            log.error("[deleteUser] 존재하지 않는 사용자입니다. userLoginId = {}", userLoginId, e);
+        } catch (DataAccessException e) {
+            log.error("[deleteUser] 데이터 삭제 중 오류가 발생했습니다. userLoginId = {}", userLoginId, e);
+        } catch (Exception e) {
+            log.error("[deleteUser] 예상치 못한 오류가 발생했습니다. userLoginId = {}", userLoginId, e);
+        }
+        return false;
+    }
+
     @Override
     public String findUserIdByUserEmailAndName(UserFindIdDto userFindIdDto) {
 
@@ -205,10 +264,10 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new IllegalStateException("해당 " + userFindIdDto.getEmail() + "과 " + userFindIdDto.getUsernameMain() + "을 가진 유저가 존재하지 않습니다."));
     }
 
-
     // 파일 이미지 저장
     private String saveProfileImage(MultipartFile profileImg) {
         try {
+
             // 파일 이름 생성
             String originalFilename = profileImg.getOriginalFilename();
             String storedFilename = UUID.randomUUID() + "_" + originalFilename;

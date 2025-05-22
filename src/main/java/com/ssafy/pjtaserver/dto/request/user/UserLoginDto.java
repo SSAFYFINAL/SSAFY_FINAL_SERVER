@@ -76,4 +76,5 @@ public class UserLoginDto extends User {
     public String getUsername() {
         return userLoginId;
     }
+
 }

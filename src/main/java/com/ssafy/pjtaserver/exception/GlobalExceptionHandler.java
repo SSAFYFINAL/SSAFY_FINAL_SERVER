@@ -73,7 +73,7 @@ public class GlobalExceptionHandler {
     protected ResponseEntity<ApiResponse> handleCustomEmailException(CustomEmailException e) {
         String message = "이메일 전송 중 오류가 발생했습니다: " + e.getMessage();
         log.error("[EMAIL ERROR] {}", message, e);
-        return buildErrorResponse(ApiResponseCode.EMAIL_SEND_ERROR, message, e);
+        return buildErrorResponse(ApiResponseCode.EMAIL_SEND_FAILED, message, e);
     }
 
     /**

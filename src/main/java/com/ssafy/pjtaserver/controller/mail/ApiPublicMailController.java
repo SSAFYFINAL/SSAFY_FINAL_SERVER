@@ -34,7 +34,7 @@ public class ApiPublicMailController {
             return ApiResponse.of(ApiResponseCode.EMAIL_SEND_SUCCESS, true);
         } else {
             log.error("이메일 전송 실패 대상 이메일: {}", mailSendDto.getEmailAddr());
-            return ApiResponse.of(ApiResponseCode.EMAIL_SEND_ERROR, false);
+            return ApiResponse.of(ApiResponseCode.EMAIL_SEND_FAILED, false);
         }
     }
 
@@ -46,7 +46,7 @@ public class ApiPublicMailController {
             return ApiResponse.of(ApiResponseCode.EMAIL_VERIFY_SUCCESS,true);
         } else {
             log.error("이메일 인증 실패 대상 이메일: {}", mailVerifyDto.getEmail());
-            return ApiResponse.of(ApiResponseCode.EMAIL_VERIFY_ERROR,false);
+            return ApiResponse.of(ApiResponseCode.EMAIL_VERIFY_FAILED,false);
         }
     }
 }
