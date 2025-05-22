@@ -120,6 +120,4 @@ public class FavoriteRepositoryImpl implements FavoriteQueryRepository{
             default -> null;
         };
     }
-
-
 }

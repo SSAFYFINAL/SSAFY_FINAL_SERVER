@@ -25,11 +25,7 @@ public interface UserService {
 
     boolean resetUserPwd(String userLoginId, UserResetPwDto userResetPwDto);
 
-    String findUserIdByUserEmailAndName(UserFindIdDto userFindIdDto);
-
     boolean updateUser(String userLoginId, UserUpdateDto userUpdateDto);
-
-    boolean followManager(String userLoginId, Long followingUserId);
 
     // user 엔티티를 userDto로 변환시켜주는 로직
     default UserLoginDto entityToDto(User user) {
@@ -44,4 +40,6 @@ public interface UserService {
                 user.getUserRoleList().stream()
                         .map(Enum::name).collect(Collectors.toList()));
     }
+
+    String findUserIdByUserEmailAndName(UserFindIdDto userFindIdDto);
 }

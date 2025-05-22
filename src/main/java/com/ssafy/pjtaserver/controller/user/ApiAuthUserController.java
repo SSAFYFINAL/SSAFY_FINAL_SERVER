@@ -1,13 +1,18 @@
 package com.ssafy.pjtaserver.controller.user;
 
+import com.ssafy.pjtaserver.dto.request.user.FollowListDto;
+import com.ssafy.pjtaserver.dto.request.user.FollowUserSearchCondition;
 import com.ssafy.pjtaserver.dto.request.user.UserResetPwDto;
 import com.ssafy.pjtaserver.dto.request.user.UserUpdateDto;
+import com.ssafy.pjtaserver.dto.response.book.PageResponseDto;
 import com.ssafy.pjtaserver.enums.ApiResponseCode;
+import com.ssafy.pjtaserver.service.user.FollowService;
 import com.ssafy.pjtaserver.service.user.UserService;
 import com.ssafy.pjtaserver.util.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,7 +26,7 @@ import org.springframework.web.bind.annotation.*;
 public class ApiAuthUserController {
 
     private final UserService userService;
-
+    private final FollowService followService;
     @PutMapping("/password-reset")
     public ResponseEntity<ApiResponse> updatePassword(@AuthenticationPrincipal UserDetails userDetails, @Validated @RequestBody UserResetPwDto userResetPwDto) {
         log.info("------------------------------api user password reset------------------------------");
@@ -49,21 +54,30 @@ public class ApiAuthUserController {
         return ApiResponse.of(ApiResponseCode.SUCCESS, true);
     }
 
-    @PostMapping("/follow/{targetUserID}")
-    public ResponseEntity<ApiResponse> followAdd(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long targetUserID) {
+    @PostMapping("/follow/{targetUserId}")
+    public ResponseEntity<ApiResponse> followAdd(@AuthenticationPrincipal UserDetails userDetails, @PathVariable String targetUserId) {
         log.info("------------------------------api follow add------------------------------");
-        log.info("targetUserID : {}", targetUserID);
+        log.info("targetUserID : {}", targetUserId);
+        boolean result = followService.addFollowRelation(userDetails.getUsername(), targetUserId);
 
-        boolean results = userService.followManager(userDetails.getUsername(), targetUserID);
-        if(!results) {
-            return ApiResponse.of(ApiResponseCode.FAVORITE_CALCLE);
+        if(!result) {
+            return ApiResponse.of(ApiResponseCode.UNFOLLOW_SUCCESS, true);
         }
-        return ApiResponse.of(ApiResponseCode.UNFOLLOW_SUCCESS);
+
+        return ApiResponse.of(ApiResponseCode.FOLLOW_COMPLETED, true);
     }
 
-    @PostMapping("/follow-list")
-    public ResponseEntity<ApiResponse> getFollowRelation( ) {
-        return null;
+    // 본인의 팔로잉, 팔로워 다른사람의 팔로잉 팔로워 조회하고 싶을때 조회하고 싶은사람의 String id를 넘겨주면된다
+    @PostMapping("/follow-list/{targetUserId}")
+    public ResponseEntity<ApiResponse> getFollowRelation(@AuthenticationPrincipal UserDetails userDetails,
+                                                         @PathVariable String targetUserId,
+                                                         @RequestBody FollowUserSearchCondition condition,
+                                                         Pageable pageable,
+                                                         @RequestParam String type) {
+        log.info("------------------------------api follow-list ------------------------------");
+        PageResponseDto<FollowListDto> followList = followService.getFollowList(targetUserId, condition, pageable, type);
+
+        return ApiResponse.of(ApiResponseCode.SUCCESS, followList);
     }
 
 }
