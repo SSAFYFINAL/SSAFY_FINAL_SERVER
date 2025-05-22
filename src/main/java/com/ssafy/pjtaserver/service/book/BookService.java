@@ -1,5 +1,7 @@
 package com.ssafy.pjtaserver.service.book;
 
+import com.ssafy.pjtaserver.dto.request.book.BookInfoSearchCondition;
+import com.ssafy.pjtaserver.dto.request.book.BookInfoSearchDto;
 import com.ssafy.pjtaserver.dto.response.book.*;
 import com.ssafy.pjtaserver.dto.response.user.WeeklyPopularBookDto;
 import com.ssafy.pjtaserver.enums.BookResponseType;

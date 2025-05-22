@@ -1,9 +1,9 @@
 package com.ssafy.pjtaserver.service.user;
 
-import com.ssafy.pjtaserver.domain.user.Follow;
 import com.ssafy.pjtaserver.domain.user.User;
 import com.ssafy.pjtaserver.dto.request.mail.MailSendDto;
 import com.ssafy.pjtaserver.dto.request.user.*;
+import com.ssafy.pjtaserver.dto.response.book.PageResponseDto;
 import com.ssafy.pjtaserver.enums.EmailType;
 import com.ssafy.pjtaserver.enums.UserRole;
 import com.ssafy.pjtaserver.exception.JoinValidationException;
@@ -14,7 +14,6 @@ import com.ssafy.pjtaserver.security.handler.ApiLoginSuccessHandler;
 import com.ssafy.pjtaserver.enums.SocialLogin;
 import com.ssafy.pjtaserver.service.mail.MailService;
 import jakarta.mail.MessagingException;
-import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -168,14 +167,6 @@ public class UserServiceImpl implements UserService {
                 .orElse(false);
     }
 
-    @Override
-    public String findUserIdByUserEmailAndName(UserFindIdDto userFindIdDto) {
-
-        return userRepository.findByUserEmailAndUsernameMain(userFindIdDto.getEmail(), userFindIdDto.getUsernameMain())
-                .map(User::getUserLoginId)
-                .orElseThrow(() -> new IllegalStateException("해당 " + userFindIdDto.getEmail() + "과 " + userFindIdDto.getUsernameMain() + "을 가진 유저가 존재하지 않습니다."));
-    }
-
     @Transactional
     @Override
     public boolean updateUser(String userLoginId, UserUpdateDto userUpdateDto) {
@@ -206,36 +197,14 @@ public class UserServiceImpl implements UserService {
         return true;
     }
 
-    // 팔로잉 할때 이미 존재하는 팔로워 팔로잉 이라면 팔로잉 취소 처리를 해줘야한다.
-    // 없는 팔로잉 팔로워 관계라면 팔로잉 추가 처리를 해줘야한다.
-    // true면 팔로우 관계 추가 완료, false 면 이미 동일한 팔로우 관계가 존재한다는 뜻이므로 팔로우 취소처리
-    @Transactional
     @Override
-    public boolean followManager(String followerLoginId, String followingLoginId) {
-        return canFollow(followerLoginId, followingLoginId);
+    public String findUserIdByUserEmailAndName(UserFindIdDto userFindIdDto) {
+
+        return userRepository.findByUserEmailAndUsernameMain(userFindIdDto.getEmail(), userFindIdDto.getUsernameMain())
+                .map(User::getUserLoginId)
+                .orElseThrow(() -> new IllegalStateException("해당 " + userFindIdDto.getEmail() + "과 " + userFindIdDto.getUsernameMain() + "을 가진 유저가 존재하지 않습니다."));
     }
 
-
-    private boolean canFollow(String followerId, String followingId) {
-
-        User follower = existsUser(followerId);
-        User following = existsUser(followingId);
-
-        Follow follow = Follow.createFollow(follower, following);
-        Optional<Follow> byFollowerAndFollowing = followRepository.findByFollowerAndFollowing(follower, following);
-
-        if(byFollowerAndFollowing.isPresent()) {
-            followRepository.delete(byFollowerAndFollowing.get());
-            return false;
-        }
-
-        followRepository.save(follow);
-        return true;
-    }
-
-    private User existsUser(String userId) {
-        return userRepository.findByUserLoginId(userId).orElseThrow(() -> new EntityNotFoundException("해당 아이디의 유저를 찾을 수 없습니다.: " + userId));
-    }
 
     // 파일 이미지 저장
     private String saveProfileImage(MultipartFile profileImg) {
@@ -318,7 +287,6 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 랜덤 대문자로 이루어진 임의의 비밀번호를 생성
-     *
      * @return 생성된 임의 비밀번호
      */
     private String makePassword() {

@@ -1,5 +1,6 @@
 package com.ssafy.pjtaserver.domain.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ssafy.pjtaserver.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.*;
@@ -32,6 +33,7 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id")
     )
     @Column(name = "user_role", nullable = false)
+    @JsonIgnore
     private List<UserRole> userRoleList = new ArrayList<>();
 
     @Column(name = "username-main", nullable = false)

@@ -31,10 +31,10 @@ public class ApiPublicMailController {
         boolean isSend = mailService.sendEmail(mailSendDto);
 
         if (isSend) {
-            return ApiResponse.of(ApiResponseCode.EMAIL_SEND_SUCCESS);
+            return ApiResponse.of(ApiResponseCode.EMAIL_SEND_SUCCESS, true);
         } else {
             log.error("이메일 전송 실패 대상 이메일: {}", mailSendDto.getEmailAddr());
-            return ApiResponse.of(ApiResponseCode.EMAIL_SEND_ERROR);
+            return ApiResponse.of(ApiResponseCode.EMAIL_SEND_ERROR, false);
         }
     }
 
