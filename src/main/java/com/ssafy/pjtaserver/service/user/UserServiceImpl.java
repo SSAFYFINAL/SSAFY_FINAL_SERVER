@@ -257,6 +257,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public boolean checkPw(String userLoginId, String userPwd) {
+        User user = userRepository.findByUserLoginId(userLoginId)
+                .orElseThrow(() -> new EntityNotFoundException("해당 아이디의 유저를 찾을 수 없습니다.: " + userLoginId));
+
+        // 디버깅용 로그 추가
+        log.info("입력된 비밀번호(Plain): {}", userPwd);
+        log.info("저장된 비밀번호(Encoded): {}", user.getUserPwd());
+        boolean isMatch = passwordEncoder.matches(userPwd, user.getUserPwd());
+        log.info("비밀번호 매칭 결과: {}", isMatch);
+
+        return isMatch;
+    }
+
+
+    @Override
     public String findUserIdByUserEmailAndName(UserFindIdDto userFindIdDto) {
 
         return userRepository.findByUserEmailAndUsernameMain(userFindIdDto.getEmail(), userFindIdDto.getUsernameMain())

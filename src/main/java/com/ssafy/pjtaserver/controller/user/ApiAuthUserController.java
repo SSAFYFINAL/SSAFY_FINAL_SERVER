@@ -1,9 +1,6 @@
 package com.ssafy.pjtaserver.controller.user;
 
-import com.ssafy.pjtaserver.dto.request.user.FollowListDto;
-import com.ssafy.pjtaserver.dto.request.user.FollowUserSearchCondition;
-import com.ssafy.pjtaserver.dto.request.user.UserResetPwDto;
-import com.ssafy.pjtaserver.dto.request.user.UserUpdateDto;
+import com.ssafy.pjtaserver.dto.request.user.*;
 import com.ssafy.pjtaserver.dto.response.book.PageResponseDto;
 import com.ssafy.pjtaserver.enums.ApiResponseCode;
 import com.ssafy.pjtaserver.service.user.FollowService;
@@ -79,6 +76,17 @@ public class ApiAuthUserController {
 
         return ApiResponse.of(ApiResponseCode.SUCCESS, followList);
     }
+
+    @PostMapping("/check-pw")
+    public ResponseEntity<ApiResponse> checkPw(@AuthenticationPrincipal UserDetails userDetails, @Valid @RequestBody CheckUserPwDto checkUserPwDto) {
+        log.info("------------------------------api check pw------------------------------");
+
+        if (!userService.checkPw(userDetails.getUsername(), checkUserPwDto.getUserPw())) {
+            return ApiResponse.of(ApiResponseCode.CHECK_USER_PW_FAIL, false);
+        }
+        return ApiResponse.of(ApiResponseCode.CHECK_USER_PW_SUCCESS, true);
+    }
+
 
     @DeleteMapping("/delete")
     public ResponseEntity<ApiResponse> deleteUser(@AuthenticationPrincipal UserDetails userDetails) {
