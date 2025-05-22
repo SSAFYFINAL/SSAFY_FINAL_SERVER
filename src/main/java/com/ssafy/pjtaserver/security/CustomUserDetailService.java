@@ -40,6 +40,11 @@ public class CustomUserDetailService implements UserDetailsService {
         if(user == null) {
             throw new UsernameNotFoundException("유저 찾을수 없음");
         }
+
+        if(user.isDeleted()) {
+            throw new UsernameNotFoundException("탈퇴된 회원 입니다.");
+        }
+
         log.info("database encoded password: {}", user.getUserPwd()); // 암호화된 비밀번호 출력
 
         UserLoginDto userLoginDto = new UserLoginDto(

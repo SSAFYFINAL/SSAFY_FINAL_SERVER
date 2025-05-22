@@ -49,7 +49,7 @@ public class ApiAuthBookController {
         if(result == BookResponseType.FAVORITE_ADD) {
             return ApiResponse.of(ApiResponseCode.FAVORITE_ADD, true);
         }
-        return ApiResponse.of(ApiResponseCode.FAVORITE_CALCLE, true);
+        return ApiResponse.of(ApiResponseCode.FAVORITE_CANCEL, true);
     }
 
     // 상세

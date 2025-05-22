@@ -37,16 +37,16 @@ public class ApiAuthGuestBookController {
         boolean result = guestBookService.writeGuestBook(guestBookWriteDto);
 
         if(!result) {
-            return ApiResponse.of(ApiResponseCode.REQUEST_FAILED,false);
+            return ApiResponse.of(ApiResponseCode.GUESTBOOK_WRITE_FAILED,false);
         }
-        return ApiResponse.of(ApiResponseCode.SUCCESS, true);
+        return ApiResponse.of(ApiResponseCode.GUESTBOOK_WRITE_SUCCESS, true);
     }
 
     @PostMapping("/list/{ownerId}")
     public ResponseEntity<ApiResponse> getGuestBookList(Pageable pageable, @RequestBody GuestbookCondition condition, @PathVariable("ownerId") Long ownerId) {
         log.info("------------------------------api guestbook list------------------------------");
         PageResponseDto<GuestbookListDto> results = guestBookService.searchGuestbookPageComplex(condition, pageable, ownerId);
-        return ApiResponse.of(ApiResponseCode.SUCCESS, results);
+        return ApiResponse.of(ApiResponseCode.GUESTBOOK_LIST_SUCCESS, results);
     }
 
     @DeleteMapping("/delete/{guestBookId}")
@@ -57,9 +57,9 @@ public class ApiAuthGuestBookController {
         boolean result = guestBookService.deleteGuestBook(userLoginId, Long.parseLong(guestBookId));
 
         if (!result) {
-            return ApiResponse.of(ApiResponseCode.REQUEST_FAILED, false);
+            return ApiResponse.of(ApiResponseCode.GUESTBOOK_DELETE_FAILED, false);
         }
-        return ApiResponse.of(ApiResponseCode.SUCCESS, true);
+        return ApiResponse.of(ApiResponseCode.GUESTBOOK_DELETE_SUCCESS, true);
     }
 
     @PutMapping("/update/{guestBookId}")
@@ -71,9 +71,9 @@ public class ApiAuthGuestBookController {
         boolean result = guestBookService.updateGuestBook(userLoginId, Long.parseLong(guestBookId), guestBookUpdateDto.getContent());
 
         if (!result) {
-            return ApiResponse.of(ApiResponseCode.REQUEST_FAILED, false);
+            return ApiResponse.of(ApiResponseCode.GUESTBOOK_UPDATE_FAILED, false);
         }
-        return ApiResponse.of(ApiResponseCode.SUCCESS, true);
+        return ApiResponse.of(ApiResponseCode.GUESTBOOK_UPDATE_SUCCESS, true);
     }
 
 }

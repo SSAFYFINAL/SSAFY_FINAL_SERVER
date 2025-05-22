@@ -16,8 +16,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -113,9 +111,9 @@ public class ApiPublicUserController {
 
         String userLoginId = userService.findUserIdByUserEmailAndName(userFindIdDto);
         if(userLoginId == null) {
-            return ApiResponse.of(ApiResponseCode.REQUEST_FAILED);
+            return ApiResponse.of(ApiResponseCode.FIND_USER_ID_FAIL);
         }
-        return ApiResponse.of(ApiResponseCode.SUCCESS, userLoginId);
+        return ApiResponse.of(ApiResponseCode.FIND_USER_ID_SUCCESS, userLoginId);
     }
 
     @PutMapping("/password-reset")
@@ -128,8 +126,8 @@ public class ApiPublicUserController {
         boolean isReset = userService.resetUserPwd(userLoginId, userResetPwDto);
 
         if(!isReset) {
-            return ApiResponse.of(ApiResponseCode.REQUEST_FAILED, false);
+            return ApiResponse.of(ApiResponseCode.USER_DELETE_FAIL, false);
         }
-        return ApiResponse.of(ApiResponseCode.SUCCESS, true);
+        return ApiResponse.of(ApiResponseCode.USER_DELETE_SUCCESS, true);
     }
 }

@@ -80,4 +80,12 @@ public class ApiAuthUserController {
         return ApiResponse.of(ApiResponseCode.SUCCESS, followList);
     }
 
+    @DeleteMapping("/delete")
+    public ResponseEntity<ApiResponse> deleteUser(@AuthenticationPrincipal UserDetails userDetails) {
+        log.info("------------------------------api user delete------------------------------");
+        if (!userService.deleteUser(userDetails.getUsername())) {
+            return ApiResponse.of(ApiResponseCode.REQUEST_FAILED, false);
+        }
+        return ApiResponse.of(ApiResponseCode.SUCCESS, true);
+    }
 }

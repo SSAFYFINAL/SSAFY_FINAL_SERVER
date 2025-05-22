@@ -58,5 +58,4 @@ public class GuestBook {
     public static GuestBook createGuestBook(User ownerId, User writerId, String content) {
         return new GuestBook(ownerId, writerId, content);
     }
-
 }

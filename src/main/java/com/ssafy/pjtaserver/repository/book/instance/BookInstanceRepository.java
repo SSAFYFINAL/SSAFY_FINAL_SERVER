@@ -13,4 +13,5 @@ import java.util.List;
 public interface BookInstanceRepository extends JpaRepository<BookInstance, Long>, BookInstanceQueryRepository {
     List<BookInstance> findByStatusAndBookInfo_IdOrderByIdAsc(BookCheckoutStatus status, Long bookInfoId);
     boolean existsBookInstanceByBookInfoAndCurrentUserId(BookInfo bookInfo, User currentUserId);
+    List<BookInstance> findBookInstanceByCurrentUserId(User user);
 }

@@ -28,14 +28,14 @@ public class ApiPublicMainController {
         List<WeeklyPopularBookDto> results = bookService.getWeeklyPopular();
         log.info("weeklyPopular : {}", results);
 
-        return ApiResponse.of(ApiResponseCode.SUCCESS, results);
+        return ApiResponse.of(ApiResponseCode.WEEKLY_POPULAR_LIST_SUCCESS, results);
     }
 
     @GetMapping("/recent-book-list")
     public ResponseEntity<ApiResponse> getRecentBooks() {
         log.info("------------------------------api recent book list------------------------------");
         List<RecentBooksDto> results = bookService.getRecentBooks();
-        return ApiResponse.of(ApiResponseCode.SUCCESS, results);
+        return ApiResponse.of(ApiResponseCode.RECENT_BOOK_LIST_SUCCESS, results);
     }
 
 }
