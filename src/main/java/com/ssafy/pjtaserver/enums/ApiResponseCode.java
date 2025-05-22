@@ -19,12 +19,14 @@ public enum ApiResponseCode {
     LOGIN_SUCCESS(HttpStatus.OK, 1101, "로그인에 성공했습니다."),
     CAN_USE_LOGIN_ID(HttpStatus.OK, 1102, "사용 가능한 로그인 아이디입니다."),
     USER_DELETE_SUCCESS(HttpStatus.OK, 1103, "해당 유저 회원탈퇴가 완료되었습니다."),
+    FIND_USER_ID_SUCCESS(HttpStatus.OK, 1104, "아이디 찾기가 완료 되었습니다."),
+    CHECK_USER_PW_SUCCESS(HttpStatus.OK, 1105, "비밀번호 확인이 성공 하였습니다."),
     USER_CREATED_ERROR(HttpStatus.OK, 2100, "회원가입 실패."),
     LOGIN_FAILED(HttpStatus.OK, 2101, "로그인에 실패했습니다."),
     DUPLICATE_LOGIN_ID(HttpStatus.OK, 2102, "이미 존재하는 로그인 아이디입니다."),
     USER_DELETE_FAIL(HttpStatus.OK, 2103, "해당 유저 회원탈퇴가 실패하였습니다."),
-    FIND_USER_ID_SUCCESS(HttpStatus.OK, 1104, "아이디 찾기가 완료 되었습니다."),
     FIND_USER_ID_FAIL(HttpStatus.OK, 2104, "아이디 찾기가 실패 되었습니다."),
+    CHECK_USER_PW_FAIL(HttpStatus.OK, 2105, "비밀번호 확인이 실패 하였습니다."),
 
     // 대출 예약 관련 응답
     CHECKOUT_SUCCESS(HttpStatus.OK, 1200, "대출이 완료되었습니다."),
