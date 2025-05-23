@@ -34,6 +34,7 @@ public interface UserService {
     // user 엔티티를 userDto로 변환시켜주는 로직
     default UserLoginDto entityToDto(User user) {
         return new UserLoginDto(
+                user.getId(),
                 user.getUserLoginId(),
                 user.getUserPwd(),
                 user.getUsernameMain(),

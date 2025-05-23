@@ -42,7 +42,6 @@ class FavoriteBookListTest {
                     "설명" + i,
                     "작가" + i,
                     "출판사" + i,
-                    "분류" + i,
                     null,
                     "이미지" + i
             );

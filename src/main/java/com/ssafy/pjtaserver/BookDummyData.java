@@ -34,11 +34,10 @@
 //            String authorName = AUTHOR_FIRST_NAMES[i % AUTHOR_FIRST_NAMES.length] + " " +
 //                    AUTHOR_LAST_NAMES[i % AUTHOR_LAST_NAMES.length];
 //            String publisherName = PUBLISHERS[i % PUBLISHERS.length];
-//            String classificationName = String.format("00%d.%d", (i % 10), i % 5);
 //            String imgPath = "/images/book_" + i + ".jpg";
 //
 //            BookInfo bookInfo = BookInfo.createBook(
-//                    isbn, title, description, authorName, publisherName, classificationName,
+//                    isbn, title, description, authorName, publisherName,
 //                    null, imgPath
 //            );
 //

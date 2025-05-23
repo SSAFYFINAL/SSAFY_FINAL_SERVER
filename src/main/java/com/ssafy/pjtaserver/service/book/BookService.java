@@ -15,8 +15,8 @@ public interface BookService {
     BookDetailDto getDetail(Long bookInfoId, Optional<String> userLoginId);
     BookResponseType favoriteBookManager(String userLoginId, Long bookInfoId);
     BookResponseType checkoutAndReservationManager(String userLoginId, Long bookInfoId);
-    PageResponseDto<BookInfoSearchDto> searchFavoritePageComplex(BookInfoSearchCondition condition, Pageable updatedPageable, String userLoginId);
+    PageResponseDto<BookInfoSearchDto> searchFavoritePageComplex(BookInfoSearchCondition condition, Pageable updatedPageable, Long userId);
     List<WeeklyPopularBookDto> getWeeklyPopular();
     List<RecentBooksDto> getRecentBooks();
-    PageResponseDto<CheckoutHistoryDto> getCheckoutHistory(BookInfoSearchCondition condition ,String userLoginId, Pageable updatedPageable);
+    PageResponseDto<CheckoutHistoryDto> getCheckoutHistory(BookInfoSearchCondition condition ,Long userId, Pageable updatedPageable);
 }

@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 public class GuestBookWriteDto {
     @NotBlank(message = "ownerId는 필수 입력값 입니다.")
-    private String ownerId;
+    private Long ownerId;
 
     private String writerId;
 

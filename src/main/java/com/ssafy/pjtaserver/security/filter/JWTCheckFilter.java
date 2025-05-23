@@ -70,6 +70,14 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             Map<String, Object> claims = JWTUtil.validateToken(accessToken);
 
             log.info("JWT claims: " + claims);
+            Object userIdObj = claims.get("userId");
+            Long userId;
+            if (userIdObj instanceof Integer) {
+                userId = ((Integer) userIdObj).longValue();
+            } else {
+                userId = (Long) userIdObj;
+            }
+
             String userLoginId = (String) claims.get("userLoginId");
             Boolean social = (Boolean) claims.get("social");
             String nickname = (String) claims.get("nickName");
@@ -79,7 +87,7 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             String username = (String) claims.get("username");
             String userPhone = (String) claims.get("userPhone");
 
-            UserLoginDto userLoginDto = new UserLoginDto(userLoginId, userPwd, username, nickname, email, userPhone, social, roleNames);
+            UserLoginDto userLoginDto = new UserLoginDto(userId, userLoginId, userPwd, username, nickname, email, userPhone, social, roleNames);
 
             log.info("----------------------------------- ");
             log.info(String.valueOf(userLoginDto));

@@ -64,9 +64,9 @@ public class ApiAuthBookController {
     }
 
     // 찜목록
-    @PostMapping("/favorites")
-    public ResponseEntity<ApiResponse> getFavoriteList(@AuthenticationPrincipal UserDetails userDetails, @RequestBody BookInfoSearchCondition condition, Pageable pageable) {
-        PageResponseDto<BookInfoSearchDto> results = bookService.searchFavoritePageComplex(condition, pageable, userDetails.getUsername());
+    @PostMapping("/favorites/{userId}")
+    public ResponseEntity<ApiResponse> getFavoriteList(@PathVariable Long userId, @RequestBody BookInfoSearchCondition condition, Pageable pageable) {
+        PageResponseDto<BookInfoSearchDto> results = bookService.searchFavoritePageComplex(condition, pageable, userId);
 
         log.info("------------------------------api get favorite list------------------------------");
         log.info("results : {}", results);
@@ -74,11 +74,12 @@ public class ApiAuthBookController {
         return ApiResponse.of(ApiResponseCode.SUCCESS,results);
     }
 
-    @PostMapping("/checkout-history")
-    public ResponseEntity<ApiResponse> getCheckoutHistory(@AuthenticationPrincipal UserDetails userDetails, @RequestBody BookInfoSearchCondition condition, Pageable pageable) {
+    // 해당 유저의 대출 기록을 조회하는 기능
+    @PostMapping("/checkout-history/{userId}")
+    public ResponseEntity<ApiResponse> getCheckoutHistory(@PathVariable Long userId , @RequestBody BookInfoSearchCondition condition, Pageable pageable) {
         log.info("------------------------------api get checkout history------------------------------");
 
-        PageResponseDto<CheckoutHistoryDto> results = bookService.getCheckoutHistory(condition, userDetails.getUsername(), pageable);
+        PageResponseDto<CheckoutHistoryDto> results = bookService.getCheckoutHistory(condition, userId, pageable);
 
         return ApiResponse.of(ApiResponseCode.SUCCESS, results);
     }
