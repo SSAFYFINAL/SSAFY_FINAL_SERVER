@@ -56,6 +56,7 @@ public class CustomUserDetailService implements UserDetailsService {
                 user.getUserEmail(),
                 user.getUserPhone(),
                 user.isSocial(),
+                user.getProfileImgPath(),
                 user.getUserRoleList()
                         .stream()
                         .map(Enum::name).collect(Collectors.toList()));

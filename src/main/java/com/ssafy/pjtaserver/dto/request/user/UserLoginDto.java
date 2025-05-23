@@ -22,6 +22,7 @@ public class UserLoginDto extends User {
     private String nickName;
     private String userEmail;
     private String userPhone;
+    private String profileImgPath;
 
     private boolean social;
 
@@ -32,7 +33,7 @@ public class UserLoginDto extends User {
         this.userLoginId = userLoginId;
     }
 
-    public UserLoginDto(Long userId, String userLoginId, String userPwd, String username, String nickName, String userEmail, String userPhone, boolean social, List<String> roleNames) {
+    public UserLoginDto(Long userId, String userLoginId, String userPwd, String username, String nickName, String userEmail, String userPhone, boolean social, String profileImgPath, List<String> roleNames) {
         super(userLoginId, userPwd, getCollect(roleNames));
         this.userId = userId;
         this.userLoginId = userLoginId;
@@ -42,6 +43,7 @@ public class UserLoginDto extends User {
         this.userEmail = userEmail;
         this.userPhone = userPhone;
         this.social = social;
+        this.profileImgPath = profileImgPath;
         this.roleNames = roleNames;
     }
 
@@ -71,6 +73,7 @@ public class UserLoginDto extends User {
         dataMap.put("nickName", nickName);
         dataMap.put("userPhone", userPhone);
         dataMap.put("social", social);
+        dataMap.put("profileImgPath", profileImgPath);
         dataMap.put("roleNames", roleNames);
 
         return dataMap;

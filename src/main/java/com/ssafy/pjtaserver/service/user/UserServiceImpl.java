@@ -38,6 +38,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -195,25 +196,28 @@ public class UserServiceImpl implements UserService {
             }
         }
 
-        if(userUpdateDto.getUserPwd() == null || userUpdateDto.getUserPwd().isEmpty()) {
+        if (!StringUtils.hasText(userUpdateDto.getUserPwd())) {
             user.updateUserInfo(
                     storedFilePath,
                     userUpdateDto.getUsernameMain(),
                     userUpdateDto.getUserNickname(),
                     userUpdateDto.getUserPhone()
             );
+        } else {
+            if (!userUpdateDto.getUserPwd().matches("^(?=.*[0-9])(?=.*[!@#$%^&*()])(?=.*[a-zA-Z]).{8,}$")) {
+                throw new IllegalArgumentException("비밀번호는 조건에 맞아야 합니다.");
+            }
+
+            user.updateUserInfo(
+                    storedFilePath,
+                    userUpdateDto.getUsernameMain(),
+                    userUpdateDto.getUserNickname(),
+                    userUpdateDto.getUserPhone(),
+                    passwordEncoder.encode(userUpdateDto.getUserPwd())
+            );
         }
 
-        user.updateUserInfo(
-                storedFilePath,
-                userUpdateDto.getUsernameMain(),
-                userUpdateDto.getUserNickname(),
-                userUpdateDto.getUserPhone(),
-                passwordEncoder.encode(userUpdateDto.getUserPwd())
-        );
-
         userRepository.save(user);
-
         return true;
     }
 
