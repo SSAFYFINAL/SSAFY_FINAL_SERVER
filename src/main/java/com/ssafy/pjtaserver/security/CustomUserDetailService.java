@@ -48,6 +48,7 @@ public class CustomUserDetailService implements UserDetailsService {
         log.info("database encoded password: {}", user.getUserPwd()); // 암호화된 비밀번호 출력
 
         UserLoginDto userLoginDto = new UserLoginDto(
+                user.getId(),
                 user.getUserLoginId(),
                 user.getUserPwd(),
                 user.getUsernameMain(),

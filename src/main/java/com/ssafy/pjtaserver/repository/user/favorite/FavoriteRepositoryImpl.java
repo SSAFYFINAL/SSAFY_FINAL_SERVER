@@ -30,7 +30,7 @@ public class FavoriteRepositoryImpl implements FavoriteQueryRepository{
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public Page<BookInfoSearchDto> searchFavoriteBook(BookInfoSearchCondition condition, Pageable pageable, String userLoginId) {
+    public Page<BookInfoSearchDto> searchFavoriteBook(BookInfoSearchCondition condition, Pageable pageable, Long userId) {
 
         List<BookInfoSearchDto> results = jpaQueryFactory
                 .select(new QBookInfoSearchDto(
@@ -39,16 +39,15 @@ public class FavoriteRepositoryImpl implements FavoriteQueryRepository{
                         bookInfo.bookImgPath.as("bookImgPath"),
                         bookInfo.isbn,
                         bookInfo.publisherName.as("publisherName"),
-                        bookInfo.seriesName.as("seriesName"),
                         bookInfo.title))
                 .from(bookInfo)
                 .join(bookInfo.favoriteBookList, favoriteBookList)
-                .on(favoriteBookList.user.userLoginId.eq(userLoginId)) // 조인 조건
+                .on(favoriteBookList.user.id.eq(userId)) // 조인 조건
                 .where(
                         titleEq(condition.getTitle()),
                         authorNameEq(condition.getAuthorName()),
                         publisherNameEq(condition.getPublisherName()),
-                        favoriteBookList.user.userLoginId.eq(userLoginId)
+                        favoriteBookList.user.id.eq(userId)
                 )
                 .orderBy(getOrderSpecifiers(pageable))
                 .offset(pageable.getOffset())
@@ -59,7 +58,7 @@ public class FavoriteRepositoryImpl implements FavoriteQueryRepository{
                 .select(bookInfo.id.count())
                 .from(bookInfo)
                 .join(bookInfo.favoriteBookList, favoriteBookList)
-                .on(favoriteBookList.user.userLoginId.eq(userLoginId))
+                .on(favoriteBookList.user.id.eq(userId))
                 .where(
                         titleEq(condition.getTitle()),
                         authorNameEq(condition.getAuthorName()),

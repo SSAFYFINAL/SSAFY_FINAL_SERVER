@@ -35,12 +35,6 @@ public class BookInfo {
     @Column(name = "publisher_name", nullable = false)
     private String publisherName;
 
-    @Column(name = "series_name")
-    private String seriesName;
-
-    @Column(name = "classification_name")
-    private String classificationName;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category categoryId;
@@ -65,7 +59,6 @@ public class BookInfo {
             String description,
             String authorName,
             String publisherName,
-            String classificationName,
             Category categoryId,
             String bookImgPath
     ) {
@@ -75,7 +68,6 @@ public class BookInfo {
         bookInfo.description = description;
         bookInfo.authorName = authorName;
         bookInfo.publisherName = publisherName;
-        bookInfo.seriesName = classificationName;
         bookInfo.categoryId = categoryId;
         bookInfo.bookImgPath = bookImgPath;
         return bookInfo;

@@ -24,7 +24,7 @@ public class CheckoutRepositoryImpl implements CheckoutQueryRepository {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Page<CheckoutHistoryDto> searchCheckoutHistory(BookInfoSearchCondition condition, Pageable pageable, String userLoginId) {
+    public Page<CheckoutHistoryDto> searchCheckoutHistory(BookInfoSearchCondition condition, Pageable pageable, Long userId) {
         List<CheckoutHistoryDto> results = queryFactory
                 .select(new QCheckoutHistoryDto(
                         bookInstance.bookInfo.id,
@@ -35,7 +35,7 @@ public class CheckoutRepositoryImpl implements CheckoutQueryRepository {
                         bookCheckout.checkoutDate,
                         bookCheckout.dueDate))
                 .from(bookCheckout)
-                .where(bookCheckout.user.userLoginId.eq(userLoginId))
+                .where(bookCheckout.user.id.eq(userId))
                 .join(bookCheckout.bookInstance, bookInstance)
                 .join(bookInstance.bookInfo, bookInfo)
                 .orderBy(getOrderSpecifiers(pageable))
@@ -49,7 +49,7 @@ public class CheckoutRepositoryImpl implements CheckoutQueryRepository {
                         .from(bookCheckout)
                         .join(bookCheckout.bookInstance, bookInstance)
                         .join(bookInstance.bookInfo, bookInfo)
-                        .where(bookCheckout.user.userLoginId.eq(userLoginId));
+                        .where(bookCheckout.user.id.eq(userId));
 
         return PageableExecutionUtils.getPage(results, pageable, countQuery::fetchOne);
     }

@@ -15,6 +15,7 @@ import static java.util.stream.Collectors.*;
 @Getter
 public class UserLoginDto extends User {
 
+    private Long userId;
     private final String userLoginId;
     private String userPwd;
     private String username;
@@ -31,9 +32,9 @@ public class UserLoginDto extends User {
         this.userLoginId = userLoginId;
     }
 
-    public UserLoginDto(String userLoginId, String userPwd, String username, String nickName, String userEmail, String userPhone, boolean social, List<String> roleNames) {
+    public UserLoginDto(Long userId, String userLoginId, String userPwd, String username, String nickName, String userEmail, String userPhone, boolean social, List<String> roleNames) {
         super(userLoginId, userPwd, getCollect(roleNames));
-
+        this.userId = userId;
         this.userLoginId = userLoginId;
         this.userPwd = userPwd;
         this.username = username;
@@ -58,9 +59,11 @@ public class UserLoginDto extends User {
         this.userLoginId = userLoginId;
         this.userPwd = password;
     }
+
     // JWT
     public Map<String, Object> getClaims() {
         HashMap<String, Object> dataMap = new HashMap<>();
+        dataMap.put("userId", userId);
         dataMap.put("email", userEmail);
         dataMap.put("userLoginId", userLoginId);
         dataMap.put("userPwd", userPwd);

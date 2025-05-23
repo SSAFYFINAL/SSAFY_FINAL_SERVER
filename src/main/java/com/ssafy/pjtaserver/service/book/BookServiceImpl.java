@@ -89,7 +89,6 @@ public class BookServiceImpl implements BookService {
                         .isAvailableCheckedOut(isAvailableForCheckout)
                         .isBookFavorite(isFavorite)
                         .bookImgPath(info.getBookImgPath())
-                        .seriesName(info.getSeriesName())
                         .description(info.getDescription())
                         .categoryName(info.getCategoryId())
                         .build()
@@ -176,11 +175,11 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public PageResponseDto<BookInfoSearchDto> searchFavoritePageComplex(BookInfoSearchCondition condition, Pageable pageable, String userLoginId) {
+    public PageResponseDto<BookInfoSearchDto> searchFavoritePageComplex(BookInfoSearchCondition condition, Pageable pageable, Long userId) {
         Sort sort = Sort.by(Sort.Direction.fromString(condition.getOrderDirection()), condition.getOrderBy());
         Pageable updatedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
 
-        Page<BookInfoSearchDto> bookInfoSearchDto = favoriteRepository.searchFavoriteBook(condition, updatedPageable, userLoginId);
+        Page<BookInfoSearchDto> bookInfoSearchDto = favoriteRepository.searchFavoriteBook(condition, updatedPageable, userId);
 
         return new PageResponseDto<>(
                 bookInfoSearchDto.getContent(),
@@ -213,11 +212,11 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public PageResponseDto<CheckoutHistoryDto> getCheckoutHistory(BookInfoSearchCondition condition, String userLoginId, Pageable pageable) {
+    public PageResponseDto<CheckoutHistoryDto> getCheckoutHistory(BookInfoSearchCondition condition, Long userId, Pageable pageable) {
         Sort sort = Sort.by(Sort.Direction.fromString(condition.getOrderDirection()), condition.getOrderBy());
         Pageable updatedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
 
-        Page<CheckoutHistoryDto> checkoutHistory = checkoutRepository.searchCheckoutHistory(condition, updatedPageable, userLoginId);
+        Page<CheckoutHistoryDto> checkoutHistory = checkoutRepository.searchCheckoutHistory(condition, updatedPageable, userId);
 
         return new PageResponseDto<>(
                 checkoutHistory.getContent(),

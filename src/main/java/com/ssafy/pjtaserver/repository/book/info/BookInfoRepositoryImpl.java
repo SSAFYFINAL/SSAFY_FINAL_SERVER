@@ -35,7 +35,6 @@ public class BookInfoRepositoryImpl implements BookInfoQueryRepository {
                         bookInfo.bookImgPath.as("bookImgPath"),
                         bookInfo.isbn,
                         bookInfo.publisherName.as("publisherName"),
-                        bookInfo.seriesName.as("seriesName"),
                         bookInfo.title))
                 .from(bookInfo)
                 .where(

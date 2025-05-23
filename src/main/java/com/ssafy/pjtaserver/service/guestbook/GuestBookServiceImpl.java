@@ -34,7 +34,7 @@ public class GuestBookServiceImpl implements GuestBookService{
     public boolean writeGuestBook(GuestBookWriteDto guestBookWriteDto) {
 
         Optional<User> writer = userRepository.findByUserLoginId(guestBookWriteDto.getWriterId());
-        Optional<User> owner = userRepository.findByUserLoginId(guestBookWriteDto.getOwnerId());
+        Optional<User> owner = userRepository.findUserById(guestBookWriteDto.getOwnerId());
 
         if(writer.isEmpty()) {
             throw new EntityNotFoundException("해당 아이디의 유저를 찾을 수 없습니다." + guestBookWriteDto.getWriterId());
