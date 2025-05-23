@@ -129,6 +129,13 @@ public class User {
         this.userPwd = userPwd;
     }
 
+    public void updateUserInfo(String profileImgPath, String usernameMain, String nickName, String userPhone) {
+        this.profileImgPath = profileImgPath;
+        this.usernameMain = usernameMain;
+        this.nickName = nickName;
+        this.userPhone = userPhone;
+    }
+
     public User deleteUser() {
         this.isDeleted = true; // `this`를 직접 사용하여 내부 상태 변경
         return this;

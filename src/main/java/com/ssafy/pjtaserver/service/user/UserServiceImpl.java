@@ -195,12 +195,21 @@ public class UserServiceImpl implements UserService {
             }
         }
 
+        if(userUpdateDto.getUserPwd() == null || userUpdateDto.getUserPwd().isEmpty()) {
+            user.updateUserInfo(
+                    storedFilePath,
+                    userUpdateDto.getUsernameMain(),
+                    userUpdateDto.getUserNickname(),
+                    userUpdateDto.getUserPhone()
+            );
+        }
+
         user.updateUserInfo(
                 storedFilePath,
                 userUpdateDto.getUsernameMain(),
                 userUpdateDto.getUserNickname(),
                 userUpdateDto.getUserPhone(),
-                userUpdateDto.getUserPwd()
+                passwordEncoder.encode(userUpdateDto.getUserPwd())
         );
 
         userRepository.save(user);
