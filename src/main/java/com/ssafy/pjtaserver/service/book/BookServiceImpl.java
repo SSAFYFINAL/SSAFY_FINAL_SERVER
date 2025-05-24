@@ -90,7 +90,7 @@ public class BookServiceImpl implements BookService {
                         .isBookFavorite(isFavorite)
                         .bookImgPath(info.getBookImgPath())
                         .description(info.getDescription())
-                        .categoryName(info.getCategoryId())
+                        .categoryName(info.getCategoryId().getCategoryTitle())
                         .build()
                 )
                 .orElseThrow(() -> new EntityNotFoundException("해당 책이 존재하지 않습니다.: " + bookInfoId));
