@@ -6,12 +6,12 @@ import com.ssafy.pjtaserver.dto.response.book.PageResponseDto;
 import org.springframework.data.domain.Pageable;
 
 public interface FollowService {
-    PageResponseDto<FollowListDto> getFollowList(String userLoginId,
+    PageResponseDto<FollowListDto> getFollowList(Long userLoginId,
                                                  FollowUserSearchCondition condition,
                                                  Pageable pageable,
                                                  String type);
 
-    boolean addFollowRelation(String ownerId, String targetId);
+    boolean addFollowRelation(String ownerId, Long targetId);
 
 
 }

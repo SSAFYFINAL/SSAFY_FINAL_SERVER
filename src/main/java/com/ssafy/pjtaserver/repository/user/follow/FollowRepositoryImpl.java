@@ -30,8 +30,10 @@ public class FollowRepositoryImpl implements FollowQueryRepository{
         String FOLLOWING = "following";
         List<FollowListDto> results = jpaQueryFactory
                 .select(new QFollowListDto(
+                        user.id,
                         follow.following.userLoginId,
                         follow.following.usernameMain,
+                        user.nickName,
                         follow.following.profileImgPath
                 ))
                 .from(follow)
@@ -65,8 +67,10 @@ public class FollowRepositoryImpl implements FollowQueryRepository{
         String FOLLOWER = "follower";
         List<FollowListDto> results = jpaQueryFactory
                 .select(new QFollowListDto(
+                        user.id,
                         follow.followOwner.userLoginId,
                         follow.followOwner.usernameMain,
+                        user.nickName,
                         follow.followOwner.profileImgPath
                 ))
                 .from(follow)

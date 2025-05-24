@@ -57,7 +57,8 @@ public class ApiAuthUserController {
     }
 
     @PostMapping("/follow/{targetUserId}")
-    public ResponseEntity<ApiResponseUtil> followAdd(@AuthenticationPrincipal UserDetails userDetails, @PathVariable String targetUserId) {
+    public ResponseEntity<ApiResponseUtil> followAdd(@AuthenticationPrincipal UserDetails userDetails,
+                                                     @PathVariable Long targetUserId) {
         log.info("------------------------------api follow add------------------------------");
         log.info("targetUserID : {}", targetUserId);
         boolean result = followService.addFollowRelation(userDetails.getUsername(), targetUserId);
@@ -71,8 +72,7 @@ public class ApiAuthUserController {
 
     // 본인의 팔로잉, 팔로워 다른사람의 팔로잉 팔로워 조회하고 싶을때 조회하고 싶은사람의 String id를 넘겨주면된다
     @PostMapping("/follow-list/{targetUserId}")
-    public ResponseEntity<ApiResponseUtil> getFollowRelation(@AuthenticationPrincipal UserDetails userDetails,
-                                                             @PathVariable String targetUserId,
+    public ResponseEntity<ApiResponseUtil> getFollowRelation(@PathVariable Long targetUserId,
                                                              @RequestBody FollowUserSearchCondition condition,
                                                              Pageable pageable,
                                                              @RequestParam String type) {
