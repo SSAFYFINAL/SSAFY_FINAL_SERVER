@@ -33,7 +33,8 @@ public class CheckoutRepositoryImpl implements CheckoutQueryRepository {
                         bookInfo.authorName,
                         bookInfo.publisherName,
                         bookCheckout.checkoutDate,
-                        bookCheckout.dueDate))
+                        bookCheckout.dueDate,
+                        bookInfo.bookImgPath))
                 .from(bookCheckout)
                 .where(bookCheckout.user.id.eq(userId))
                 .join(bookCheckout.bookInstance, bookInstance)

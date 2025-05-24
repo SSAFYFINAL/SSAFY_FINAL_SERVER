@@ -15,9 +15,10 @@ public class CheckoutHistoryDto {
     private String publisherName;
     private LocalDateTime checkoutDate;
     private LocalDateTime dueDate;
+    private String profileImgPath;
 
     @QueryProjection
-    public CheckoutHistoryDto(Long bookInfoId, Long checkoutId, String title, String authorName, String publisherName, LocalDateTime checkoutDate, LocalDateTime dueDate) {
+    public CheckoutHistoryDto(Long bookInfoId, Long checkoutId, String title, String authorName, String publisherName, LocalDateTime checkoutDate, LocalDateTime dueDate, String profileImgPath) {
         this.bookInfoId = bookInfoId;
         this.checkoutId = checkoutId;
         this.title = title;
@@ -25,6 +26,7 @@ public class CheckoutHistoryDto {
         this.publisherName = publisherName;
         this.checkoutDate = checkoutDate;
         this.dueDate = dueDate;
+        this.profileImgPath = profileImgPath;
     }
     
 }
