@@ -1,7 +1,7 @@
 package com.ssafy.pjtaserver.controller;
 
 import com.ssafy.pjtaserver.exception.CustomJWTException;
-import com.ssafy.pjtaserver.util.JWTUtil;
+import com.ssafy.pjtaserver.utils.JWTUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;

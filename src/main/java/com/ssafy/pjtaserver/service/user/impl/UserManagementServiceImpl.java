@@ -1,4 +1,4 @@
-package com.ssafy.pjtaserver.service.user;
+package com.ssafy.pjtaserver.service.user.impl;
 
 import com.ssafy.pjtaserver.domain.book.BookInstance;
 import com.ssafy.pjtaserver.domain.user.User;
@@ -18,6 +18,8 @@ import com.ssafy.pjtaserver.repository.user.user.UserRepository;
 import com.ssafy.pjtaserver.security.handler.ApiLoginFailHandler;
 import com.ssafy.pjtaserver.security.handler.ApiLoginSuccessHandler;
 import com.ssafy.pjtaserver.service.mail.MailService;
+import com.ssafy.pjtaserver.service.user.UserManagementService;
+import com.ssafy.pjtaserver.utils.FileUtil;
 import jakarta.mail.MessagingException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.ServletException;
@@ -25,7 +27,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -43,21 +44,13 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class UserServiceImpl implements UserService {
-
-    @Value("${file.upload-dir}")
-    private String uploadDir;
+public class UserManagementServiceImpl implements UserManagementService {
 
     private static final String DEFAULT_PHONE_NUMBER = "010-xxxx-xxxx"; // 소셜 로그인 사용자를 위한 기본 휴대폰 번호
     private static final String DEFAULT_SOCIAL_NICKNAME = "소셜회원"; // 소셜 로그인 사용자를 위한 기본 닉네임
@@ -74,6 +67,7 @@ public class UserServiceImpl implements UserService {
     private final BookInstanceRepository bookInstanceRepository;
     private final FavoriteRepository favoriteRepository;
     private final CheckoutRepository checkoutRepository;
+    private final FileUtil fileUtil;
 
     /**
      * 로그인 성공/실패 핸들러를 통해 결과를 응답
@@ -190,7 +184,7 @@ public class UserServiceImpl implements UserService {
         MultipartFile profileImg = userUpdateDto.getProfileImg();
         if (profileImg != null && !profileImg.isEmpty()) {
             try {
-                storedFilePath = saveProfileImage(profileImg); // 파일 저장
+                storedFilePath = fileUtil.saveProfileImage(profileImg); // 파일 저장
             } catch (Exception e) {
                 throw new RuntimeException("파일 저장 중 오류 발생: " + e.getMessage());
             }
@@ -283,36 +277,12 @@ public class UserServiceImpl implements UserService {
         return isMatch;
     }
 
-
     @Override
     public String findUserIdByUserEmailAndName(UserFindIdDto userFindIdDto) {
 
         return userRepository.findByUserEmailAndUsernameMain(userFindIdDto.getEmail(), userFindIdDto.getUsernameMain())
                 .map(User::getUserLoginId)
                 .orElseThrow(() -> new IllegalStateException("해당 " + userFindIdDto.getEmail() + "과 " + userFindIdDto.getUsernameMain() + "을 가진 유저가 존재하지 않습니다."));
-    }
-
-    // 파일 이미지 저장
-    private String saveProfileImage(MultipartFile profileImg) {
-        try {
-
-            // 파일 이름 생성
-            String originalFilename = profileImg.getOriginalFilename();
-            String storedFilename = UUID.randomUUID() + "_" + originalFilename;
-
-            // 저장 경로 생성
-            Path uploadPath = Paths.get(uploadDir);
-            if (!Files.exists(uploadPath)) {
-                Files.createDirectories(uploadPath);
-            }
-
-            // 파일 저장
-            Path filePath = uploadPath.resolve(storedFilename);
-            Files.copy(profileImg.getInputStream(), filePath);
-            return filePath.toString();
-        } catch (Exception e) {
-            throw new RuntimeException("파일 저장 중 오류 발생: " + e.getMessage());
-        }
     }
 
     /**

@@ -4,12 +4,11 @@ import com.ssafy.pjtaserver.dto.response.book.RecentBooksDto;
 import com.ssafy.pjtaserver.dto.response.user.WeeklyPopularBookDto;
 import com.ssafy.pjtaserver.enums.ApiResponseCode;
 import com.ssafy.pjtaserver.service.book.BookService;
-import com.ssafy.pjtaserver.util.ApiResponse;
+import com.ssafy.pjtaserver.utils.ApiResponseUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,19 +23,19 @@ public class ApiPublicMainController {
     private final BookService bookService;
 
     @GetMapping("/weekly-popular")
-    public ResponseEntity<ApiResponse> getWeeklyPopular() {
+    public ResponseEntity<ApiResponseUtil> getWeeklyPopular() {
         log.info("------------------------------api weekly popular------------------------------");
         List<WeeklyPopularBookDto> results = bookService.getWeeklyPopular();
         log.info("weeklyPopular : {}", results);
 
-        return ApiResponse.of(ApiResponseCode.WEEKLY_POPULAR_LIST_SUCCESS, results);
+        return ApiResponseUtil.of(ApiResponseCode.WEEKLY_POPULAR_LIST_SUCCESS, results);
     }
 
     @GetMapping("/recent-book-list")
-    public ResponseEntity<ApiResponse> getRecentBooks() {
+    public ResponseEntity<ApiResponseUtil> getRecentBooks() {
         log.info("------------------------------api recent book list------------------------------");
         List<RecentBooksDto> results = bookService.getRecentBooks();
-        return ApiResponse.of(ApiResponseCode.RECENT_BOOK_LIST_SUCCESS, results);
+        return ApiResponseUtil.of(ApiResponseCode.RECENT_BOOK_LIST_SUCCESS, results);
     }
 
 }

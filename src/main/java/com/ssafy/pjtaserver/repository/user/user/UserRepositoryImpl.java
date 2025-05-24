@@ -1,8 +1,11 @@
 package com.ssafy.pjtaserver.repository.user.user;
 
+import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.pjtaserver.domain.user.User;
 import lombok.RequiredArgsConstructor;
+
+import java.util.List;
 
 import static com.ssafy.pjtaserver.domain.user.QUser.user;
 

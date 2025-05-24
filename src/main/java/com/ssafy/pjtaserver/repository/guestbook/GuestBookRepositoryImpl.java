@@ -6,7 +6,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.pjtaserver.dto.response.guestbook.GuestbookCondition;
 import com.ssafy.pjtaserver.dto.response.guestbook.GuestbookListDto;
 import com.ssafy.pjtaserver.dto.response.guestbook.QGuestbookListDto;
-import com.ssafy.pjtaserver.util.SortUtils;
+import com.ssafy.pjtaserver.utils.SortUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -50,7 +50,7 @@ public class GuestBookRepositoryImpl implements GuestBookQueryRepository{
     }
 
     private OrderSpecifier<?>[] getOrderSpecifiers(Pageable pageable) {
-        return SortUtils.getOrderSpecifiers(pageable, this::mapSortProperty);
+        return SortUtil.getOrderSpecifiers(pageable, this::mapSortProperty);
     }
 
     private OrderSpecifier<?> mapSortProperty(String property, boolean isAscending) {
