@@ -8,7 +8,7 @@ import com.ssafy.pjtaserver.domain.user.User;
 import com.ssafy.pjtaserver.dto.request.user.FollowListDto;
 import com.ssafy.pjtaserver.dto.request.user.FollowUserSearchCondition;
 import com.ssafy.pjtaserver.dto.request.user.QFollowListDto;
-import com.ssafy.pjtaserver.util.SortUtils;
+import com.ssafy.pjtaserver.utils.SortUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -117,7 +117,7 @@ public class FollowRepositoryImpl implements FollowQueryRepository{
     }
 
     private OrderSpecifier<?>[] getOrderFollowerSpecifiers(Pageable pageable) {
-        return SortUtils.getOrderSpecifiers(pageable, this::mapSortFollowerProperty);
+        return SortUtil.getOrderSpecifiers(pageable, this::mapSortFollowerProperty);
     }
 
     // 정렬 조건정의
@@ -130,7 +130,7 @@ public class FollowRepositoryImpl implements FollowQueryRepository{
     }
 
     private OrderSpecifier<?>[] getOrderFollowingSpecifiers(Pageable pageable) {
-        return SortUtils.getOrderSpecifiers(pageable, this::mapSortFollowingProperty);
+        return SortUtil.getOrderSpecifiers(pageable, this::mapSortFollowingProperty);
     }
 
     // 정렬 조건정의

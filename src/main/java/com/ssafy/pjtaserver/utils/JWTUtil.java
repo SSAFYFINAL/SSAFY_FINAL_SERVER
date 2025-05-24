@@ -1,4 +1,4 @@
-package com.ssafy.pjtaserver.util;
+package com.ssafy.pjtaserver.utils;
 
 import com.ssafy.pjtaserver.exception.CustomJWTException;
 import io.jsonwebtoken.*;

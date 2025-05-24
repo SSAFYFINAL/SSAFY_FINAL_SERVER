@@ -9,7 +9,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.pjtaserver.dto.request.book.BookInfoSearchCondition;
 import com.ssafy.pjtaserver.dto.request.book.BookInfoSearchDto;
 import com.ssafy.pjtaserver.dto.request.book.QBookInfoSearchDto;
-import com.ssafy.pjtaserver.util.SortUtils;
+import com.ssafy.pjtaserver.utils.SortUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -106,7 +106,7 @@ public class FavoriteRepositoryImpl implements FavoriteQueryRepository{
     }
 
     private OrderSpecifier<?>[] getOrderSpecifiers(Pageable pageable) {
-        return SortUtils.getOrderSpecifiers(pageable, this::mapSortProperty);
+        return SortUtil.getOrderSpecifiers(pageable, this::mapSortProperty);
     }
 
     // 정렬 조건정의

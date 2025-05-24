@@ -7,7 +7,7 @@ import com.ssafy.pjtaserver.dto.response.guestbook.GuestbookCondition;
 import com.ssafy.pjtaserver.dto.response.guestbook.GuestbookListDto;
 import com.ssafy.pjtaserver.enums.ApiResponseCode;
 import com.ssafy.pjtaserver.service.guestbook.GuestBookService;
-import com.ssafy.pjtaserver.util.ApiResponse;
+import com.ssafy.pjtaserver.utils.ApiResponseUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +29,7 @@ public class ApiAuthGuestBookController {
      *  ownerId 방명록의 주인은 writer가 방문한 마이페이지의 주인이 된다.
      */
     @PostMapping("/write")
-    public ResponseEntity<ApiResponse> writeGuestBook(@AuthenticationPrincipal UserDetails userDetails, @Valid @RequestBody GuestBookWriteDto guestBookWriteDto) {
+    public ResponseEntity<ApiResponseUtil> writeGuestBook(@AuthenticationPrincipal UserDetails userDetails, @Valid @RequestBody GuestBookWriteDto guestBookWriteDto) {
         log.info("------------------------------api guestbook write------------------------------");
         String userLoginId = userDetails.getUsername();
         guestBookWriteDto.setWriterId(userLoginId);
@@ -37,43 +37,43 @@ public class ApiAuthGuestBookController {
         boolean result = guestBookService.writeGuestBook(guestBookWriteDto);
 
         if(!result) {
-            return ApiResponse.of(ApiResponseCode.GUESTBOOK_WRITE_FAILED,false);
+            return ApiResponseUtil.of(ApiResponseCode.GUESTBOOK_WRITE_FAILED,false);
         }
-        return ApiResponse.of(ApiResponseCode.GUESTBOOK_WRITE_SUCCESS, true);
+        return ApiResponseUtil.of(ApiResponseCode.GUESTBOOK_WRITE_SUCCESS, true);
     }
 
     @PostMapping("/list/{ownerId}")
-    public ResponseEntity<ApiResponse> getGuestBookList(Pageable pageable, @RequestBody GuestbookCondition condition, @PathVariable("ownerId") Long ownerId) {
+    public ResponseEntity<ApiResponseUtil> getGuestBookList(Pageable pageable, @RequestBody GuestbookCondition condition, @PathVariable("ownerId") Long ownerId) {
         log.info("------------------------------api guestbook list------------------------------");
         PageResponseDto<GuestbookListDto> results = guestBookService.searchGuestbookPageComplex(condition, pageable, ownerId);
-        return ApiResponse.of(ApiResponseCode.GUESTBOOK_LIST_SUCCESS, results);
+        return ApiResponseUtil.of(ApiResponseCode.GUESTBOOK_LIST_SUCCESS, results);
     }
 
     @DeleteMapping("/delete/{guestBookId}")
-    public ResponseEntity<ApiResponse> deleteGuestBook(@AuthenticationPrincipal UserDetails userDetails, @PathVariable String guestBookId) {
+    public ResponseEntity<ApiResponseUtil> deleteGuestBook(@AuthenticationPrincipal UserDetails userDetails, @PathVariable String guestBookId) {
         log.info("------------------------------api guestbook delete------------------------------");
         String userLoginId = userDetails.getUsername();
 
         boolean result = guestBookService.deleteGuestBook(userLoginId, Long.parseLong(guestBookId));
 
         if (!result) {
-            return ApiResponse.of(ApiResponseCode.GUESTBOOK_DELETE_FAILED, false);
+            return ApiResponseUtil.of(ApiResponseCode.GUESTBOOK_DELETE_FAILED, false);
         }
-        return ApiResponse.of(ApiResponseCode.GUESTBOOK_DELETE_SUCCESS, true);
+        return ApiResponseUtil.of(ApiResponseCode.GUESTBOOK_DELETE_SUCCESS, true);
     }
 
     @PutMapping("/update/{guestBookId}")
-    public ResponseEntity<ApiResponse> updateGuestBook(@AuthenticationPrincipal UserDetails userDetails,
-                                                       @PathVariable String guestBookId,
-                                                       @Valid @RequestBody GuestBookUpdateDto guestBookUpdateDto) {
+    public ResponseEntity<ApiResponseUtil> updateGuestBook(@AuthenticationPrincipal UserDetails userDetails,
+                                                           @PathVariable String guestBookId,
+                                                           @Valid @RequestBody GuestBookUpdateDto guestBookUpdateDto) {
         log.info("------------------------------api guestbook update------------------------------");
         String userLoginId = userDetails.getUsername();
         boolean result = guestBookService.updateGuestBook(userLoginId, Long.parseLong(guestBookId), guestBookUpdateDto.getContent());
 
         if (!result) {
-            return ApiResponse.of(ApiResponseCode.GUESTBOOK_UPDATE_FAILED, false);
+            return ApiResponseUtil.of(ApiResponseCode.GUESTBOOK_UPDATE_FAILED, false);
         }
-        return ApiResponse.of(ApiResponseCode.GUESTBOOK_UPDATE_SUCCESS, true);
+        return ApiResponseUtil.of(ApiResponseCode.GUESTBOOK_UPDATE_SUCCESS, true);
     }
 
 }

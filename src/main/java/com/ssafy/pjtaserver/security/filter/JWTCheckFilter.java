@@ -3,8 +3,8 @@ package com.ssafy.pjtaserver.security.filter;
 import com.google.gson.Gson;
 import com.ssafy.pjtaserver.dto.request.user.UserLoginDto;
 import com.ssafy.pjtaserver.enums.ApiResponseCode;
-import com.ssafy.pjtaserver.util.ApiResponse;
-import com.ssafy.pjtaserver.util.JWTUtil;
+import com.ssafy.pjtaserver.utils.ApiResponseUtil;
+import com.ssafy.pjtaserver.utils.JWTUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -114,8 +114,8 @@ public class JWTCheckFilter extends OncePerRequestFilter {
         response.setStatus(HttpStatus.OK.value());
         response.setContentType("application/json; charset=UTF-8");
 
-        ApiResponse apiResponse = ApiResponse.of(apiResponseCode,apiResponseCode.getMessage()).getBody();
-        String json = new Gson().toJson(apiResponse);
+        ApiResponseUtil apiResponseUtil = ApiResponseUtil.of(apiResponseCode,apiResponseCode.getMessage()).getBody();
+        String json = new Gson().toJson(apiResponseUtil);
 
         PrintWriter out = response.getWriter();
         out.println(json);

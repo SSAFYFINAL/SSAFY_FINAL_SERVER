@@ -6,7 +6,7 @@ import com.ssafy.pjtaserver.dto.request.book.BookInfoSearchDto;
 import com.ssafy.pjtaserver.dto.response.book.PageResponseDto;
 import com.ssafy.pjtaserver.enums.ApiResponseCode;
 import com.ssafy.pjtaserver.service.book.BookService;
-import com.ssafy.pjtaserver.util.ApiResponse;
+import com.ssafy.pjtaserver.utils.ApiResponseUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -22,21 +22,21 @@ public class ApiPublicBookController {
     private final BookService bookService;
 
     @PostMapping("/search/list")
-    public ResponseEntity<ApiResponse> searchBookList(@RequestBody BookInfoSearchCondition condition,
-            Pageable pageable) {
+    public ResponseEntity<ApiResponseUtil> searchBookList(@RequestBody BookInfoSearchCondition condition,
+                                                          Pageable pageable) {
         log.info("------------------------------api search book list------------------------------");
 
         PageResponseDto<BookInfoSearchDto> results = bookService.searchPageComplex(condition, pageable);
 
-        return ApiResponse.of(ApiResponseCode.SUCCESS, results);
+        return ApiResponseUtil.of(ApiResponseCode.SUCCESS, results);
     }
 
     @GetMapping("/details")
-    public ResponseEntity<ApiResponse> getBookInfoDetails(@RequestParam Long bookInfoId) {
+    public ResponseEntity<ApiResponseUtil> getBookInfoDetails(@RequestParam Long bookInfoId) {
         log.info("------------------------------api is book available for checkout------------------------------");
         BookDetailDto results = bookService.getDetail(bookInfoId, java.util.Optional.empty());
         log.info("results : {}", results);
 
-        return ApiResponse.of(ApiResponseCode.SUCCESS, results);
+        return ApiResponseUtil.of(ApiResponseCode.SUCCESS, results);
     }
 }

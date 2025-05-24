@@ -1,7 +1,7 @@
 package com.ssafy.pjtaserver.security.handler;
 
 import com.google.gson.Gson;
-import com.ssafy.pjtaserver.util.ApiResponse;
+import com.ssafy.pjtaserver.utils.ApiResponseUtil;
 import com.ssafy.pjtaserver.enums.ApiResponseCode;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,7 +22,7 @@ public class ApiLoginFailHandler implements AuthenticationFailureHandler {
         log.info("로그인 실패 : " + exception);
 
         Gson gson = new Gson();
-        String jsonStr = gson.toJson(ApiResponse.of(ApiResponseCode.AUTHENTICATION_FAILED));
+        String jsonStr = gson.toJson(ApiResponseUtil.of(ApiResponseCode.AUTHENTICATION_FAILED));
         response.setContentType("application/json; charset=UTF-8");
         PrintWriter printWriter = response.getWriter();
         printWriter.println(jsonStr);

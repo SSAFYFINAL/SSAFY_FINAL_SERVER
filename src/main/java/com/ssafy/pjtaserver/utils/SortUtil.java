@@ -1,4 +1,4 @@
-package com.ssafy.pjtaserver.util;
+package com.ssafy.pjtaserver.utils;
 
 import com.querydsl.core.types.OrderSpecifier;
 import lombok.extern.slf4j.Slf4j;
@@ -7,13 +7,11 @@ import org.springframework.data.domain.Pageable;
 import java.util.Objects;
 import java.util.function.BiFunction;
 
-import static com.ssafy.pjtaserver.domain.book.QBookInfo.bookInfo;
-
 @Slf4j
-public class SortUtils {
+public class SortUtil {
 
 
-    private SortUtils() {
+    private SortUtil() {
     }
 
     /**

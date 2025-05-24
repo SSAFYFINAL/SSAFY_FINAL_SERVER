@@ -2,6 +2,7 @@ package com.ssafy.pjtaserver.service.user;
 
 import com.ssafy.pjtaserver.domain.user.User;
 import com.ssafy.pjtaserver.dto.request.user.*;
+import com.ssafy.pjtaserver.dto.response.user.RecommendUserDto;
 import com.ssafy.pjtaserver.enums.SocialLogin;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.ServletException;
@@ -9,9 +10,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.stream.Collectors;
 
-public interface UserService {
+public interface UserManagementService {
     // 로그인 회원 인증 서비스
     void authenticateAndRespond(UserLoginDto userLoginDto, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException;
 

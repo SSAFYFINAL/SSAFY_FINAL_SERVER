@@ -6,7 +6,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.pjtaserver.dto.request.book.BookInfoSearchCondition;
 import com.ssafy.pjtaserver.dto.response.book.CheckoutHistoryDto;
 import com.ssafy.pjtaserver.dto.response.book.QCheckoutHistoryDto;
-import com.ssafy.pjtaserver.util.SortUtils;
+import com.ssafy.pjtaserver.utils.SortUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -55,7 +55,7 @@ public class CheckoutRepositoryImpl implements CheckoutQueryRepository {
     }
 
     private OrderSpecifier<?>[] getOrderSpecifiers(Pageable pageable) {
-        return SortUtils.getOrderSpecifiers(pageable, this::mapSortProperty);
+        return SortUtil.getOrderSpecifiers(pageable, this::mapSortProperty);
     }
 
     // 정렬 조건정의

@@ -1,4 +1,4 @@
-package com.ssafy.pjtaserver.service.user;
+package com.ssafy.pjtaserver.service.user.impl;
 
 import com.ssafy.pjtaserver.domain.user.Follow;
 import com.ssafy.pjtaserver.domain.user.User;
@@ -7,6 +7,7 @@ import com.ssafy.pjtaserver.dto.request.user.FollowUserSearchCondition;
 import com.ssafy.pjtaserver.dto.response.book.PageResponseDto;
 import com.ssafy.pjtaserver.repository.user.follow.FollowRepository;
 import com.ssafy.pjtaserver.repository.user.user.UserRepository;
+import com.ssafy.pjtaserver.service.user.FollowService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
