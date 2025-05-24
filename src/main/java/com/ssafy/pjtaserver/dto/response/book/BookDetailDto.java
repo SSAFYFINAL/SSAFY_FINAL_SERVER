@@ -20,5 +20,5 @@ public class BookDetailDto {
     private String bookImgPath;
     private String seriesName;
     private String description;
-    private Category categoryName;
+    private String categoryName;
 }
