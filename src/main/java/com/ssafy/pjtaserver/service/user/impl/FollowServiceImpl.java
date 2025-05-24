@@ -25,7 +25,7 @@ public class FollowServiceImpl implements FollowService {
     private final UserRepository userRepository;
 
     @Override
-    public PageResponseDto<FollowListDto> getFollowList(String ownerId,
+    public PageResponseDto<FollowListDto> getFollowList(Long ownerId,
                                                         FollowUserSearchCondition condition,
                                                         Pageable pageable,
                                                         String type) {
@@ -55,7 +55,7 @@ public class FollowServiceImpl implements FollowService {
 
     @Override
     @Transactional
-    public boolean addFollowRelation(String ownerId, String targetId) {
+    public boolean addFollowRelation(String ownerId, Long targetId) {
         // 사용자 조회
         User owner = getUser(ownerId);
         User target = getUser(targetId);
@@ -91,6 +91,11 @@ public class FollowServiceImpl implements FollowService {
     }
 
     // 주어진 ID로 사용자 조회
+    private User getUser(Long userId) {
+        return userRepository.findUserById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("해당 아이디의 유저를 찾을 수 없습니다: " + userId));
+    }
+
     private User getUser(String userLoginId) {
         return userRepository.findByUserLoginId(userLoginId)
                 .orElseThrow(() -> new EntityNotFoundException("해당 아이디의 유저를 찾을 수 없습니다: " + userLoginId));

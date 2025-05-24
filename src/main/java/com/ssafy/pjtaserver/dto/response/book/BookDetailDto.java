@@ -1,6 +1,5 @@
 package com.ssafy.pjtaserver.dto.response.book;
 
-import com.ssafy.pjtaserver.domain.book.Category;
 import lombok.Builder;
 import lombok.Data;
 
