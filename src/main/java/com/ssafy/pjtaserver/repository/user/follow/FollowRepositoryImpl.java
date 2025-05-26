@@ -40,9 +40,9 @@ public class FollowRepositoryImpl implements FollowQueryRepository{
                 .join(follow.following, user)
                 .where(
                         follow.followOwner.eq(ownerId),
-                        follow.followOwner.isNotNull(),
-                        usernameMainEq(ownerId.getUsernameMain(), FOLLOWING),
-                        userLoginIdEq(ownerId.getUserLoginId(), FOLLOWING)
+                        follow.followOwner.isNotNull()
+//                        usernameMainEq(ownerId.getUsernameMain(), FOLLOWING),
+//                        userLoginIdEq(ownerId.getUserLoginId(), FOLLOWING)
                 )
                 .orderBy(getOrderFollowingSpecifiers(pageable))
                 .offset(pageable.getOffset())
@@ -55,9 +55,9 @@ public class FollowRepositoryImpl implements FollowQueryRepository{
                 .join(follow.following, user)
                 .where(
                         follow.followOwner.eq(ownerId),
-                        follow.followOwner.isNotNull(),
-                        usernameMainEq(ownerId.getUsernameMain(), FOLLOWING),
-                        userLoginIdEq(ownerId.getUserLoginId(), FOLLOWING)
+                        follow.followOwner.isNotNull()
+//                        usernameMainEq(ownerId.getUsernameMain(), FOLLOWING),
+//                        userLoginIdEq(ownerId.getUserLoginId(), FOLLOWING)
                 );
         return PageableExecutionUtils.getPage(results, pageable, countQuery::fetchOne);
     }
@@ -67,19 +67,19 @@ public class FollowRepositoryImpl implements FollowQueryRepository{
         String FOLLOWER = "follower";
         List<FollowListDto> results = jpaQueryFactory
                 .select(new QFollowListDto(
-                        user.id,
-                        follow.followOwner.userLoginId,
-                        follow.followOwner.usernameMain,
-                        user.nickName,
-                        follow.followOwner.profileImgPath
+                        follow.follower.id,
+                        follow.follower.userLoginId,
+                        follow.follower.usernameMain,
+                        follow.follower.nickName,
+                        follow.follower.profileImgPath
                 ))
                 .from(follow)
-                .join(follow.followOwner, user)
+                .join(follow.follower, user)
                 .where(
-                        follow.follower.eq(follower),
-                        follow.follower.isNotNull(),
-                        usernameMainEq(follower.getUsernameMain(), FOLLOWER),
-                        userLoginIdEq(follower.getUserLoginId(), FOLLOWER)
+                        follow.followOwner.eq(follower),
+                        follow.follower.isNotNull()
+//                        usernameMainEq(follower.getUsernameMain(), FOLLOWER),
+//                        userLoginIdEq(follower.getUserLoginId(), FOLLOWER)
                 )
                 .orderBy(getOrderFollowerSpecifiers(pageable))
                 .offset(pageable.getOffset())
@@ -92,9 +92,9 @@ public class FollowRepositoryImpl implements FollowQueryRepository{
                 .join(follow.followOwner, user)
                 .where(
                         follow.follower.eq(follower),
-                        follow.follower.isNotNull(),
-                        usernameMainEq(follower.getUsernameMain(), FOLLOWER),
-                        userLoginIdEq(follower.getUserLoginId(), FOLLOWER)
+                        follow.follower.isNotNull()
+//                        usernameMainEq(follower.getUsernameMain(), FOLLOWER),
+//                        userLoginIdEq(follower.getUserLoginId(), FOLLOWER)
                 );
         return PageableExecutionUtils.getPage(results, pageable, countQuery::fetchOne);
     }

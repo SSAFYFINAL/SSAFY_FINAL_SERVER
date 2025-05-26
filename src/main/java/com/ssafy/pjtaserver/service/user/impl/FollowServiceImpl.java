@@ -5,11 +5,13 @@ import com.ssafy.pjtaserver.domain.user.User;
 import com.ssafy.pjtaserver.dto.request.user.FollowListDto;
 import com.ssafy.pjtaserver.dto.request.user.FollowUserSearchCondition;
 import com.ssafy.pjtaserver.dto.response.book.PageResponseDto;
+import com.ssafy.pjtaserver.enums.SearchFollowType;
 import com.ssafy.pjtaserver.repository.user.follow.FollowRepository;
 import com.ssafy.pjtaserver.repository.user.user.UserRepository;
 import com.ssafy.pjtaserver.service.user.FollowService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -19,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class FollowServiceImpl implements FollowService {
 
     private final FollowRepository followRepository;
@@ -30,17 +33,18 @@ public class FollowServiceImpl implements FollowService {
                                                         Pageable pageable,
                                                         String type) {
         User user = getUser(ownerId);
-
         // 정렬 및 페이징 처리
         Sort sort = Sort.by(Sort.Direction.fromString(condition.getOrderDirection()), condition.getOrderBy());
         Pageable updatedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
 
         Page<FollowListDto> results;
 
-        // 팔로워 또는 팔로잉 조회
-        if ("follower".equals(type)) {
+        // 필요시 type을 trim()으로 처리하고 equalsIgnoreCase()를 추가
+        if (type.trim().equalsIgnoreCase(SearchFollowType.FOLLOWER.getType())) {
+            log.info("type = {} ", "follower");
             results = followRepository.selectFollowers(user, type, condition, updatedPageable);
         } else {
+            log.info("type = {} ", "following");
             results = followRepository.selectFollowing(user, type, condition, updatedPageable);
         }
 
