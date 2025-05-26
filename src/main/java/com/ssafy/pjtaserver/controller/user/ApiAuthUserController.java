@@ -106,7 +106,7 @@ public class ApiAuthUserController {
     @GetMapping("/recommend/similar-user")
     public ResponseEntity<ApiResponseUtil> recommendSimilarUser(@AuthenticationPrincipal UserDetails userDetails) {
         log.info("------------------------------api recommend similar user------------------------------");
-        List<RecommendUserDto> results = userRecommendationService.recommendSimilarUser(userDetails.getUsername(), 10);
+        List<RecommendUserDto> results = userRecommendationService.recommendSimilarUser(userDetails.getUsername(), 3);
         log.info("results : {}", results);
         return ApiResponseUtil.of(ApiResponseCode.SUCCESS, results);
     }
