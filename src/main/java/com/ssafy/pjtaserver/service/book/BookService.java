@@ -19,4 +19,5 @@ public interface BookService {
     List<WeeklyPopularBookDto> getWeeklyPopular();
     List<RecentBooksDto> getRecentBooks();
     PageResponseDto<CheckoutHistoryDto> getCheckoutHistory(BookInfoSearchCondition condition ,Long userId, Pageable updatedPageable);
+    List<CheckOutRankingDto> getCheckOutRanking();
 }
