@@ -1,16 +1,16 @@
-package com.ssafy.pjtaserver.repository.book.info;
+package com.ssafy.pjtaserver.repository.book.impl;
 
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.pjtaserver.domain.book.*;
-import com.ssafy.pjtaserver.domain.user.QFavoriteBookList;
 import com.ssafy.pjtaserver.dto.request.book.BookInfoSearchCondition;
 import com.ssafy.pjtaserver.dto.request.book.BookInfoSearchDto;
 import com.ssafy.pjtaserver.dto.request.book.QBookInfoSearchDto;
 import com.ssafy.pjtaserver.dto.response.book.BookInfoDto;
 import com.ssafy.pjtaserver.dto.response.book.QBookInfoDto;
+import com.ssafy.pjtaserver.repository.book.query.BookInfoQueryRepository;
 import com.ssafy.pjtaserver.utils.SortUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +23,6 @@ import java.util.List;
 import static com.ssafy.pjtaserver.domain.book.QBookCheckout.bookCheckout;
 import static com.ssafy.pjtaserver.domain.book.QBookInfo.bookInfo;
 import static com.ssafy.pjtaserver.domain.book.QBookInstance.bookInstance;
-import static com.ssafy.pjtaserver.domain.book.QCategory.category;
 import static com.ssafy.pjtaserver.domain.user.QFavoriteBookList.favoriteBookList;
 import static org.springframework.util.StringUtils.hasText;
 

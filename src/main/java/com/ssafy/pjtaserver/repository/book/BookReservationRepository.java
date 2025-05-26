@@ -1,4 +1,4 @@
-package com.ssafy.pjtaserver.repository.book.reservation;
+package com.ssafy.pjtaserver.repository.book;
 
 import com.ssafy.pjtaserver.domain.book.BookInfo;
 import com.ssafy.pjtaserver.domain.book.BookReservation;

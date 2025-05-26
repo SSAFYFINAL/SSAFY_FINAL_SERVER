@@ -2,7 +2,7 @@ package com.ssafy.pjtaserver.service.user.impl;
 
 import com.ssafy.pjtaserver.domain.user.User;
 import com.ssafy.pjtaserver.dto.response.user.RecommendUserDto;
-import com.ssafy.pjtaserver.repository.user.user.UserRepository;
+import com.ssafy.pjtaserver.repository.user.UserRepository;
 import com.ssafy.pjtaserver.service.user.UserRecommendationService;
 import com.ssafy.pjtaserver.utils.SimilarityCalculatorUtil;
 import lombok.RequiredArgsConstructor;

@@ -1,4 +1,4 @@
-package com.ssafy.pjtaserver.repository.book.checkout;
+package com.ssafy.pjtaserver.repository.book.query;
 
 import com.ssafy.pjtaserver.dto.request.book.BookInfoSearchCondition;
 import com.ssafy.pjtaserver.dto.response.book.CheckOutRankingDto;

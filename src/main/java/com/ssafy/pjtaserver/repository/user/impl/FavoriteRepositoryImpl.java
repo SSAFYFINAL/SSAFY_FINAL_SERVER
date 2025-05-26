@@ -1,4 +1,4 @@
-package com.ssafy.pjtaserver.repository.user.favorite;
+package com.ssafy.pjtaserver.repository.user.impl;
 
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.OrderSpecifier;
@@ -9,6 +9,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.pjtaserver.dto.request.book.BookInfoSearchCondition;
 import com.ssafy.pjtaserver.dto.request.book.BookInfoSearchDto;
 import com.ssafy.pjtaserver.dto.request.book.QBookInfoSearchDto;
+import com.ssafy.pjtaserver.repository.user.query.FavoriteQueryRepository;
 import com.ssafy.pjtaserver.utils.SortUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +26,7 @@ import static org.springframework.util.StringUtils.hasText;
 
 @Slf4j
 @RequiredArgsConstructor
-public class FavoriteRepositoryImpl implements FavoriteQueryRepository{
+public class FavoriteRepositoryImpl implements FavoriteQueryRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
 

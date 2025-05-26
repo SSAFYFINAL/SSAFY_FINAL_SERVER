@@ -7,7 +7,7 @@ import com.ssafy.pjtaserver.dto.response.book.PageResponseDto;
 import com.ssafy.pjtaserver.dto.response.guestbook.GuestbookCondition;
 import com.ssafy.pjtaserver.dto.response.guestbook.GuestbookListDto;
 import com.ssafy.pjtaserver.repository.guestbook.GuestBookRepository;
-import com.ssafy.pjtaserver.repository.user.user.UserRepository;
+import com.ssafy.pjtaserver.repository.user.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

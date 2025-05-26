@@ -1,4 +1,4 @@
-package com.ssafy.pjtaserver.repository.user.follow;
+package com.ssafy.pjtaserver.repository.user.impl;
 
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -8,6 +8,7 @@ import com.ssafy.pjtaserver.domain.user.User;
 import com.ssafy.pjtaserver.dto.request.user.FollowListDto;
 import com.ssafy.pjtaserver.dto.request.user.FollowUserSearchCondition;
 import com.ssafy.pjtaserver.dto.request.user.QFollowListDto;
+import com.ssafy.pjtaserver.repository.user.query.FollowQueryRepository;
 import com.ssafy.pjtaserver.utils.SortUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -21,7 +22,7 @@ import static com.ssafy.pjtaserver.domain.user.QUser.user;
 import static org.springframework.util.StringUtils.hasText;
 
 @RequiredArgsConstructor
-public class FollowRepositoryImpl implements FollowQueryRepository{
+public class FollowRepositoryImpl implements FollowQueryRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
 

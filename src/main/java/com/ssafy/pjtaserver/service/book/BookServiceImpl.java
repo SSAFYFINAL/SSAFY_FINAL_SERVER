@@ -14,12 +14,12 @@ import com.ssafy.pjtaserver.dto.response.user.WeeklyPopularBookDto;
 import com.ssafy.pjtaserver.enums.BookCheckoutStatus;
 import com.ssafy.pjtaserver.enums.BookResponseType;
 import com.ssafy.pjtaserver.enums.ReservationStatus;
-import com.ssafy.pjtaserver.repository.book.checkout.CheckoutRepository;
-import com.ssafy.pjtaserver.repository.book.info.BookInfoRepository;
-import com.ssafy.pjtaserver.repository.book.instance.BookInstanceRepository;
-import com.ssafy.pjtaserver.repository.book.reservation.BookReservationRepository;
-import com.ssafy.pjtaserver.repository.user.favorite.FavoriteRepository;
-import com.ssafy.pjtaserver.repository.user.user.UserRepository;
+import com.ssafy.pjtaserver.repository.book.CheckoutRepository;
+import com.ssafy.pjtaserver.repository.book.BookInfoRepository;
+import com.ssafy.pjtaserver.repository.book.BookInstanceRepository;
+import com.ssafy.pjtaserver.repository.book.BookReservationRepository;
+import com.ssafy.pjtaserver.repository.user.FavoriteRepository;
+import com.ssafy.pjtaserver.repository.user.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -249,15 +249,19 @@ public class BookServiceImpl implements BookService {
     @Override
     public List<BookInfoDto> userLikeBookList(String userLoginId,int n) {
         List<BookInfoDto> likeBookList = bookInfoRepository.searchBookListWithCategory(userLoginId);
-        if (likeBookList.size() <= n) {
-            return likeBookList;
+
+        if (likeBookList.size() != n) {
+            List<BookInfoDto> bookList = bookInfoRepository.searchBookList();
+            Collections.shuffle(bookList);
+            return bookList.subList(0, n);
         }
 
         Collections.shuffle(likeBookList);
+
         return likeBookList.subList(0, n);
     }
 
-    public List<WeeklyPopularBookDto> convertTuplesToDtos(List<Tuple> tuples) {
+    private List<WeeklyPopularBookDto> convertTuplesToDtos(List<Tuple> tuples) {
         return IntStream.range(0, tuples.size())
                 .mapToObj(i -> {
                     Tuple tuple = tuples.get(i);
