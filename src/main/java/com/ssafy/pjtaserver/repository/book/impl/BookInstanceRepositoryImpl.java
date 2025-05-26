@@ -1,14 +1,15 @@
-package com.ssafy.pjtaserver.repository.book.instance;
+package com.ssafy.pjtaserver.repository.book.impl;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.pjtaserver.enums.BookCheckoutStatus;
+import com.ssafy.pjtaserver.repository.book.query.BookInstanceQueryRepository;
 import lombok.RequiredArgsConstructor;
 
 import static com.ssafy.pjtaserver.domain.book.QBookInfo.bookInfo;
 import static com.ssafy.pjtaserver.domain.book.QBookInstance.bookInstance;
 
 @RequiredArgsConstructor
-public class BookInstanceRepositoryImpl implements BookInstanceQueryRepository{
+public class BookInstanceRepositoryImpl implements BookInstanceQueryRepository {
 
     private final JPAQueryFactory queryFactory;
 

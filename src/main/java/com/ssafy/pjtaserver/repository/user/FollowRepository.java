@@ -1,7 +1,8 @@
-package com.ssafy.pjtaserver.repository.user.follow;
+package com.ssafy.pjtaserver.repository.user;
 
 import com.ssafy.pjtaserver.domain.user.Follow;
 import com.ssafy.pjtaserver.domain.user.User;
+import com.ssafy.pjtaserver.repository.user.query.FollowQueryRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

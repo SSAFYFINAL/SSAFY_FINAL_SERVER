@@ -1,7 +1,6 @@
-package com.ssafy.pjtaserver.repository.book.checkout;
+package com.ssafy.pjtaserver.repository.book.impl;
 
 import com.querydsl.core.types.OrderSpecifier;
-import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.pjtaserver.dto.request.book.BookInfoSearchCondition;
@@ -9,6 +8,7 @@ import com.ssafy.pjtaserver.dto.response.book.CheckOutRankingDto;
 import com.ssafy.pjtaserver.dto.response.book.CheckoutHistoryDto;
 import com.ssafy.pjtaserver.dto.response.book.QCheckOutRankingDto;
 import com.ssafy.pjtaserver.dto.response.book.QCheckoutHistoryDto;
+import com.ssafy.pjtaserver.repository.book.query.CheckoutQueryRepository;
 import com.ssafy.pjtaserver.utils.SortUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

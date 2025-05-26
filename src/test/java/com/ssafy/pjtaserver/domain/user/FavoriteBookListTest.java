@@ -1,9 +1,9 @@
 package com.ssafy.pjtaserver.domain.user;
 
 import com.ssafy.pjtaserver.domain.book.BookInfo;
-import com.ssafy.pjtaserver.repository.book.info.BookInfoRepository;
-import com.ssafy.pjtaserver.repository.user.favorite.FavoriteRepository;
-import com.ssafy.pjtaserver.repository.user.user.UserRepository;
+import com.ssafy.pjtaserver.repository.book.BookInfoRepository;
+import com.ssafy.pjtaserver.repository.user.FavoriteRepository;
+import com.ssafy.pjtaserver.repository.user.UserRepository;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

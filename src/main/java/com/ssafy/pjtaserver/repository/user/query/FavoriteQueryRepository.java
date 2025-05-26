@@ -1,4 +1,4 @@
-package com.ssafy.pjtaserver.repository.user.favorite;
+package com.ssafy.pjtaserver.repository.user.query;
 
 import com.querydsl.core.Tuple;
 import com.ssafy.pjtaserver.dto.request.book.BookInfoSearchCondition;

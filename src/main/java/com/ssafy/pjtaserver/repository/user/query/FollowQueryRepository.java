@@ -1,6 +1,5 @@
-package com.ssafy.pjtaserver.repository.user.follow;
+package com.ssafy.pjtaserver.repository.user.query;
 
-import com.ssafy.pjtaserver.domain.user.Follow;
 import com.ssafy.pjtaserver.domain.user.User;
 import com.ssafy.pjtaserver.dto.request.user.FollowListDto;
 import com.ssafy.pjtaserver.dto.request.user.FollowUserSearchCondition;

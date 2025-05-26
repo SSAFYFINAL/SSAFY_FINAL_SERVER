@@ -1,9 +1,10 @@
-package com.ssafy.pjtaserver.repository.book.instance;
+package com.ssafy.pjtaserver.repository.book;
 
 import com.ssafy.pjtaserver.domain.book.BookInfo;
 import com.ssafy.pjtaserver.domain.book.BookInstance;
 import com.ssafy.pjtaserver.domain.user.User;
 import com.ssafy.pjtaserver.enums.BookCheckoutStatus;
+import com.ssafy.pjtaserver.repository.book.query.BookInstanceQueryRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

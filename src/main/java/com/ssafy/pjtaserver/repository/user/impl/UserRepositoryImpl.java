@@ -1,16 +1,14 @@
-package com.ssafy.pjtaserver.repository.user.user;
+package com.ssafy.pjtaserver.repository.user.impl;
 
-import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.pjtaserver.domain.user.User;
+import com.ssafy.pjtaserver.repository.user.query.UserQueryRepository;
 import lombok.RequiredArgsConstructor;
-
-import java.util.List;
 
 import static com.ssafy.pjtaserver.domain.user.QUser.user;
 
 @RequiredArgsConstructor
-public class UserRepositoryImpl implements UserQueryRepository{
+public class UserRepositoryImpl implements UserQueryRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
 

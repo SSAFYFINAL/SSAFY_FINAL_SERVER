@@ -1,4 +1,4 @@
-package com.ssafy.pjtaserver.repository.book.info;
+package com.ssafy.pjtaserver.repository.book.query;
 
 import com.ssafy.pjtaserver.domain.book.BookInfo;
 import com.ssafy.pjtaserver.dto.request.book.BookInfoSearchCondition;
