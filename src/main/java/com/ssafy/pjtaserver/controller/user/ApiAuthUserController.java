@@ -4,6 +4,7 @@ import com.ssafy.pjtaserver.dto.request.user.*;
 import com.ssafy.pjtaserver.dto.response.book.PageResponseDto;
 import com.ssafy.pjtaserver.dto.response.user.RecommendUserDto;
 import com.ssafy.pjtaserver.enums.ApiResponseCode;
+import com.ssafy.pjtaserver.enums.SearchFollowType;
 import com.ssafy.pjtaserver.service.user.FollowService;
 import com.ssafy.pjtaserver.service.user.UserManagementService;
 import com.ssafy.pjtaserver.service.user.UserRecommendationService;
@@ -77,8 +78,9 @@ public class ApiAuthUserController {
                                                              Pageable pageable,
                                                              @RequestParam String type) {
         log.info("------------------------------api follow-list ------------------------------");
-        PageResponseDto<FollowListDto> followList = followService.getFollowList(targetUserId, condition, pageable, type);
 
+        PageResponseDto<FollowListDto> followList = followService.getFollowList(targetUserId, condition, pageable, type);
+        log.info("type = {}", type);
         return ApiResponseUtil.of(ApiResponseCode.SUCCESS, followList);
     }
 
