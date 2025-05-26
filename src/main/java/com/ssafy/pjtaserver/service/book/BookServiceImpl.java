@@ -31,6 +31,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.IntStream;
@@ -230,6 +231,30 @@ public class BookServiceImpl implements BookService {
     @Override
     public List<CheckOutRankingDto> getCheckOutRanking() {
         return checkoutRepository.getCheckoutRanking();
+    }
+
+    @Override
+    public List<BookInfoDto> randomBookSearch(int n) {
+        List<BookInfoDto> bookInfoList = bookInfoRepository.searchBookList();
+
+        if (bookInfoList.size() <= n) {
+            return bookInfoList;
+        }
+
+        Collections.shuffle(bookInfoList);
+
+        return bookInfoList.subList(0, n);
+    }
+
+    @Override
+    public List<BookInfoDto> userLikeBookList(String userLoginId,int n) {
+        List<BookInfoDto> likeBookList = bookInfoRepository.searchBookListWithCategory(userLoginId);
+        if (likeBookList.size() <= n) {
+            return likeBookList;
+        }
+
+        Collections.shuffle(likeBookList);
+        return likeBookList.subList(0, n);
     }
 
     public List<WeeklyPopularBookDto> convertTuplesToDtos(List<Tuple> tuples) {

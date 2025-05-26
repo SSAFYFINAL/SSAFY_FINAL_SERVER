@@ -4,10 +4,13 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.ssafy.pjtaserver.domain.book.BookInfo;
+import com.ssafy.pjtaserver.domain.book.*;
+import com.ssafy.pjtaserver.domain.user.QFavoriteBookList;
 import com.ssafy.pjtaserver.dto.request.book.BookInfoSearchCondition;
 import com.ssafy.pjtaserver.dto.request.book.BookInfoSearchDto;
 import com.ssafy.pjtaserver.dto.request.book.QBookInfoSearchDto;
+import com.ssafy.pjtaserver.dto.response.book.BookInfoDto;
+import com.ssafy.pjtaserver.dto.response.book.QBookInfoDto;
 import com.ssafy.pjtaserver.utils.SortUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +20,11 @@ import org.springframework.data.support.PageableExecutionUtils;
 
 import java.util.List;
 
+import static com.ssafy.pjtaserver.domain.book.QBookCheckout.bookCheckout;
 import static com.ssafy.pjtaserver.domain.book.QBookInfo.bookInfo;
+import static com.ssafy.pjtaserver.domain.book.QBookInstance.bookInstance;
+import static com.ssafy.pjtaserver.domain.book.QCategory.category;
+import static com.ssafy.pjtaserver.domain.user.QFavoriteBookList.favoriteBookList;
 import static org.springframework.util.StringUtils.hasText;
 
 @RequiredArgsConstructor
@@ -66,6 +73,45 @@ public class BookInfoRepositoryImpl implements BookInfoQueryRepository {
                 .from(bookInfo)
                 .orderBy(bookInfo.registryDate.desc())
                 .limit(5)
+                .fetch();
+    }
+
+    @Override
+    public List<BookInfoDto> searchBookList() {
+        return jpaQueryFactory
+                .select(new QBookInfoDto(
+                        bookInfo.id,
+                        bookInfo.title,
+                        bookInfo.authorName,
+                        bookInfo.bookImgPath
+                ))
+                .from(bookInfo)
+                .fetch();
+    }
+
+    @Override
+    public List<BookInfoDto> searchBookListWithCategory(String userLoginId) {
+        Category category = jpaQueryFactory
+                .select(QCategory.category)
+                .from(QCategory.category)
+                .leftJoin(bookInfo).on(bookInfo.categoryId.id.eq(QCategory.category.id))
+                .leftJoin(bookInstance).on(bookInstance.bookInfo.id.eq(bookInfo.id))
+                .leftJoin(bookCheckout).on(bookCheckout.bookInstance.id.eq(bookInstance.id).and(bookCheckout.user.userLoginId.eq(userLoginId)))
+                .leftJoin(favoriteBookList).on(favoriteBookList.bookInfo.id.eq(bookInfo.id).and(favoriteBookList.user.userLoginId.eq(userLoginId)))
+                .groupBy(QCategory.category.id)
+                .orderBy(bookCheckout.id.count().add(favoriteBookList.favoriteBookListId.count()).desc())
+                .limit(1)
+                .fetchOne();
+
+        return jpaQueryFactory
+                .select(new QBookInfoDto(
+                        bookInfo.id,
+                        bookInfo.title,
+                        bookInfo.authorName,
+                        bookInfo.bookImgPath
+                ))
+                .from(bookInfo)
+                .where(bookInfo.categoryId.eq(category))
                 .fetch();
     }
 

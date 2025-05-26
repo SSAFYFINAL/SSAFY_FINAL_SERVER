@@ -20,4 +20,6 @@ public interface BookService {
     List<RecentBooksDto> getRecentBooks();
     PageResponseDto<CheckoutHistoryDto> getCheckoutHistory(BookInfoSearchCondition condition ,Long userId, Pageable updatedPageable);
     List<CheckOutRankingDto> getCheckOutRanking();
+    List<BookInfoDto> randomBookSearch(int n);
+    List<BookInfoDto> userLikeBookList(String userLoginId, int n);
 }
