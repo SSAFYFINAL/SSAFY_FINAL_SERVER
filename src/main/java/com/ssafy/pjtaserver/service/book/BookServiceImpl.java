@@ -227,6 +227,11 @@ public class BookServiceImpl implements BookService {
         );
     }
 
+    @Override
+    public List<CheckOutRankingDto> getCheckOutRanking() {
+        return checkoutRepository.getCheckoutRanking();
+    }
+
     public List<WeeklyPopularBookDto> convertTuplesToDtos(List<Tuple> tuples) {
         return IntStream.range(0, tuples.size())
                 .mapToObj(i -> {

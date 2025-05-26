@@ -3,6 +3,7 @@ package com.ssafy.pjtaserver.controller.book;
 import com.ssafy.pjtaserver.dto.response.book.BookDetailDto;
 import com.ssafy.pjtaserver.dto.request.book.BookInfoSearchCondition;
 import com.ssafy.pjtaserver.dto.request.book.BookInfoSearchDto;
+import com.ssafy.pjtaserver.dto.response.book.CheckOutRankingDto;
 import com.ssafy.pjtaserver.dto.response.book.PageResponseDto;
 import com.ssafy.pjtaserver.enums.ApiResponseCode;
 import com.ssafy.pjtaserver.service.book.BookService;
@@ -12,6 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -38,5 +41,14 @@ public class ApiPublicBookController {
         log.info("results : {}", results);
 
         return ApiResponseUtil.of(ApiResponseCode.SUCCESS, results);
+    }
+
+    @GetMapping("/top-borrower")
+    public ResponseEntity<ApiResponseUtil> getTopBorrower() {
+        log.info("------------------------------api get top borrower------------------------------");
+
+        List<CheckOutRankingDto> checkOutRanking = bookService.getCheckOutRanking();
+
+        return ApiResponseUtil.of(ApiResponseCode.SUCCESS, checkOutRanking);
     }
 }
