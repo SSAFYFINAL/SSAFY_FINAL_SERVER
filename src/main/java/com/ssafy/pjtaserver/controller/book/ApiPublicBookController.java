@@ -3,6 +3,7 @@ package com.ssafy.pjtaserver.controller.book;
 import com.ssafy.pjtaserver.dto.response.book.BookDetailDto;
 import com.ssafy.pjtaserver.dto.request.book.BookInfoSearchCondition;
 import com.ssafy.pjtaserver.dto.request.book.BookInfoSearchDto;
+import com.ssafy.pjtaserver.dto.response.book.BookInfoDto;
 import com.ssafy.pjtaserver.dto.response.book.CheckOutRankingDto;
 import com.ssafy.pjtaserver.dto.response.book.PageResponseDto;
 import com.ssafy.pjtaserver.enums.ApiResponseCode;
@@ -50,5 +51,12 @@ public class ApiPublicBookController {
         List<CheckOutRankingDto> checkOutRanking = bookService.getCheckOutRanking();
 
         return ApiResponseUtil.of(ApiResponseCode.SUCCESS, checkOutRanking);
+    }
+
+    @GetMapping("/recommend-books")
+    public ResponseEntity<ApiResponseUtil> getRecommendBooks() {
+        log.info("------------------------------api get recommend books------------------------------");
+        List<BookInfoDto> result = bookService.randomBookSearch(5);
+        return ApiResponseUtil.of(ApiResponseCode.SUCCESS, result);
     }
 }

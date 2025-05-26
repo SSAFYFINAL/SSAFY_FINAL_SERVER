@@ -12,8 +12,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 import static java.util.Optional.*;
 
@@ -82,5 +85,13 @@ public class ApiAuthBookController {
         PageResponseDto<CheckoutHistoryDto> results = bookService.getCheckoutHistory(condition, userId, pageable);
 
         return ApiResponseUtil.of(ApiResponseCode.SUCCESS, results);
+    }
+
+    @GetMapping("/recommend-books")
+    public ResponseEntity<ApiResponseUtil> getRecommendBooks(@AuthenticationPrincipal UserDetails userDetails) {
+        log.info("------------------------------api get recommend books------------------------------");
+        List<BookInfoDto> likeBookList = bookService.userLikeBookList(userDetails.getUsername(),5);
+
+        return ApiResponseUtil.of(ApiResponseCode.SUCCESS, likeBookList);
     }
 }
