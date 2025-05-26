@@ -4,6 +4,7 @@ import com.ssafy.pjtaserver.domain.book.BookInstance;
 import com.ssafy.pjtaserver.domain.user.User;
 import com.ssafy.pjtaserver.dto.request.mail.MailSendDto;
 import com.ssafy.pjtaserver.dto.request.user.*;
+import com.ssafy.pjtaserver.dto.response.user.UserDetailDto;
 import com.ssafy.pjtaserver.enums.EmailType;
 import com.ssafy.pjtaserver.enums.SocialLogin;
 import com.ssafy.pjtaserver.enums.UserRole;
@@ -275,6 +276,21 @@ public class UserManagementServiceImpl implements UserManagementService {
         log.info("비밀번호 매칭 결과: {}", isMatch);
 
         return isMatch;
+    }
+
+    @Override
+    public UserDetailDto getUserDetail(Long userId) {
+        User user = userRepository.findUserById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("해당 아이디의 유저를 찾을 수 없습니다."));
+
+
+        return UserDetailDto.builder()
+                .userId(user.getId())
+                .userLoginId(user.getUserLoginId())
+                .usernameMain(user.getUsernameMain())
+                .userNickname(user.getNickName())
+                .userImgPath(user.getProfileImgPath())
+                .build();
     }
 
     @Override
