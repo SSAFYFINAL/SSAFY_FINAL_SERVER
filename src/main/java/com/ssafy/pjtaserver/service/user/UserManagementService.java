@@ -3,6 +3,7 @@ package com.ssafy.pjtaserver.service.user;
 import com.ssafy.pjtaserver.domain.user.User;
 import com.ssafy.pjtaserver.dto.request.user.*;
 import com.ssafy.pjtaserver.dto.response.user.RecommendUserDto;
+import com.ssafy.pjtaserver.dto.response.user.UserDetailDto;
 import com.ssafy.pjtaserver.enums.SocialLogin;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.ServletException;
@@ -32,6 +33,8 @@ public interface UserManagementService {
     boolean deleteUser(String userLoginId);
 
     boolean checkPw(String userLoginId, String userPwd);
+
+    UserDetailDto getUserDetail(Long userId);
 
     // user 엔티티를 userDto로 변환시켜주는 로직
     default UserLoginDto entityToDto(User user) {

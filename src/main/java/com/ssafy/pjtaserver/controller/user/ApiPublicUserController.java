@@ -4,6 +4,7 @@ import com.ssafy.pjtaserver.dto.request.user.UserFindIdDto;
 import com.ssafy.pjtaserver.dto.request.user.UserLoginDto;
 import com.ssafy.pjtaserver.dto.request.user.UserJoinDto;
 import com.ssafy.pjtaserver.dto.request.user.UserResetPwDto;
+import com.ssafy.pjtaserver.dto.response.user.UserDetailDto;
 import com.ssafy.pjtaserver.service.user.UserManagementService;
 import com.ssafy.pjtaserver.utils.JWTUtil;
 import com.ssafy.pjtaserver.enums.SocialLogin;
@@ -129,5 +130,12 @@ public class ApiPublicUserController {
             return ApiResponseUtil.of(ApiResponseCode.USER_DELETE_FAIL, false);
         }
         return ApiResponseUtil.of(ApiResponseCode.USER_DELETE_SUCCESS, true);
+    }
+
+    @GetMapping("/detail")
+    public ResponseEntity<ApiResponseUtil> getUserDetail(@RequestParam Long userId) {
+        log.info("------------------------------api user detail------------------------------");
+        UserDetailDto userDetail = userManagementService.getUserDetail(userId);
+        return ApiResponseUtil.of(ApiResponseCode.SUCCESS, userDetail);
     }
 }
