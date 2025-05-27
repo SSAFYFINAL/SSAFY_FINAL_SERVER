@@ -47,7 +47,7 @@ public class ApiPublicUserController {
      */
     // 카카오 소셔
     @GetMapping("/login/kakao")
-    public ResponseEntity<ApiResponseUtil> getMemberFromKakao(String accessToken) throws MessagingException {
+    public ResponseEntity<ApiResponseUtil> getMemberFromKakao(@RequestParam String accessToken) throws MessagingException {
         log.info("------------------------------api kakao data------------------------------");
         log.info("getMemberFromKakao : {}", accessToken);
         log.info("------------------------------api kakao data------------------------------");
@@ -68,7 +68,7 @@ public class ApiPublicUserController {
     }
 
     @GetMapping("/login/google")
-    public ResponseEntity<ApiResponseUtil> getMemberFromGoogle(String accessToken) throws MessagingException {
+    public ResponseEntity<ApiResponseUtil> getMemberFromGoogle(@RequestParam String accessToken) throws MessagingException {
         log.info("------------------------------api google data------------------------------");
         log.info("getMemberFromGoogle : {}", accessToken);
         log.info("------------------------------api google data------------------------------");

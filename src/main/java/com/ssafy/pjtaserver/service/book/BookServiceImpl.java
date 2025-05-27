@@ -145,34 +145,36 @@ public class BookServiceImpl implements BookService {
     @Transactional
     @Override
     public BookResponseType checkoutAndReservationManager(String userLoginId, Long bookInfoId) {
-        BookInstance bookInstance = searchCheckoutAvailable(bookInfoId);
         BookInfo bookInfo = getBookInfo(bookInfoId);
         User user = getUser(userLoginId);
 
         boolean existedReservation = bookReservationRepository.existsBookReservationsByBookInfoAndUserId(bookInfo, user);
-        boolean existsDuplicatedCheckoutBook = bookInstanceRepository.existsBookInstanceByBookInfoAndCurrentUserId(bookInfo, user);
-        boolean isBookAvailableForCheckout = isBookAvailableForCheckout(bookInfoId);
-
-        if(existedReservation) {
+        if (existedReservation) {
             throw new IllegalStateException("해당 유저는 이미 같은책을 예약중에 있습니다.");
         }
 
-        if(existsDuplicatedCheckoutBook) {
+        boolean existsDuplicatedCheckoutBook = bookInstanceRepository.existsBookInstanceByBookInfoAndCurrentUserId(bookInfo, user);
+        if (existsDuplicatedCheckoutBook) {
             throw new IllegalStateException("해당 유저는 이미 같은책을 대출중에 있습니다.");
         }
 
-        if(!isBookAvailableForCheckout) {
-            BookReservation bookReservation = BookReservation.createBookReservation(user, bookInfo, bookInstance, ReservationStatus.ACTIVE);
+        boolean isBookAvailableForCheckout = isBookAvailableForCheckout(bookInfoId);
+        if (!isBookAvailableForCheckout) {
+            // 대출 불가 = 예약 수행
+            BookReservation bookReservation = BookReservation.createBookReservation(
+                    user, bookInfo, null, ReservationStatus.ACTIVE);
             bookReservationRepository.save(bookReservation);
 
             log.info("예약 성공: {}", bookReservation);
             return RESERVATION_SUCCESS;
-        } else {
-            bookInstance.checkout(user);
-            checkoutRepository.save(BookCheckout.createCheckout(user, bookInstance));
-            log.info("대출 성공 - BookInstanceId: {}, UserId: {}", bookInstance.getId(), user.getId());
-            return CHECKOUT_SUCCESS;
         }
+
+        // 이 시점에만 실제로 대출 가능한 인스턴스를 가져옴
+        BookInstance bookInstance = searchCheckoutAvailable(bookInfoId);
+        bookInstance.checkout(user);
+        checkoutRepository.save(BookCheckout.createCheckout(user, bookInstance));
+        log.info("대출 성공 - BookInstanceId: {}, UserId: {}", bookInstance.getId(), user.getId());
+        return CHECKOUT_SUCCESS;
     }
 
     @Override
