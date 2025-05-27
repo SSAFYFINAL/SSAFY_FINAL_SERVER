@@ -1,11 +1,14 @@
 package com.ssafy.pjtaserver.domain.book;
 
+import com.ssafy.pjtaserver.domain.user.FavoriteBookList;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -23,7 +26,7 @@ public class BookInfo {
     @Column(name = "title", nullable = false)
     private String title;
 
-    @Column(name = "description", nullable = false)
+    @Column(name = "description", nullable = false, columnDefinition = "TEXT")
     private String description;
 
     @Column(name = "author_name", nullable = false)
@@ -31,12 +34,6 @@ public class BookInfo {
 
     @Column(name = "publisher_name", nullable = false)
     private String publisherName;
-
-    @Column(name = "series_name")
-    private String seriesName;
-
-    @Column(name = "classification_name")
-    private String classificationName;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
@@ -48,8 +45,39 @@ public class BookInfo {
     @Column(name = "book_img_path")
     private String bookImgPath;
 
+    @OneToMany(mappedBy = "bookInfo", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<FavoriteBookList> favoriteBookList = new ArrayList<>();
+
     @PrePersist
     public void prePersist() {
         registryDate = LocalDateTime.now();
+    }
+
+    public static BookInfo createBook(
+            String isbn,
+            String title,
+            String description,
+            String authorName,
+            String publisherName,
+            Category categoryId,
+            String bookImgPath
+    ) {
+        BookInfo bookInfo = new BookInfo();
+        bookInfo.isbn = isbn;
+        bookInfo.title = title;
+        bookInfo.description = description;
+        bookInfo.authorName = authorName;
+        bookInfo.publisherName = publisherName;
+        bookInfo.categoryId = categoryId;
+        bookInfo.bookImgPath = bookImgPath;
+        return bookInfo;
+    }
+
+    public void addFavoriteBook(FavoriteBookList favoriteBookList) {
+        this.favoriteBookList.add(favoriteBookList);
+
+        if (favoriteBookList.getBookInfo() != this) {
+            favoriteBookList.setBookInfo(this);
+        }
     }
 }

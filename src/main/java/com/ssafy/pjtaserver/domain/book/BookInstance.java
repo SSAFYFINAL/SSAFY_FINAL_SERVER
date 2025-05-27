@@ -1,5 +1,6 @@
 package com.ssafy.pjtaserver.domain.book;
 
+import com.ssafy.pjtaserver.enums.BookCheckoutStatus;
 import com.ssafy.pjtaserver.domain.user.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -36,9 +37,36 @@ public class BookInstance {
     @Column(name = "registry_date", nullable = false)
     private LocalDateTime registryDate;
 
+    @Column(name = "checkout_start_date")
+    private LocalDateTime checkoutStartDate;
+
+    @Column(name = "checkout_end_date")
+    private LocalDateTime checkoutEndDate;
+
     @PrePersist
     public void prePersist() {
         status = BookCheckoutStatus.AVAILABLE;
         registryDate = LocalDateTime.now();
+    }
+
+    public static BookInstance create(BookInfo bookInfo, String callNumber) {
+        BookInstance bookInstance = new BookInstance();
+        bookInstance.bookInfo = bookInfo;
+        bookInstance.callNumber = callNumber;
+        return bookInstance;
+    }
+
+    public void checkout(User user) {
+        this.currentUserId = user;
+        this.checkoutStartDate = LocalDateTime.now();
+        this.checkoutEndDate = LocalDateTime.now().plusDays(14);
+        this.status = BookCheckoutStatus.CHECKED_OUT;
+    }
+
+    public void returnBook() {
+        this.currentUserId = null;
+        this.checkoutStartDate = null;
+        this.checkoutEndDate = null;
+        this.status = BookCheckoutStatus.AVAILABLE;
     }
 }

@@ -1,8 +1,8 @@
 package com.ssafy.pjtaserver.security.handler;
 
 import com.google.gson.Gson;
-import com.ssafy.pjtaserver.util.apiResponseUtil.ApiResponse;
-import com.ssafy.pjtaserver.util.apiResponseUtil.ApiResponseCode;
+import com.ssafy.pjtaserver.utils.ApiResponseUtil;
+import com.ssafy.pjtaserver.enums.ApiResponseCode;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -20,7 +20,7 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
         Gson gson = new Gson();
 
         log.info("------------------------------access denied------------------------------");
-        String jsonStr = gson.toJson(ApiResponse.of(ApiResponseCode.DENIED_ACCESS_TOKEN));
+        String jsonStr = gson.toJson(ApiResponseUtil.of(ApiResponseCode.DENIED_ACCESS_TOKEN));
         response.setContentType("application/json; charset=UTF-8");
         PrintWriter printWriter = response.getWriter();
         printWriter.println(jsonStr);

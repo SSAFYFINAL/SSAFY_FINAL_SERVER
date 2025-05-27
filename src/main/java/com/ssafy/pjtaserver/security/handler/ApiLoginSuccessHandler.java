@@ -1,8 +1,8 @@
 package com.ssafy.pjtaserver.security.handler;
 
 import com.google.gson.Gson;
-import com.ssafy.pjtaserver.dto.UserDto;
-import com.ssafy.pjtaserver.util.JWTUtil;
+import com.ssafy.pjtaserver.dto.request.user.UserLoginDto;
+import com.ssafy.pjtaserver.utils.JWTUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -23,10 +23,10 @@ public class ApiLoginSuccessHandler implements AuthenticationSuccessHandler {
         log.info(authentication.toString());
         log.info("------------------------------api 로그인 성공------------------------------");
 
-        UserDto userDto = (UserDto) authentication.getPrincipal();
+        UserLoginDto userLoginDto = (UserLoginDto) authentication.getPrincipal();
 
         // 유저의 정보를 담고있다.
-        Map<String, Object> claims = userDto.getClaims();
+        Map<String, Object> claims = userLoginDto.getClaims();
 
         String accessToken = JWTUtil.generateToken(claims, 30);
         String refreshToken = JWTUtil.generateToken(claims, 60 * 24);
@@ -49,6 +49,5 @@ public class ApiLoginSuccessHandler implements AuthenticationSuccessHandler {
         PrintWriter printWriter = response.getWriter();
         printWriter.println(jsonStr);
         printWriter.close();
-
     }
 }

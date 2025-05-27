@@ -1,10 +1,11 @@
 package com.ssafy.pjtaserver.domain.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ssafy.pjtaserver.enums.UserRole;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,10 +35,11 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id")
     )
     @Column(name = "user_role", nullable = false)
+    @JsonIgnore
     private List<UserRole> userRoleList = new ArrayList<>();
 
-    @Column(name = "user_name", nullable = false)
-    private String username;
+    @Column(name = "username-main", nullable = false)
+    private String usernameMain;
 
     @Column(name = "user_nick_name", nullable = false)
     private String nickName;
@@ -54,6 +56,12 @@ public class User {
     @Column(name = "profile_img_path")
     private String profileImgPath;
 
+    @Column(name = "is_deleted", nullable = false)
+    private boolean isDeleted;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<FavoriteBookList> favoriteBookList = new ArrayList<>();
+
     /**
      * 일반 유저 권한의 새로운 User 인스턴스를 생성합니다.
      *
@@ -69,11 +77,12 @@ public class User {
         User user = new User();
         user.userLoginId = userLoginId;
         user.userPwd = userPwd;
-        user.username = username;
+        user.usernameMain = username;
         user.nickName = nickName;
         user.userEmail = userEmail;
         user.userPhone = userPhone;
         user.userRoleList.add(UserRole.USER);
+        user.isDeleted = false;
         return user;
     }
 
@@ -92,13 +101,46 @@ public class User {
         User admin = new User();
         admin.userLoginId = userLoginId;
         admin.userPwd = userPwd;
-        admin.username = username;
+        admin.usernameMain = username;
         admin.nickName = nickName;
         admin.userEmail = userEmail;
         admin.userPhone = userPhone;
         admin.userRoleList.add(UserRole.ADMIN);
+        admin.isDeleted = false;
         return admin;
     }
+
+    @Builder
+    public User(String userLoginId, String userPwd, String usernameMain, String nickName, String userEmail, String userPhone, boolean social) {
+        this.userLoginId = userLoginId;
+        this.userPwd = userPwd;
+        this.usernameMain = usernameMain;
+        this.nickName = nickName;
+        this.userEmail = userEmail;
+        this.userPhone = userPhone;
+        this.social = social;
+    }
+
+    public void updateUserInfo(String profileImgPath, String usernameMain, String nickName, String userPhone, String userPwd) {
+        this.profileImgPath = profileImgPath;
+        this.usernameMain = usernameMain;
+        this.nickName = nickName;
+        this.userPhone = userPhone;
+        this.userPwd = userPwd;
+    }
+
+    public void updateUserInfo(String profileImgPath, String usernameMain, String nickName, String userPhone) {
+        this.profileImgPath = profileImgPath;
+        this.usernameMain = usernameMain;
+        this.nickName = nickName;
+        this.userPhone = userPhone;
+    }
+
+    public User deleteUser() {
+        this.isDeleted = true; // `this`를 직접 사용하여 내부 상태 변경
+        return this;
+    }
+
 
     public void addRole(UserRole role) {
         this.userRoleList.add(role);
@@ -120,4 +162,11 @@ public class User {
         this.social = social;
     }
 
+    public void addFavoriteBook(FavoriteBookList favoriteBookList) {
+        this.favoriteBookList.add(favoriteBookList);
+
+        if (favoriteBookList.getUser() != this) {
+            favoriteBookList.setUser(this);
+        }
+    }
 }

@@ -3,12 +3,69 @@
 <head>
     <title th:text="${subject}"></title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <style>
+        body {
+            font-family: 'Arial', 'Helvetica', sans-serif;
+            background-color: #fff5ed;
+            color: #4a4a4a;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .email-container {
+            background: #ffe4d6;
+            border: 2px solid #ff5116;
+            border-radius: 15px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+            width: 80%;
+            max-width: 500px;
+        }
+
+        .email-header {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ff5116;
+            margin-bottom: 10px;
+        }
+
+        .message {
+            font-size: 16px;
+            line-height: 1.6;
+            margin: 20px 0;
+            color: #4a4a4a;
+        }
+
+        .certify-code {
+            font-size: 18px;
+            font-weight: bold;
+            background: #fff;
+            color: #ff5116;
+            padding: 10px 15px;
+            border: 2px dashed #ff5116;
+            border-radius: 8px;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        .footer {
+            margin-top: 15px;
+            font-size: 12px;
+            color: #999;
+        }
+    </style>
 </head>
 <body>
-<div style="display: flex;">
-    <p>님, 안녕하세요!</p>
+<div class="email-container">
+    <h1 class="email-header" th:text="${subject} + ' 이메일입니다!'"></h1>
+    <p class="message" th:text="${message}"></p>
+    <p class="certify-code" th:text="${certifyCode}"></p>
+    <div class="footer">귀여운 이메일을 열어주셔서 감사합니다! 🍊</div>
 </div>
-<br/>
-<p th:text="${message}"></p>
 </body>
 </html>

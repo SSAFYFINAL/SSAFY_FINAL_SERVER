@@ -1,10 +1,12 @@
 package com.ssafy.pjtaserver.service.mail;
 
-import com.ssafy.pjtaserver.dto.MailDto;
+import com.ssafy.pjtaserver.dto.request.mail.MailSendDto;
+import com.ssafy.pjtaserver.dto.request.mail.MailVerifyDto;
 import jakarta.mail.MessagingException;
 import org.springframework.stereotype.Service;
 
 @Service
 public interface MailService {
-    void sendEmail(MailDto mailDto) throws MessagingException;
+    boolean sendEmail(MailSendDto mailSendDto) throws MessagingException;
+    boolean verifyEmail(MailVerifyDto mailVerifyDto);
 }

@@ -18,13 +18,13 @@ public class GuestBook {
     @Column(name = "guest_book_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id", nullable = false)
-    private User ownerId;
+    private User owner;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "writer_id", nullable = false)
-    private User writerId;
+    private User writer;
 
     @Column(name = "content", nullable = false)
     private String content;
@@ -41,15 +41,21 @@ public class GuestBook {
         isDeleted = false;
     }
 
-    // userLintener 에 사용할 목적으로 생성
     public void setIsDeleted(boolean isDeleted) {
         this.isDeleted = isDeleted;
     }
 
-    public GuestBook(User ownerId, User writerId, String content) {
-        this.ownerId = ownerId;
-        this.writerId = writerId;
+    public void changeContent(String content) {
         this.content = content;
     }
 
+    public GuestBook(User owner, User writer, String content) {
+        this.owner = owner;
+        this.writer = writer;
+        this.content = content;
+    }
+
+    public static GuestBook createGuestBook(User ownerId, User writerId, String content) {
+        return new GuestBook(ownerId, writerId, content);
+    }
 }

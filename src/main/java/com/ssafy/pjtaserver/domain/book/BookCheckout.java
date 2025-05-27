@@ -20,11 +20,11 @@ public class BookCheckout {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private User userId;
+    private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "book_instance_id")
-    private BookInstance bookInstanceId;
+    private BookInstance bookInstance;
 
     @Column(name = "checkout_date", nullable = false)
     private LocalDateTime checkoutDate;
@@ -39,5 +39,12 @@ public class BookCheckout {
     public void prePersist() {
         checkoutDate = LocalDateTime.now();
         dueDate = LocalDateTime.now().plusDays(14);
+    }
+
+    public static BookCheckout createCheckout(User user, BookInstance bookInstance) {
+        BookCheckout bookCheckout = new BookCheckout();
+        bookCheckout.user = user;
+        bookCheckout.bookInstance = bookInstance;
+        return bookCheckout;
     }
 }

@@ -1,7 +1,7 @@
 package com.ssafy.pjtaserver.security;
 
 import com.ssafy.pjtaserver.domain.user.User;
-import com.ssafy.pjtaserver.dto.UserDto;
+import com.ssafy.pjtaserver.dto.request.user.UserLoginDto;
 import com.ssafy.pjtaserver.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,22 +40,29 @@ public class CustomUserDetailService implements UserDetailsService {
         if(user == null) {
             throw new UsernameNotFoundException("유저 찾을수 없음");
         }
+
+        if(user.isDeleted()) {
+            throw new UsernameNotFoundException("탈퇴된 회원 입니다.");
+        }
+
         log.info("database encoded password: {}", user.getUserPwd()); // 암호화된 비밀번호 출력
 
-        UserDto userDto = new UserDto(
+        UserLoginDto userLoginDto = new UserLoginDto(
+                user.getId(),
                 user.getUserLoginId(),
                 user.getUserPwd(),
-                user.getUsername(),
+                user.getUsernameMain(),
                 user.getNickName(),
+                user.getUserEmail(),
                 user.getUserPhone(),
-                user.getProfileImgPath(),
                 user.isSocial(),
+                user.getProfileImgPath(),
                 user.getUserRoleList()
                         .stream()
                         .map(Enum::name).collect(Collectors.toList()));
 
-        log.info("userDto : {}", userDto);
+        log.info("userDto : {}", userLoginDto);
 
-        return userDto;
+        return userLoginDto;
     }
 }
