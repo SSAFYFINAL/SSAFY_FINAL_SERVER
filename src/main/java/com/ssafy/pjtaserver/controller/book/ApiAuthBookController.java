@@ -24,7 +24,6 @@ import static java.util.Optional.*;
 @Slf4j
 @RequestMapping("/api/auth/book")
 public class ApiAuthBookController {
-
     private final BookService bookService;
 
     // 대출 요청하는 로직
