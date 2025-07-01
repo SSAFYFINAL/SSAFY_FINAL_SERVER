@@ -1,6 +1,38 @@
+# 📚 SSAFIT BOOK
+
+SSAFIT BOOK은 운동 영상을 활용하는 기존 SSAFIT 프로젝트와는 달리, 운동 책을 중심으로 한 온라인 도서관 웹 서비스입니다.
+이 프로젝트는 독서와 운동을 결합한 새로운 형태의 콘텐츠 소비를 제안하며, 사용자들에게 더 깊이 있는 정보와 커뮤니티 경험을 제공합니다
+
+## 주요기능
+
+- 💡 도서 대출 및 찜 기능: 온라인에서 원하는 운동 책을 간편하게 대출하고 찜할 수 있습니다.
+
+- 🔍 도서 상세 페이지: 책에 대한 자세한 정보를 확인하고 나에게 맞는 책을 선택할 수 있습니다.
+
+- 👥 유저 추천 및 커뮤니티: 찜한 도서를 기반으로 관심사가 비슷한 유저를 추천하고, 팔로우하거나 방명록을 통해 소통할 수 있습니다.
+
+- 📈 개인화 추천 & 인기 도서: 나의 관심사에 맞는 도서나 현재 인기 있는 도서를 추천하여 독서 습관 형성을 돕습니다.
+
+## 목표
+
+SSAFIT BOOK은 단순한 도서 대출 서비스가 아닌, 운동에 대한 독서 경험을 공유하고 확산하는 커뮤니티 공간입니다.
+이를 통해 운동 지식의 깊이를 더하고, 사용자 간 상호작용을 통해 지속적인 동기 부여와 독서 습관 형성을 유도합니다.
+
+## 팀원 소개
+
+<table>
+  <tbody>
+    <tr>
+      <td align="center"><a href="https://github.com/dojin8351"><img src="https://avatars.githubusercontent.com/u/163515795?v=4" width="100px;" alt=""/><br /><sub><b>김도현 </b></sub></a><br /><sub>Backend</sub></td>
+      <td align="center"><a href="https://github.com/dnjsrk"><img src="https://avatars.githubusercontent.com/u/105371253?v=4" width="100px;"  alt=""/><br /><sub><b>변가원</b></sub></a><br /><sub>Frontend</sub></td>
+    </tr>
+  </tbody>
+</table>
+
 ## 개발환경 및 개발도구
 
 ### Frontend<br/>
+
 ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
 ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
 ![vite](https://img.shields.io/badge/Vite-B73BFE?style=for-the-badge&logo=vite&logoColor=FFD62E)
@@ -8,6 +40,7 @@
 ![CSS3](https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white)
 
 ### Backend<br/>
+
 <img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=OpenJDK&logoColor=white">
 <img src="https://img.shields.io/badge/Spring-6DB33F?style=for-the-badge&logo=Spring&logoColor=white">
 <img src="https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white">
@@ -16,16 +49,19 @@
 ![Tomcat](https://img.shields.io/badge/Apache_Tomcat-F8DC75?style=for-the-badge&logo=apachetomcat&logoColor=black)
 
 ### DataBase<br/>
+
 <img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=MySQL&logoColor=white">
 <img src="https://img.shields.io/badge/Hibernate-59666C?style=for-the-badge&logo=Hibernate&logoColor=white">
 <img src="https://img.shields.io/badge/JPA-0769AD?style=for-the-badge&logo=jQuery&logoColor=white">
 <img src="https://img.shields.io/badge/QueryDsl-59666C?style=for-the-badge&logo=jQuery&logoColor=white">
 
 ### Build
+
 <img src="https://img.shields.io/badge/Gradle-02303A?style=for-the-badge&logo=Gradle&logoColor=white">
 <img src="https://img.shields.io/badge/Node.js-5FA04E?style=for-the-badge&logo=Node.js&logoColor=white">
 
 ### 협업
+
 ![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)
 ![Figma](https://img.shields.io/badge/Figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white)
 ![Jira](https://img.shields.io/badge/Jira-0052CC?style=for-the-badge&logo=jira&logoColor=white)
@@ -33,87 +69,97 @@
 <br>
 
 ### ERD
+
 ![img_1.png](img_1.png)
 
-| 테이블명               | 설명              |
-|--------------------|-----------------|
-| user               | 회원 정보           |
-| user_roles         | 회원 권한           |
-| book_info          | 도서 정보           |
-| book_checkout      | 도서 대출 정보        |
+| 테이블명           | 설명                       |
+| ------------------ | -------------------------- |
+| user               | 회원 정보                  |
+| user_roles         | 회원 권한                  |
+| book_info          | 도서 정보                  |
+| book_checkout      | 도서 대출 정보             |
 | book_instance      | 물리적 책에대한 현황, 정보 |
-| book_reservation   | 도서 예약 정보        |
-| favorite_book_list | 좋아요한 도서 리스트     |
-| follow             | 팔로워, 팔로우        |
-| guest_book         | 방명록             |
-| email_verification | 이메일 인증 정보       |
-| category           | 카테고리            |
+| book_reservation   | 도서 예약 정보             |
+| favorite_book_list | 좋아요한 도서 리스트       |
+| follow             | 팔로워, 팔로우             |
+| guest_book         | 방명록                     |
+| email_verification | 이메일 인증 정보           |
+| category           | 카테고리                   |
 
 ## API 명세서
+
 ### AuthUserController
-| HTTP Method | API                                       | Description                   | Request Body/Params                                                                                                                                                                                                                    | Response Body                                         |  Bearer &lt;accessToken&gt; |
-|-------------|-------------------------------------------|-------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------|---------------|
-| PUT         | /api/auth/user/password-reset             | 회원 비밀번호 초기화                   | Request Body : <br/>{<br>&nbsp;&nbsp;"userLoginId": "hamster123",<br>&nbsp;&nbsp;"resetPwd": "p@ssw0rd"<br>}                                                                                                                           | 성공 : "재설정 성공."<br/> 실패 : "재설정 실패."                    | O |
-| PUT         | /api/auth/user/update                     | 회원 정보 수정                      | Request Body(Form-Data) : <br/>{<br>&nbsp;&nbsp;"profileImg" : File,<br>&nbsp;&nbsp;"usernameMain": "김**"<br>&nbsp;&nbsp;"userNickname": "김*하이"<br/>&nbsp;&nbsp;"userPhone": "01012341234"<br/>&nbsp;&nbsp;"userPwd": "pass1234"<br/>} | 성공 : "정보 수정 성공."<br/> 실패 : "정보 수정 실패."                | O  |
-| POST        | /api/auth/user/follow/{targetUserId}      | 팔로우, 언팔로우                     | Path Variable: userId                                                                                                                                                                                                                  | 성공 : "팔로우, 언팔로우 성공."<br/> 실패 : "팔로우, 언팔로우 실패."        | O  |
-| POST        | /api/auth/user/follow-list/{targetUserId} | targetUserId의 팔로우, 팔로워 리스트 조회 | Path Variable : userId,<br/>Request Param : type, page, size                                                                                                                                                                           | 성공 : [아래 참조](#follow-list)<br/> 실패 : "조회 실패."         | O  |
-| POST        | /api/auth/user/check-pw                   | 비밀번호 확인                       | Request Body : <br/>{<br>&nbsp;&nbsp;"userPw": "!eeee1234"<br/>}                                                                                                                                                                             | 성공 : "비밀번호 확인 성공."<br/> 실패 : "비밀번호 확인 실패."            | O  |
-| DELETE      | /api/auth/user/delete                     | 회원 탈퇴                         |                                                                                                                                                      | 성공 : "회원탈퇴 성공."<br/> 실패 : "회원탈퇴 실패."                  | O  |
-| GET         | /api/auth/user/recommend/similar-user     | 비슷한 취향의 유저 추천                 |                                                                                                                                                      | 성공 : [아래 참조](#recommend-user-list)<br/> 실패 : "조회 실패." | O  |
+
+| HTTP Method | API                                       | Description                               | Request Body/Params                                                                                                                                                                                                                         | Response Body                                                        | Bearer &lt;accessToken&gt; |
+| ----------- | ----------------------------------------- | ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- | -------------------------- |
+| PUT         | /api/auth/user/password-reset             | 회원 비밀번호 초기화                      | Request Body : <br/>{<br>&nbsp;&nbsp;"userLoginId": "hamster123",<br>&nbsp;&nbsp;"resetPwd": "p@ssw0rd"<br>}                                                                                                                                | 성공 : "재설정 성공."<br/> 실패 : "재설정 실패."                     | O                          |
+| PUT         | /api/auth/user/update                     | 회원 정보 수정                            | Request Body(Form-Data) : <br/>{<br>&nbsp;&nbsp;"profileImg" : File,<br>&nbsp;&nbsp;"usernameMain": "김\**"<br>&nbsp;&nbsp;"userNickname": "김*하이"<br/>&nbsp;&nbsp;"userPhone": "01012341234"<br/>&nbsp;&nbsp;"userPwd": "pass1234"<br/>} | 성공 : "정보 수정 성공."<br/> 실패 : "정보 수정 실패."               | O                          |
+| POST        | /api/auth/user/follow/{targetUserId}      | 팔로우, 언팔로우                          | Path Variable: userId                                                                                                                                                                                                                       | 성공 : "팔로우, 언팔로우 성공."<br/> 실패 : "팔로우, 언팔로우 실패." | O                          |
+| POST        | /api/auth/user/follow-list/{targetUserId} | targetUserId의 팔로우, 팔로워 리스트 조회 | Path Variable : userId,<br/>Request Param : type, page, size                                                                                                                                                                                | 성공 : [아래 참조](#follow-list)<br/> 실패 : "조회 실패."            | O                          |
+| POST        | /api/auth/user/check-pw                   | 비밀번호 확인                             | Request Body : <br/>{<br>&nbsp;&nbsp;"userPw": "!eeee1234"<br/>}                                                                                                                                                                            | 성공 : "비밀번호 확인 성공."<br/> 실패 : "비밀번호 확인 실패."       | O                          |
+| DELETE      | /api/auth/user/delete                     | 회원 탈퇴                                 |                                                                                                                                                                                                                                             | 성공 : "회원탈퇴 성공."<br/> 실패 : "회원탈퇴 실패."                 | O                          |
+| GET         | /api/auth/user/recommend/similar-user     | 비슷한 취향의 유저 추천                   |                                                                                                                                                                                                                                             | 성공 : [아래 참조](#recommend-user-list)<br/> 실패 : "조회 실패."    | O                          |
 
 ### PublicUserController
 
-| HTTP Method | API                             | Description     | Request Body/Params                                                                                                                                                                                                                                                                                                                                                                                                                                   | Response Body                                              | Bearer `<accessToken>` |
-|-------------|----------------------------------|------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------|------------------------|
-| POST        | /api/public/user/login          | 로그인            | Request Body : <br/>{<br>&nbsp;&nbsp;"userLoginId": "hamster123",<br>&nbsp;&nbsp;"password": "p@ssw0rd"<br>}                                                                                                                                                                                                                                                                                                                                          | 성공 : [아래 참조](#login-success-response)<br/><br/> 실패 : 인증 실패 | X                      |
-| GET         | /api/public/user/login/kakao    | 카카오 소셜로그인 | Request Param : accessToken                                                                                                                                                                                                                                                                                                                                                                                                                           | 성공 : [아래 참조](#login-success-response)<br/><br/> 실패 : 인증 실패 | X                                                                                                                                                                                                                                                                          | X                      |
-| GET         | /api/public/user/login/google   | 구글 소셜로그인   | Request Param : accessToken                                                                                                                                                                                                                                                                                                                                                                                                                           | 성공 : [아래 참조](#login-success-response)<br/><br/> 실패 : 인증 실패 | X                                                                                                                                                                                                                                                                    | X                      |
-| POST        | /api/public/user/join           | 회원가입          | Request Body : <br/>{<br>&nbsp;&nbsp;"userLoginId": "hamster123",<br>&nbsp;&nbsp;"userPwd": "p@ssw0rd"<br>&nbsp;&nbsp;"checkUserPwd": "p@ssw0rd"<br>&nbsp;&nbsp;"usernameMain": "김시선"<br>&nbsp;&nbsp;"userNickName": "시선"<br>&nbsp;&nbsp;"userEmail": "do****@gmail.com"<br>&nbsp;&nbsp;"userPhone": "01012341234"<br>&nbsp;&nbsp;"isCheckedPw": "true"<br>&nbsp;&nbsp;"isDuplicatedUserLoginId": "true"<br>&nbsp;&nbsp;"isEmailChecked": "true"<br>} | 성공 : "회원가입이 완료 되었습니다."<br/> 실패 : 회원가입 실패                   | X                      |
-| GET         | /api/public/user/check-id       | 아이디 중복 확인   | Request Param : userLoginId                                                                                                                                                                                                                                                                                                                                                                                                                           | 성공 : "아이디 찾기가 완료 되었습니다"<br/> 실패 : "해당 이메일의 유저는 존재하지 않습니다." | X                      |
-| GET         | /api/public/user/find-id        | 아이디 찾기       | Request Param : email, usernameMain                                                                                                                                                                                                                                                                                                                                                                                                                   | "회원이 정상적으로 탈퇴 되었습니다."                                      | X                      |
-| PUT         | /api/public/user/password-reset | 비밀번호 초기화   | Request Body : <br/>{<br>&nbsp;&nbsp;"userLoginId": "hamster123",<br>&nbsp;&nbsp;"resetPwd": "p@ssw0rd"<br>}                                                                                                                                                                                                                                                                                                                                          | 성공 : "재설정 성공"<br/> 실패 : "재설정 실패."                          | X                      |
-| PUT         | /api/public/user/detail         | 유저 상세         | Request Param : userId                                                                                                                                                                                                                                                                                                                                                                                                                  | 성공 : [아래 참조](#user-detail)<br/><br/> 실패 : 인증 실패            | X                      |
+| HTTP Method | API                             | Description       | Request Body/Params                                                                                                                                                                                                                                                                                                                                                                                                                                            | Response Body                                                                                | Bearer `<accessToken>` |
+| ----------- | ------------------------------- | ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | ---------------------- | --- |
+| POST        | /api/public/user/login          | 로그인            | Request Body : <br/>{<br>&nbsp;&nbsp;"userLoginId": "hamster123",<br>&nbsp;&nbsp;"password": "p@ssw0rd"<br>}                                                                                                                                                                                                                                                                                                                                                   | 성공 : [아래 참조](#login-success-response)<br/><br/> 실패 : 인증 실패                       | X                      |
+| GET         | /api/public/user/login/kakao    | 카카오 소셜로그인 | Request Param : accessToken                                                                                                                                                                                                                                                                                                                                                                                                                                    | 성공 : [아래 참조](#login-success-response)<br/><br/> 실패 : 인증 실패                       | X                      | X   |
+| GET         | /api/public/user/login/google   | 구글 소셜로그인   | Request Param : accessToken                                                                                                                                                                                                                                                                                                                                                                                                                                    | 성공 : [아래 참조](#login-success-response)<br/><br/> 실패 : 인증 실패                       | X                      | X   |
+| POST        | /api/public/user/join           | 회원가입          | Request Body : <br/>{<br>&nbsp;&nbsp;"userLoginId": "hamster123",<br>&nbsp;&nbsp;"userPwd": "p@ssw0rd"<br>&nbsp;&nbsp;"checkUserPwd": "p@ssw0rd"<br>&nbsp;&nbsp;"usernameMain": "김시선"<br>&nbsp;&nbsp;"userNickName": "시선"<br>&nbsp;&nbsp;"userEmail": "do\*\*\*\*@gmail.com"<br>&nbsp;&nbsp;"userPhone": "01012341234"<br>&nbsp;&nbsp;"isCheckedPw": "true"<br>&nbsp;&nbsp;"isDuplicatedUserLoginId": "true"<br>&nbsp;&nbsp;"isEmailChecked": "true"<br>} | 성공 : "회원가입이 완료 되었습니다."<br/> 실패 : 회원가입 실패                               | X                      |
+| GET         | /api/public/user/check-id       | 아이디 중복 확인  | Request Param : userLoginId                                                                                                                                                                                                                                                                                                                                                                                                                                    | 성공 : "아이디 찾기가 완료 되었습니다"<br/> 실패 : "해당 이메일의 유저는 존재하지 않습니다." | X                      |
+| GET         | /api/public/user/find-id        | 아이디 찾기       | Request Param : email, usernameMain                                                                                                                                                                                                                                                                                                                                                                                                                            | "회원이 정상적으로 탈퇴 되었습니다."                                                         | X                      |
+| PUT         | /api/public/user/password-reset | 비밀번호 초기화   | Request Body : <br/>{<br>&nbsp;&nbsp;"userLoginId": "hamster123",<br>&nbsp;&nbsp;"resetPwd": "p@ssw0rd"<br>}                                                                                                                                                                                                                                                                                                                                                   | 성공 : "재설정 성공"<br/> 실패 : "재설정 실패."                                              | X                      |
+| PUT         | /api/public/user/detail         | 유저 상세         | Request Param : userId                                                                                                                                                                                                                                                                                                                                                                                                                                         | 성공 : [아래 참조](#user-detail)<br/><br/> 실패 : 인증 실패                                  | X                      |
 
 ### ApiPublicMainController
-| HTTP Method  | API                               | Description | Request Body/Params                                                                | Response Body                                      | Bearer &lt;accessToken&gt; |
-|--------------|-----------------------------------|-------------|------------------------------------------------------------------------------------|----------------------------------------------------|----------------------------|
-| GET         | /api/public/main/weekly-popular   | 주간 인기도서     |  | 성공 : [아래 참조](#weekly-popular-list)<br/> 실패 : "조회 실패." | X                          |
-| GET          | /api/public/main/recent-book-list | 신상 도서       |  | 성공 : [아래 참조](#recent-book-list)<br/> 실패 : "조회 실패." | X                          |
+
+| HTTP Method | API                               | Description   | Request Body/Params | Response Body                                                     | Bearer &lt;accessToken&gt; |
+| ----------- | --------------------------------- | ------------- | ------------------- | ----------------------------------------------------------------- | -------------------------- |
+| GET         | /api/public/main/weekly-popular   | 주간 인기도서 |                     | 성공 : [아래 참조](#weekly-popular-list)<br/> 실패 : "조회 실패." | X                          |
+| GET         | /api/public/main/recent-book-list | 신상 도서     |                     | 성공 : [아래 참조](#recent-book-list)<br/> 실패 : "조회 실패."    | X                          |
 
 ### ApiPublicMailController
-| HTTP Method  | API                          | Description | Request Body/Params                                                                                                    | Response Body                            | Bearer &lt;accessToken&gt; |
-|--------------|------------------------------|-------------|------------------------------------------------------------------------------------------------------------------------|------------------------------------------|----------------------------|
-| POST         | /api/public/send-email       | 이메일 발송      | Request Body : <br/>{<br>&nbsp;&nbsp;"emailAddr": "dojin1111@gmail.com",<br>&nbsp;&nbsp;"requestType": "REGISTER"<br>} | 성공 : "이메일 발송 성공."<br/> 실패 : "이메일 발송 실패." | X                          |
-| POST          | /api/public/verify-auth-code | 인증번호 검증     | Request Body : <br/>{<br>&nbsp;&nbsp;"email": "dojin1111@gmail.com",<br>&nbsp;&nbsp;"certifyCode": "123123"<br>}       | 성공 : "이메일 인증 성공."<br/> 실패 : "이메일 인증 실패." | X                          |
+
+| HTTP Method | API                          | Description   | Request Body/Params                                                                                                    | Response Body                                              | Bearer &lt;accessToken&gt; |
+| ----------- | ---------------------------- | ------------- | ---------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------- | -------------------------- |
+| POST        | /api/public/send-email       | 이메일 발송   | Request Body : <br/>{<br>&nbsp;&nbsp;"emailAddr": "dojin1111@gmail.com",<br>&nbsp;&nbsp;"requestType": "REGISTER"<br>} | 성공 : "이메일 발송 성공."<br/> 실패 : "이메일 발송 실패." | X                          |
+| POST        | /api/public/verify-auth-code | 인증번호 검증 | Request Body : <br/>{<br>&nbsp;&nbsp;"email": "dojin1111@gmail.com",<br>&nbsp;&nbsp;"certifyCode": "123123"<br>}       | 성공 : "이메일 인증 성공."<br/> 실패 : "이메일 인증 실패." | X                          |
 
 ### ApiAuthGuestBookController
-| HTTP Method  | API                                      | Description       | Request Body/Params                                                                                                          | Response Body                            | Bearer &lt;accessToken&gt;  |
-|--------------|------------------------------------------|-------------------|------------------------------------------------------------------------------------------------------------------------------|------------------------------------------|----------------|
-| POST         | /api/auth/guestbook/write                | 방명록 작성            | Request Body : <br/>{<br>&nbsp;&nbsp;"ownerId": "1",<br>&nbsp;&nbsp;"content": "안녕하세요~"<br>}                                 | 성공 : "방명록 작성 성공."<br/> 실패 : "방명록 작성 실패." | O  |
-| POST          | /api/auth/guestbook/list/{ownerId}       | {ownerId}의 방명록 목록 | Request Body : <br/>{<br>&nbsp;&nbsp;"ownerId": "1",<br>&nbsp;&nbsp;"content": "안녕하세요~"<br>}<br/> Request Param : page, size | 성공 : [아래 참조](#guestbook-list)            | O  |
-| DELETE          | /api/auth/guestbook/delete/{guestBookId} | 방명록 삭제            | Path Variable: guestBookId                                                                                                   | 성공 : "방명록 삭제 성공."<br/> 실패 : "방명록 삭제 실패." | O |
-| PUT          | /api/auth/guestbook/update/{guestBookId} | 방명록 수정            | Request Body : <br/>{<br>&nbsp;&nbsp;"content": "수정할거에요~",<br>}                                                              | 성공 : "방명록 수정 성공."<br/> 실패 : "방명록 수정 실패." | O  |
+
+| HTTP Method | API                                      | Description             | Request Body/Params                                                                                                               | Response Body                                              | Bearer &lt;accessToken&gt; |
+| ----------- | ---------------------------------------- | ----------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------- | -------------------------- |
+| POST        | /api/auth/guestbook/write                | 방명록 작성             | Request Body : <br/>{<br>&nbsp;&nbsp;"ownerId": "1",<br>&nbsp;&nbsp;"content": "안녕하세요~"<br>}                                 | 성공 : "방명록 작성 성공."<br/> 실패 : "방명록 작성 실패." | O                          |
+| POST        | /api/auth/guestbook/list/{ownerId}       | {ownerId}의 방명록 목록 | Request Body : <br/>{<br>&nbsp;&nbsp;"ownerId": "1",<br>&nbsp;&nbsp;"content": "안녕하세요~"<br>}<br/> Request Param : page, size | 성공 : [아래 참조](#guestbook-list)                        | O                          |
+| DELETE      | /api/auth/guestbook/delete/{guestBookId} | 방명록 삭제             | Path Variable: guestBookId                                                                                                        | 성공 : "방명록 삭제 성공."<br/> 실패 : "방명록 삭제 실패." | O                          |
+| PUT         | /api/auth/guestbook/update/{guestBookId} | 방명록 수정             | Request Body : <br/>{<br>&nbsp;&nbsp;"content": "수정할거에요~",<br>}                                                             | 성공 : "방명록 수정 성공."<br/> 실패 : "방명록 수정 실패." | O                          |
 
 ### ApiPublicBookController
-| HTTP Method  | API                              | Description | Request Body/Params                                                                | Response Body                           | Bearer &lt;accessToken&gt; |
-|--------------|----------------------------------|-------------|------------------------------------------------------------------------------------|-----------------------------------------|----------------------------|
-| POST         | /api/public/book/search/list     | 책정보 리스트     | Request Param : page, size                                                         | 성공 : [아래 참조](#book-list)                | X                          |
-| GET          | /api/public/book/details         | 책 상세 정보     | Request Param : bookInfoId                                                   | 성공 : [아래 참조](#book-detail)              | X                          |
-| GET          | /api/public/book/top-borrower    | 대출 상위 유저    |  | 성공 : [아래 참조](#top-borrower)             | X                          |
-| GET          | /api/public/book/recommend-books | 도서 추천       | | 성공 : [아래 참조](#recommend-books) | X                          |
+
+| HTTP Method | API                              | Description    | Request Body/Params        | Response Body                        | Bearer &lt;accessToken&gt; |
+| ----------- | -------------------------------- | -------------- | -------------------------- | ------------------------------------ | -------------------------- |
+| POST        | /api/public/book/search/list     | 책정보 리스트  | Request Param : page, size | 성공 : [아래 참조](#book-list)       | X                          |
+| GET         | /api/public/book/details         | 책 상세 정보   | Request Param : bookInfoId | 성공 : [아래 참조](#book-detail)     | X                          |
+| GET         | /api/public/book/top-borrower    | 대출 상위 유저 |                            | 성공 : [아래 참조](#top-borrower)    | X                          |
+| GET         | /api/public/book/recommend-books | 도서 추천      |                            | 성공 : [아래 참조](#recommend-books) | X                          |
 
 ### ApiAuthBookController
-| HTTP Method  | API                                              | Description  | Request Body/Params                                                                                                                                                                                                                                                        | Response Body                                  | Bearer &lt;accessToken&gt;  |
-|--------------|--------------------------------------------------|--------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------|----------------|
-| POST         | /api/auth/book/checkout-reservation/{bookInfoId} | 도서 예약 리스트    | Path Variable : bookInfoId <br/>Request Param : page, size<br/>Request Body : <br/>{<br>&nbsp;&nbsp;"title": null,<br>&nbsp;&nbsp;"authorName": null<br>&nbsp;&nbsp;"publisherName": null<br>&nbsp;&nbsp;"orderBy": "checkoutDate"<br>&nbsp;&nbsp;"orderDirection": "asc"<br/>} | 성공 : [아래 참조](#checkout-list)                   | O  |
-| POST          | /api/auth/book/favorite/{bookInfoId}             | 좋아요 도서 추가    | Path Variable : bookInfoId                                                                                                                                                                                         | 성공 : "좋아요 추가,취소 성공."<br/> 실패 : "좋아요 추가,취소 실패." | O  |
-| GET          | /api/auth/book/details                           | 도서 상세정보      | Request Param : bookInfoId                                                                                                                                                                                         | 성공 : [아래 참조](#book-detail)                     | O |
-| POST          | /api/auth/book/favorites/{userId}                | 좋아요한 도서 리스트  | Path Variable : bookInfoId <br/>Request Param : page, size<br/>Request Body : <br/>{<br>&nbsp;&nbsp;"title": null,<br>&nbsp;&nbsp;"authorName": null<br>&nbsp;&nbsp;"publisherName": null<br>&nbsp;&nbsp;"orderBy": "checkoutDate"<br>&nbsp;&nbsp;"orderDirection": "asc"<br/>}  | 성공 : [아래 참조](#favorites-list)                  | O |
-| POST          | /api/auth/book/checkout-history/{userId}         | 도서 대출 기록 리스트 | Path Variable:<br>username<br>Header:<br>Authorization: Bearer &lt;accessToken&gt;                                                                                                                                                                                         | 성공 : [아래 참조](#checkout-list)                             | O |
-| GET          | /api/auth/book/recommend-books                   | 도서 추천        |  | 성공 : [아래 참조](#recommend-books)                            | O  |
+
+| HTTP Method | API                                              | Description           | Request Body/Params                                                                                                                                                                                                                                                             | Response Body                                                        | Bearer &lt;accessToken&gt; |
+| ----------- | ------------------------------------------------ | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- | -------------------------- |
+| POST        | /api/auth/book/checkout-reservation/{bookInfoId} | 도서 예약 리스트      | Path Variable : bookInfoId <br/>Request Param : page, size<br/>Request Body : <br/>{<br>&nbsp;&nbsp;"title": null,<br>&nbsp;&nbsp;"authorName": null<br>&nbsp;&nbsp;"publisherName": null<br>&nbsp;&nbsp;"orderBy": "checkoutDate"<br>&nbsp;&nbsp;"orderDirection": "asc"<br/>} | 성공 : [아래 참조](#checkout-list)                                   | O                          |
+| POST        | /api/auth/book/favorite/{bookInfoId}             | 좋아요 도서 추가      | Path Variable : bookInfoId                                                                                                                                                                                                                                                      | 성공 : "좋아요 추가,취소 성공."<br/> 실패 : "좋아요 추가,취소 실패." | O                          |
+| GET         | /api/auth/book/details                           | 도서 상세정보         | Request Param : bookInfoId                                                                                                                                                                                                                                                      | 성공 : [아래 참조](#book-detail)                                     | O                          |
+| POST        | /api/auth/book/favorites/{userId}                | 좋아요한 도서 리스트  | Path Variable : bookInfoId <br/>Request Param : page, size<br/>Request Body : <br/>{<br>&nbsp;&nbsp;"title": null,<br>&nbsp;&nbsp;"authorName": null<br>&nbsp;&nbsp;"publisherName": null<br>&nbsp;&nbsp;"orderBy": "checkoutDate"<br>&nbsp;&nbsp;"orderDirection": "asc"<br/>} | 성공 : [아래 참조](#favorites-list)                                  | O                          |
+| POST        | /api/auth/book/checkout-history/{userId}         | 도서 대출 기록 리스트 | Path Variable:<br>username<br>Header:<br>Authorization: Bearer &lt;accessToken&gt;                                                                                                                                                                                              | 성공 : [아래 참조](#checkout-list)                                   | O                          |
+| GET         | /api/auth/book/recommend-books                   | 도서 추천             |                                                                                                                                                                                                                                                                                 | 성공 : [아래 참조](#recommend-books)                                 | O                          |
 
 ### 응답 반환 상세정보
+
 ### <a id="login-success-response"> 로그인 인증 성공 반환</a>
+
 ```
 {
   "status": "OK",
@@ -140,6 +186,7 @@
 ```
 
 ### <a id="user-detail"> 유저 상세정보 성공 반환</a>
+
 ```
 {
     "code": 1000,
@@ -153,7 +200,9 @@
     }
 }
 ```
+
 ### <a id="follow-list">팔로우 리스트 성공 반환</a>
+
 ```
 {
     "code": 1000,
@@ -177,6 +226,7 @@
 ```
 
 ### <a id="weekly-popular-list">추천 유저 리스트 성공 반환</a>
+
 ```
 {
     "code": 1000,
@@ -206,7 +256,9 @@
     ]
 }
 ```
+
 ### <a id="recommend-user-list">인기도서 리스트 성공 반환</a>
+
 ```
 {
     "code": 1800,
@@ -262,6 +314,7 @@
 ```
 
 ### <a id="recent-book-list">최근 등록 도서 리스트 성공 반환</a>
+
 ```
 {
     "code": 1801,
@@ -300,7 +353,9 @@
     ]
 }
 ```
+
 ### <a id="book-list">인기도서 리스트 성공 반환</a>
+
 ```
 {
     "code": 1000,
@@ -397,6 +452,7 @@
 ```
 
 ### <a id="book-detail">책 상세 정보 성공 반환</a>
+
 ```
 {
     "code": 1000,
@@ -419,6 +475,7 @@
 ```
 
 ### <a id="top-borrower">상위 대출 유저 정보 성공 반환</a>
+
 ```
 {
     "code": 1000,
@@ -450,6 +507,7 @@
 ```
 
 ### <a id="rocommend-book">추천 도서 리스트 성공 반환</a>
+
 ```
 {
     "code": 1000,
@@ -490,6 +548,7 @@
 ```
 
 ### <a id="guestbooko-list">방명록 리스트 성공 반환</a>
+
 ```
 {
     "code": 1501,
@@ -520,7 +579,9 @@
     }
 }
 ```
+
 ### <a id="checkout-list">대출 기록 리스트 성공 반환</a>
+
 ```
 {
     "code": 1000,
@@ -637,6 +698,7 @@
 ```
 
 ### <a id="favorites-list">찜 목록 리스트 성공 반환</a>
+
 ```
 {
     "code": 1000,
@@ -751,3 +813,114 @@
     }
 }
 ```
+
+## 페이지 별 기능
+
+### [초기화면]
+
+#### 1. 온보딩 화면
+
+- 회원가입, 로그인을 할 수 있도록 합니다.
+- 회원이 아니더라도 메인으로 이동할 수 있게 합니다.
+  ![](src/assets/readme/pic1.png)
+
+#### 2. 로그인
+
+- 소셜, 세션 다양한 방법으로 이용자들이 로그인할 수 있도록 합니다.
+  ![](src/assets/readme/pic2.png)
+
+#### 3. 회원가입
+
+- 다양한 인증 절차를 통해 하나의 이메일 당 하나의 계정을 만들 수 있도록 합니다.
+  ![](src/assets/readme/pic3.png)
+
+### [메인화면]
+
+#### 1. 이주의 인기도서
+
+- 일주일마다 이용자들의 찜 개수를 반영하여 상위 5개의 인기 도서를 보여줍니다.
+- 자세히 보기 클릭시 도서 상세페이지로 이동합니다.
+  ![](src/assets/readme/pic4.png)
+
+#### 2. 화제의 신간
+
+- SSAFIT BOOK의 도서 중 가장 최근에 발매된 도서 5개를 보여줍니다.
+- 책 커버 클릭시 도서 상세페이지로 이동합니다.
+
+#### 3. 취향이 비슷한 유저
+
+- 내가 찜했던 도서 목록을 기반으로 비슷한 책을 많이 찜한 유저 3명과 유저당 3권의 책을 보여주도록 합니다.
+- 책 커버 클릭시 도서 상세페이지로 이동합니다.
+  ![](src/assets/readme/pic5.png)
+
+#### 4. 이달의 대출왕
+
+- 한달동안 가장 대출을 많이 한 3명의 유저를 보여줍니다.
+- 유저 프로필 클릭시 유저페이지로 이동합니다.
+
+#### 5. 맞춤 도서 추천
+
+- 내가 찜한 도서 목록을 기반으로 맞춤 도서를 추천해줍니다.
+- 책 커버 클릭시 도서 상세페이지로 이동합니다.
+  ![](src/assets/readme/pic6.png)
+
+### [검색]
+
+#### 1. 검섹
+
+- 기본으로 검색 버튼을 클릭시 모든 도서를 한 페이지당 20권씩 보여줍니다.
+- 책 커버 클릭시 도서 상세페이지로 이동합니다.
+  ![](src/assets/readme/pic7.png)
+
+#### 2. 상세 검색
+
+- 제목, 저자, 춢판사 / 오름차순, 내림차순으로 유저가 상세하게 도서를 검색할 수 있도록 합니다.
+- 책 커버 클릭시 도서 상세페이지로 이동합니다.
+  ![](src/assets/readme/pic8.png)
+
+### [도서 상세]
+
+#### 1. 도서 상세
+
+- 표지, 제목, 저자, ISBN, 등록일자, 출판사, 소개와 대출 가능한지 여부를 알 수 있도록 합니다.
+  ![](src/assets/readme/pic9.png)
+  ![](src/assets/readme/pic10.png)
+
+#### 2. 대출
+
+- 유저가 대출하지 않고 현재 대출이 가능하다면 클릭시 '대출이 완료되었습니다'라는 알림이 뜨도록 합니다.
+- 이미 다른 유저들이 대출했다면 대출 불가능이라고 뜨도록 합니다.
+  ![](src/assets/readme/pic11.png)
+
+#### 3. 찜
+
+- 찜 버튼을 클릭시 '즐겨찾기 추가가 완료되었습니다'라는 알림이 뜨도록 합니다.
+- 이미 찜한 도서라면 클릭시 '즐겨찾기가 해재되었습니다'라는 알림이 뜨도록 합니다.
+  ![](src/assets/readme/pic12.png)
+
+### [마이페이지]
+
+#### 1. 유저 정보
+
+- 정보 수정 클릭시 비밀번호를 입력하면 개인정보를 바꿀 수 있도록 합니다.
+  ![](src/assets/readme/pic13.png)
+
+#### 2. 팔로우 팔로워
+
+- 팔로우, 팔로워 목록을 볼 수 있도록 합니다.
+- 팔로우 취소 클릭시 목록에서 사라집니다.
+- 목록의 유저 클릭시 해당 유저의 페이지로 이동하고 해당 페이지에서 유저를 팔로우할 수 있도록 합니다.
+  ![](src/assets/readme/pic16.png)
+  ![](src/assets/readme/pic17.png)
+
+#### 3. 대출, 찜 목록
+
+- 유저가 대출, 찜한 도서의 목록을 5개씩 보여줍니다.
+- 책 커버 클릭시 도서 상세페이지로 이동합니다.
+- 더보기 클릭시 유저가 대출, 찜한 모든 도서를 볼 수 있도록 합니다.
+  ![](src/assets/readme/pic14.png)
+
+#### 4. 방명록
+
+- 모든 유저가 방명록을 작성하고 확인할 수 있도록 합니다.
+  ![](src/assets/readme/pic15.png)
